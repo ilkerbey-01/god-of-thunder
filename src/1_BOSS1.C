@@ -27,7 +27,7 @@ extern ACTOR explosion;
 extern volatile char key_flag[100];
 extern volatile unsigned int timer_cnt;
 extern SETUP setup;
-extern char far *sd_data;
+extern char *sd_data;
 extern char game_over;
 extern char cheat;
 extern int exit_flag;
@@ -286,7 +286,7 @@ int boss_dead1(void)
 //===========================================================================
 void closing_sequence1(void)
 {
-  LEVEL far *lvl;
+  LEVEL *lvl;
   int rep;
 
   music_play(4, 1);
@@ -319,7 +319,7 @@ void closing_sequence1(void)
   actor_visible(1);
   actor_visible(2);
 
-  lvl = (LEVEL far *)(sd_data + (59 * 512));
+  lvl = (LEVEL *)(sd_data + (59 * 512));
   lvl->icon[6][18] = 148;
   lvl->icon[6][19] = 202;
   exit_flag = 0;

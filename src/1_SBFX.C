@@ -18,7 +18,7 @@ extern volatile unsigned int timer_cnt, vbl_cnt, magic_cnt, extra_cnt;
 extern int music_flag, sound_flag, pcsound_flag;
 extern char noal, nosb;
 
-void interrupt far (*t0OldService)(void);
+void interrupt (*t0OldService)(void);
 long TimerDivisor, TimerCount;
 volatile long TickCount2, TickCount;
 //===========================================================================

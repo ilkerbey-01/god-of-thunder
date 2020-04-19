@@ -10,13 +10,13 @@
 
 #define HERMIT_HAS_DOLL setup.f04
 //===========================================================================
-extern char far objects[NUM_OBJECTS][262];
+extern char objects[NUM_OBJECTS][262];
 extern char object_map[240];
 extern char object_index[240];
-extern char far *object_sound[26];
+extern char *object_sound[26];
 extern int ox, oy, of;
 extern LEVEL scrn;
-extern char far *bg_pics;
+extern char *bg_pics;
 extern unsigned int display_page, draw_page;
 extern int rand1, rand2;
 extern THOR_INFO thor_info;
@@ -194,8 +194,8 @@ void pick_up_object(int p)
   ox = x * 16;
   oy = y * 16;
   of = 1;
-  xfput(ox, oy, PAGE2, (char far *)(bg_pics + (scrn.bg_color * 262)));
-  xfput(ox, oy, PAGE2, (char far *)(bg_pics + (scrn.icon[y][x] * 262)));
+  xfput(ox, oy, PAGE2, (char *)(bg_pics + (scrn.bg_color * 262)));
+  xfput(ox, oy, PAGE2, (char *)(bg_pics + (scrn.icon[y][x] * 262)));
   xcopyd2d(ox, oy, ox + 16, oy + 16, ox, oy, PAGE2, draw_page, 320, 320);
   //xcopyd2d(ox,oy,ox+16,oy+16,ox,oy,PAGE2,draw_page,320,320);
 
@@ -250,7 +250,7 @@ int _drop_obj(ACTOR *actr, int o)
     object_index[p] = 27 + actr->actor_num; //actor is 3-15
     x = (p % 20) * 16;
     y = (p / 20) * 16;
-    xfput(x, y, PAGE2, (char far *)objects[o - 1]);
+    xfput(x, y, PAGE2, (char *)objects[o - 1]);
     xcopyd2d(x, y, x + 16, y + 16, x, y, PAGE2, draw_page, 320, 320);
     xcopyd2d(x, y, x + 16, y + 16, x, y, PAGE2, display_page, 320, 320);
     return 1;

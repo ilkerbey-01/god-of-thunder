@@ -10,7 +10,7 @@
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
 //===========================================================================
-extern char far text[94][72];
+extern char text[94][72];
 extern union REGS in, out;
 char pbuff[768];
 extern char dialog_color[16];
@@ -134,7 +134,7 @@ int load_palette(void)
 #define DAC_WRITE_INDEX 03c8h
 #define DAC_DATA 03c9h
 
-  if (res_read("palette", (char far *)pbuff) < 0)
+  if (res_read("palette", (char *)pbuff) < 0)
     return 0;
   for (i = 0; i < 768; i++)
     pbuff[i] = pbuff[i] >> 2;

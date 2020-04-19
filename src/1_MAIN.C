@@ -32,19 +32,19 @@ int max_shot;
 
 volatile unsigned int timer_cnt, vbl_cnt, magic_cnt, extra_cnt;
 
-char far text[94][72];
+char text[94][72];
 union REGS in, out;
 struct SREGS seg;
-char far *bg_pics;
+char *bg_pics;
 //char bg_header[200];
-char far objects[NUM_OBJECTS][262];
+char objects[NUM_OBJECTS][262];
 int ox, oy, of;
 char object_map[240];
 char object_index[240];
-char far *bleep;
+char *bleep;
 char thor_icon1, thor_icon2, thor_icon3, thor_icon4;
 char level_type;
-char far *song;
+char *song;
 char music_current;
 char boss_loaded;
 char apple_drop;
@@ -55,7 +55,7 @@ char last_setup[32];
 LEVEL scrn;
 char *scrnp;
 
-char far *sd_data;
+char *sd_data;
 int current_level, new_level, new_level_tile, current_area;
 //char file_str[10];
 
@@ -63,8 +63,8 @@ SETUP setup;
 char *tmp_buff;
 int reps;
 
-char far *mask_buff;
-char far *mask_buff_start;
+char *mask_buff;
+char *mask_buff_start;
 char abuff[AMI_LEN];
 char *ami_buff;
 ACTOR actor[MAX_ACTORS];  //current actors
@@ -87,7 +87,7 @@ char magic_pic[2][1024];
 //int shot_mask_offset[4];
 char warp_scroll;
 
-//char far *enemy_data;     //points to four actors/sounds
+//char *enemy_data;     //points to four actors/sounds
 
 ACTOR *thor;
 ACTOR *hammer;
@@ -99,12 +99,12 @@ int boss_dead;
 
 int warp_flag;
 
-char far *std_sound_start;
-char far *pcstd_sound_start;
-char far *std_sound;
-char far *pcstd_sounds;
-char far *boss_sound[3];
-char far *boss_pcsound[3];
+char *std_sound_start;
+char *pcstd_sound_start;
+char *std_sound;
+char *pcstd_sounds;
+char *boss_sound[3];
+char *boss_pcsound[3];
 long pcsound_length[NUM_SOUNDS];
 int rand1, rand2;
 int restore_screen;
@@ -125,13 +125,13 @@ int killgg_inform;
 char dialog_color[] = {14, 54, 120, 138, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 //norm,good,bad,sign,white
 
-char far *std_sounds;
-char far *pc_sound[NUM_SOUNDS];
-char far *dig_sound[NUM_SOUNDS];
+char *std_sounds;
+char *pc_sound[NUM_SOUNDS];
+char *dig_sound[NUM_SOUNDS];
 int boss_active;
 char story_flag;
 char *save_filename = "XXXXXXXX.XXX";
-char far *scr;
+char *scr;
 char demo_key[DEMO_LEN];
 int demo_cnt;
 char demo, record;
@@ -141,7 +141,7 @@ int rnd_array[100];
 char rdemo;
 char test_sdf[80];
 char *options_yesno[] = {"Yes", "No", NULL};
-char far *lzss_buff;
+char *lzss_buff;
 char game_over;
 char noal, nosb, ret;
 char tempstr[80];
@@ -150,8 +150,8 @@ char ide_run, fast_exit, nojoy, gr, xdos;
 char main_loop;
 char end_tile;
 
-void interrupt far (*old_timer_int)(void); // interrupt function pointer
-void interrupt far timer_int(void);
+void interrupt (*old_timer_int)(void); // interrupt function pointer
+void interrupt timer_int(void);
 
 void xdisplay_actors(ACTOR *act, unsigned int page);
 void xerase_actors(ACTOR *act, unsigned int page);

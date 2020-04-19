@@ -13,15 +13,15 @@ extern unsigned int draw_page, display_page, page3_offset;
 extern int current_level, new_level;
 extern char *ami_buff;
 extern char abuff[AMI_LEN];
-extern char far *mask_buff;
-extern char far *mask_buff_start;
+extern char *mask_buff;
+extern char *mask_buff_start;
 extern ACTOR actor[MAX_ACTORS];  //current actors
 extern ACTOR enemy[MAX_ENEMIES]; //current enemies
 extern ACTOR shot[MAX_ENEMIES];  //current shots
 extern char enemy_type[MAX_ENEMIES];
 int etype[MAX_ENEMIES];
 unsigned int latch_mem;
-char far *enemy_mb;
+char *enemy_mb;
 unsigned int enemy_lm;
 char *enemy_ami;
 
@@ -34,7 +34,7 @@ extern THOR_INFO thor_info;
 extern char *tmp_buff;
 
 extern LEVEL scrn;
-extern char far *sd_data;
+extern char *sd_data;
 extern char sd_header[128];
 extern int current_level;
 extern SETUP setup;
@@ -44,10 +44,10 @@ extern ACTOR magic_item[];
 extern char magic_pic[][1024];
 
 char *magic_ami;
-char far *magic_mask_buff;
+char *magic_mask_buff;
 
 char *ami_store1, *ami_store2;
-char far *mask_store1, far *mask_store2;
+char *mask_store1, *mask_store2;
 //===========================================================================
 unsigned int make_mask(MASK_IMAGE *new_image,
                        unsigned int page_start, char *Image, int image_width,
@@ -58,7 +58,7 @@ unsigned int make_mask(MASK_IMAGE *new_image,
    ALIGNED_MASK_IMAGE *work_ami;
    int scan_line, bit_num, temp_image_width;
    unsigned char mask_temp;
-   char far *new_mask_ptr;
+   char *new_mask_ptr;
    char *old_mask_ptr;
 
    page_offset = page_start;
@@ -80,7 +80,7 @@ unsigned int make_mask(MASK_IMAGE *new_image,
       /* Calculate the number of bytes needed to store the mask in
          nibble (Map Mask-ready) form, then allocate that space */
       size = work_ami->image_width * image_height;
-      work_ami->mask_ptr = (char far *)mask_buff;
+      work_ami->mask_ptr = (char *)mask_buff;
       mask_buff += size;
 
       /* Generate this nibble oriented (Map Mask-ready) alignment of
@@ -380,7 +380,7 @@ void setup_magic_item(int item)
 {
    int i;
    char *ami;
-   char far *mb;
+   char *mb;
 
    mb = mask_buff;
    mask_buff = magic_mask_buff;
@@ -400,7 +400,7 @@ void load_new_thor(void)
 {
    int rep;
    char *ami;
-   char far *mb;
+   char *mb;
 
    mb = mask_buff;
    ami = ami_buff;

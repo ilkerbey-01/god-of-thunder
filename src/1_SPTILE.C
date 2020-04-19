@@ -13,7 +13,7 @@ extern int warp_flag;
 extern LEVEL scrn;
 extern ACTOR actor[MAX_ACTORS];
 extern ACTOR *thor;
-extern char far *bg_pics;
+extern char *bg_pics;
 extern THOR_INFO thor_info;
 extern int thor_x1, thor_y1, thor_x2, thor_y2, thor_real_y1;
 extern unsigned int display_page, draw_page;
@@ -186,7 +186,7 @@ void erase_door(int x, int y)
      scrn.icon[y][x] = scrn.bg_color;
      x = x << 4;
      y = y << 4;
-     xfput(x, y, PAGE2, (char far *)(bg_pics + (scrn.bg_color * 262)));
+     xfput(x, y, PAGE2, (char *)(bg_pics + (scrn.bg_color * 262)));
      xcopyd2d(x, y, x + 16, y + 16, x, y, PAGE2, draw_page, 320, 320);
      xcopyd2d(x, y, x + 16, y + 16, x, y, PAGE2, display_page, 320, 320);
 }

@@ -10,7 +10,7 @@
 
 //===========================================================================
 extern int new_level, current_level;
-extern char far *bg_pics;
+extern char *bg_pics;
 extern LEVEL scrn;
 extern ACTOR actor[MAX_ACTORS];
 extern ACTOR *thor;
@@ -322,9 +322,9 @@ int boss22a_movement(ACTOR *actr)
   actor[an].x = x;
   actor[an].y = y;
 
-  xfput(x, y, display_page, (char far *)(bg_pics + (scrn.bg_color * 262)));
-  xfput(x, y, draw_page, (char far *)(bg_pics + (scrn.bg_color * 262)));
-  xfput(x, y, PAGE2, (char far *)(bg_pics + (scrn.bg_color * 262)));
+  xfput(x, y, display_page, (char *)(bg_pics + (scrn.bg_color * 262)));
+  xfput(x, y, draw_page, (char *)(bg_pics + (scrn.bg_color * 262)));
+  xfput(x, y, PAGE2, (char *)(bg_pics + (scrn.bg_color * 262)));
   scrn.icon[y / 16][x / 16] = scrn.bg_color;
 
   actor[3].i2++;

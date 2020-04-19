@@ -30,7 +30,7 @@ extern THOR_INFO thor_info;
 extern int current_level;
 extern char odin[4][262];
 extern char *tmp_buff;
-extern char far *sd_data;
+extern char *sd_data;
 extern char cheat;
 extern volatile char key_flag[100];
 extern int key_magic;
@@ -41,34 +41,34 @@ extern unsigned int display_page, draw_page;
 extern ACTOR actor[MAX_ACTORS];
 extern int new_level, current_level, new_level_tile;
 extern LEVEL scrn;
-extern char far objects[NUM_OBJECTS][262];
+extern char objects[NUM_OBJECTS][262];
 extern char object_map[240];
 extern char object_index[240];
 extern int thunder_flag;
 //============================= Globals ==================================
-long far num_var[26];       //numeric variables
-char far str_var[26][81];   //string vars
-char far line_label[32][9]; //line label look up table
-char far *line_ptr[32];     //line label pointers
-char far *new_ptr;
+long num_var[26];       //numeric variables
+char str_var[26][81];   //string vars
+char line_label[32][9]; //line label look up table
+char *line_ptr[32];     //line label pointers
+char *new_ptr;
 int num_labels;            //number of labels
-char far *gosub_stack[32]; //stack for GOSUB return addresses
+char *gosub_stack[32]; //stack for GOSUB return addresses
 char gosub_ptr;            //GOSUB stack pointer
-char far *for_stack[10];   //FOR stack
+char *for_stack[10];   //FOR stack
 long for_val[10];          //current FOR value
 char for_var[10];          //ending FOR value (target var)
 char for_ptr;              //FOR stack pointer
-char far *buff_ptr;        //pointer to current command
-char far *buff_end;        //pointer to end of buffer
-char far *buffer;          //buffer space (malloc'ed)
+char *buff_ptr;        //pointer to current command
+char *buff_end;        //pointer to end of buffer
+char *buffer;          //buffer space (malloc'ed)
 long scr_index;
 char *scr_pic;
 long lvalue;
 long ltemp;
-char far temps[255];
+char temps[255];
 
 #define SCR_BUFF_SIZE 5000
-char far *scr_command[] = {"!@#$%", "END", "GOTO", "GOSUB", "RETURN", "FOR", "NEXT",
+char *scr_command[] = {"!@#$%", "END", "GOTO", "GOSUB", "RETURN", "FOR", "NEXT",
                            "IF", "ELSE", "RUN",
                            "ADDJEWELS", "ADDHEALTH", "ADDMAGIC", "ADDKEYS",
                            "ADDSCORE", "SAY", "ASK", "SOUND", "PLACETILE",
@@ -76,7 +76,7 @@ char far *scr_command[] = {"!@#$%", "END", "GOTO", "GOSUB", "RETURN", "FOR", "NE
                            "PAUSE", "TEXT", "EXEC", "VISIBLE", "RANDOM",
                            NULL};
 
-char far *internal_variable[] = {"@JEWELS", "@HEALTH", "@MAGIC", "@SCORE",
+char *internal_variable[] = {"@JEWELS", "@HEALTH", "@MAGIC", "@SCORE",
                                  "@SCREEN", "@KEYS",
                                  "@OW", "@GULP", "@SWISH", "@YAH", "@ELECTRIC",
                                  "@THUNDER", "@DOOR", "@FALL", "@ANGEL", "@WOOP",
@@ -84,7 +84,7 @@ char far *internal_variable[] = {"@JEWELS", "@HEALTH", "@MAGIC", "@SCORE",
                                  "@EXPLODE", "@FLAG", "@ITEM", "@THORTILE",
                                  "@THORPOS", NULL};
 
-char far *scr_error[] = {"!@#$%", "Out of Memory", "Can't Read Script",
+char *scr_error[] = {"!@#$%", "Out of Memory", "Can't Read Script",
                          "Too Many Labels", "No END",
                          "Syntax", "Out of Range", "Undefined Label",
                          "RETURN Without GOSUB", "Nesting",
@@ -156,7 +156,7 @@ run_script: //jump point for RUN command
       { //RUN command
         re_execute = 1;
         if (buffer)
-          farfree(buffer);
+         free(buffer);
         goto run_script;
       }
       if (!ret)
@@ -176,7 +176,7 @@ void script_exit(void)
 
   //xshowpage(display_page);
   if (buffer)
-    farfree(buffer);
+   free(buffer);
 }
 //=========================================================================
 int skip_colon(void)
@@ -204,7 +204,7 @@ int get_command(void)
     if (!scr_command[i])
       break; //lookup command
     len = _fstrlen(scr_command[i]);
-    if (!_fstrncmp(buff_ptr, (char far *)scr_command[i], len))
+    if (!_fstrncmp(buff_ptr, (char *)scr_command[i], len))
     {
       buff_ptr += len;
       return i;
@@ -259,7 +259,7 @@ strloop:
   {
     get_str();
     if (strlen(varstr) + _fstrlen(temps) < 255)
-      _fstrcat((char far *)varstr, temps);
+      _fstrcat((char *)varstr, temps);
     goto nextstr;
   }
   if (isalpha(*buff_ptr))
@@ -268,7 +268,7 @@ strloop:
     {
       varnum = (*buff_ptr) - 65;
       if (strlen(varstr) + _fstrlen(str_var[varnum]) < 255)
-        _fstrcat((char far *)varstr, str_var[varnum]);
+        _fstrcat((char *)varstr, str_var[varnum]);
       buff_ptr += 2;
       goto nextstr;
     }
@@ -294,7 +294,7 @@ nextstr:
 strdone:
   if (strlen(varstr) > 255)
     return -1;
-  _fstrcpy(temps, (char far *)varstr);
+  _fstrcpy(temps, (char *)varstr);
   return 1;
 }
 //=========================================================================
@@ -499,7 +499,7 @@ int get_internal_variable(void)
   return 1;
 }
 //=========================================================================
-int get_line(char far *src, char far *dst)
+int get_line(char *src, char *dst)
 {
   int cnt;
 
@@ -527,11 +527,11 @@ int read_script_file(void)
   int i, len, p, ret, cnt;
   char ch;
   char tmps[255];
-  char far *sb;
-  char far *sbuff;
+  char *sb;
+  char *sbuff;
   char str[21];
 
-  buffer = farmalloc(SCR_BUFF_SIZE);
+  buffer =malloc(SCR_BUFF_SIZE);
   if (!buffer)
   {
     ret = 1;
@@ -540,7 +540,7 @@ int read_script_file(void)
   buff_ptr = buffer;
   _fmemset(buffer, 0, SCR_BUFF_SIZE);
 
-  sbuff = farmalloc(25000l);
+  sbuff =malloc(25000l);
   if (!sbuff)
   {
     ret = 1;
@@ -563,7 +563,7 @@ int read_script_file(void)
 
   while (1)
   {
-    cnt = get_line(sb, (char far *)tmps);
+    cnt = get_line(sb, (char *)tmps);
     sb += cnt;
     if (!strcmp(tmps, "|EOF"))
     {
@@ -576,7 +576,7 @@ int read_script_file(void)
   num_labels = 0;
   while (1)
   {
-    cnt = get_line(sb, (char far *)tmps);
+    cnt = get_line(sb, (char *)tmps);
     if (!strcmp(tmps, "|STOP"))
     {
       if (buff_ptr != buffer)
@@ -627,7 +627,7 @@ int read_script_file(void)
     { //line label
       temp_buff[len - 1] = 0;
       line_ptr[num_labels] = buff_ptr;
-      _fstrcpy(line_label[num_labels++], (char far *)temp_buff);
+      _fstrcpy(line_label[num_labels++], (char *)temp_buff);
       if (num_labels > 31)
       {
         ret = 3;
@@ -637,14 +637,14 @@ int read_script_file(void)
       buff_ptr++;
       continue;
     }
-    _fstrcpy(buff_ptr, (char far *)temp_buff);
+    _fstrcpy(buff_ptr, (char *)temp_buff);
     buff_ptr += strlen(temp_buff);
     *buff_ptr = 0;
     buff_ptr++;
   }
 done:
   if (sbuff)
-    farfree(sbuff);
+   free(sbuff);
   return ret;
 }
 //=========================================================================
@@ -652,7 +652,7 @@ void script_error(int err_num)
 {
   int line_num;
   char s[17];
-  char far *tb;
+  char *tb;
   char ts[81];
 
   line_num = 1;
@@ -670,7 +670,7 @@ void script_error(int err_num)
   if (err_num > ERROR_MAX)
     err_num = 5; //unknown=syntax
 
-  _fstrcpy((char far *)ts, scr_error[err_num]);
+  _fstrcpy((char *)ts, scr_error[err_num]);
   itoa(line_num, s, 10);
   strcat(ts, " in Line #");
   strcat(ts, s);
@@ -723,7 +723,7 @@ int cmd_goto(void)
     len = strlen(s);
     if (len == 0)
       break;
-    if (!_fstrcmp((char far *)s, line_label[i]))
+    if (!_fstrcmp((char *)s, line_label[i]))
     {
       new_ptr = line_ptr[i];
       buff_ptr += len;
@@ -861,7 +861,7 @@ int cmd_addscore(void)
 //=========================================================================
 int cmd_say(int mode, int type)
 {
-  char far *p;
+  char *p;
   int obj;
 
   if (mode)
@@ -879,10 +879,10 @@ int cmd_say(int mode, int type)
     obj = 0;
 
   memset(tmp_buff, 0, TMP_SIZE);
-  p = (char far *)tmp_buff;
+  p = (char *)tmp_buff;
   while (calc_string(0))
   {
-    _fstrcpy((char far *)p, temps);
+    _fstrcpy((char *)p, temps);
     p += _fstrlen(temps);
     *(p) = 10;
     p++;
@@ -919,7 +919,7 @@ int cmd_ask(void)
 
   if (!calc_string(1))
     return 5;
-  _fstrncpy((char far *)title, temps, 41);
+  _fstrncpy((char *)title, temps, 41);
   title[40] = 0;
 
   if (*buff_ptr == ',')
@@ -936,7 +936,7 @@ int cmd_ask(void)
   i = 0;
   while (calc_string(0))
   {
-    _fstrncpy((char far *)opts[i], temps, 41);
+    _fstrncpy((char *)opts[i], temps, 41);
     opts[i][40] = 0;
     op[i] = opts[i];
     i++;
@@ -965,7 +965,7 @@ int cmd_sound(void)
 int cmd_settile(void)
 {
   int screen, pos, tile;
-  LEVEL far *lvl;
+  LEVEL *lvl;
 
   if (!calc_value())
     return 5;
@@ -990,7 +990,7 @@ int cmd_settile(void)
   }
   else
   {
-    lvl = (LEVEL far *)(sd_data + (screen * 512));
+    lvl = (LEVEL *)(sd_data + (screen * 512));
     lvl->icon[pos / 20][pos % 20] = tile;
   }
   return 0;
@@ -1064,7 +1064,7 @@ int cmd_ltoa(void)
     return 5;
 
   ltoa(lvalue, str, 10);
-  _fstrcpy(str_var[sv], (char far *)str);
+  _fstrcpy(str_var[sv], (char *)str);
   return 0;
 }
 //=========================================================================
@@ -1138,7 +1138,7 @@ void scr_func1(void)
   thor->show = 2;
 }
 //=========================================================================
-char far *offense[] = {
+char *offense[] = {
     "Cussing",
     "Rebellion",
     "Kissing Your Mother Goodbye",
@@ -1147,7 +1147,7 @@ char far *offense[] = {
     "Carrying a Concealed Hammer",
 };
 
-char far *reason[] = {
+char *reason[] = {
     "We heard you say 'Booger'.",
     "You look kind of rebellious.",
     "Your mother turned you in.",
@@ -1210,7 +1210,7 @@ void scr_func3(void)
       object_index[p] = 31; //actor is 3-15
       x = (p % 20) * 16;
       y = (p / 20) * 16;
-      xfput(x, y, PAGE2, (char far *)objects[o - 1]);
+      xfput(x, y, PAGE2, (char *)objects[o - 1]);
       xcopyd2d(x, y, x + 16, y + 16, x, y, PAGE2, draw_page, 320, 320);
       xcopyd2d(x, y, x + 16, y + 16, x, y, PAGE2, display_page, 320, 320);
       pause(30);

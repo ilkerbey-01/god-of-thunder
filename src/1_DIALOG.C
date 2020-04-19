@@ -17,8 +17,8 @@ extern int thor_x1, thor_y1, thor_x2, thor_y2, thor_real_y1;
 extern int exit_flag;
 extern int switch_flag;
 extern unsigned int display_page, draw_page;
-extern char far *bg_pics;
-extern char far objects[NUM_OBJECTS][262];
+extern char *bg_pics;
+extern char objects[NUM_OBJECTS][262];
 extern char object_map[240];
 extern char object_index[240];
 extern THOR_INFO thor_info;
@@ -26,7 +26,7 @@ extern int rand1, rand2;
 extern char cheat;
 extern char *options_yesno[];
 extern SETUP setup;
-extern char far *sd_data;
+extern char *sd_data;
 
 #define GOTKEY1 setup.f00
 #define TROLL_SHRUB setup.f01
@@ -309,7 +309,7 @@ void d_fix_tv(ACTOR *act)
 void d_fix_bridge(ACTOR *act)
 {
   int sel;
-  LEVEL far *lvl;
+  LEVEL *lvl;
 
   if (!actor_speaks(act, 3015, 0))
     return;
@@ -330,7 +330,7 @@ void d_fix_bridge(ACTOR *act)
     if (sel == 3)
     {
       actor_speaks(act, 3018, 0);
-      lvl = (LEVEL far *)(sd_data + (52 * 512));
+      lvl = (LEVEL *)(sd_data + (52 * 512));
       lvl->icon[138 / 20][138 % 20] = 147;
       lvl->icon[158 / 20][158 % 20] = 148;
       BRIDGE_FIXED = 1;
@@ -560,13 +560,13 @@ int dialog_twelve(ACTOR *act)
 //===========================================================================
 int dialog_thirteen(ACTOR *act)
 { //spill guts girl
-  LEVEL far *lvl;
+  LEVEL *lvl;
 
   if (TALKED_TO_HERMIT)
   {
     actor_speaks(act, 24, 0);
     d_restore();
-    lvl = (LEVEL far *)(sd_data + (30 * 512));
+    lvl = (LEVEL *)(sd_data + (30 * 512));
     lvl->icon[145 / 20][145 % 20] = 224;
     lvl->icon[145 / 20][145 % 20] = 224;
   }

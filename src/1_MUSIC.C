@@ -13,7 +13,7 @@
 #include "MU_Manc.h"
 #include "SB_Manc.h"
 
-extern char far *song;
+extern char *song;
 extern char music_current;
 extern struct sup setup;
 //=========================================================================

@@ -10,7 +10,7 @@ typedef struct
 {
        int image_width;        //image width in addresses in display memory
        unsigned int image_ptr; //offset of image bitmap in display mem
-       char far *mask_ptr;     //pointer to mask bitmap
+       char *mask_ptr;     //pointer to mask bitmap
 } ALIGNED_MASK_IMAGE;
 
 typedef struct

@@ -11,15 +11,15 @@ void xfillrectangle(int StartX, int StartY, int EndX, int EndY,
 void xpset(int X, int Y, unsigned int PageBase, int Color);
 int xpoint(int X, int Y, unsigned int PageBase);
 void xget(int x1, int y1, int x2, int y2, unsigned int pagebase,
-          char far *buff, int invis);
+          char *buff, int invis);
 void xput(int x, int y, unsigned int pagebase, char *buff);
 void xput2(int x, int y, unsigned int pagebase, char *buff);
-void xtext(int x, int y, unsigned int pagebase, char far *buff, int color);
-void xtext1(int x, int y, unsigned int pagebase, char far *buff, int color);
-void xtextx(int x, int y, unsigned int pagebase, char far *buff, int color);
+void xtext(int x, int y, unsigned int pagebase, char *buff, int color);
+void xtext1(int x, int y, unsigned int pagebase, char *buff, int color);
+void xtextx(int x, int y, unsigned int pagebase, char *buff, int color);
 
-void xfput(int x, int y, unsigned int pagebase, char far *buff);
-void xfarput(int x, int y, unsigned int pagebase, char far *buff);
+void xfput(int x, int y, unsigned int pagebase, char *buff);
+void xfarput(int x, int y, unsigned int pagebase, char *buff);
 void xcopyd2dmasked(int SourceStartX,
                     int SourceStartY, int SourceEndX, int SourceEndY,
                     int DestStartX, int DestStartY, MASK_IMAGE *Source,
@@ -48,7 +48,7 @@ void xddfast(int source_x, int source_y, int width, int height,
              int dest_x, int dest_y,
              unsigned int source_page, unsigned int dest_page);
 xsetpal(unsigned char color, unsigned char R, unsigned char G, unsigned char B);
-xgetpal(char far *pal, int num_colrs, int start_index);
+xgetpal(char *pal, int num_colrs, int start_index);
 
 //G_MAIN.C
 void run_gotm(void);
@@ -93,7 +93,7 @@ void story(void);
 
 //G_FILE.C
 long file_size(char *path);
-unsigned int read_file(char *filename, char far *buff,
+unsigned int read_file(char *filename, char *buff,
                        long offset, unsigned int amount, int key);
 int load_bg_data(void);
 int load_sd_data(void);
@@ -103,11 +103,11 @@ int load_picture(int index, char *buff);
 void setup_filenames(int level);
 int load_speech(int index);
 long file_size(char *path);
-void far *get_file(char *filename, int key);
+void *get_file(char *filename, int key);
 void save_game(void);
 int load_game(int flag);
 void help(void);
-long res_read(char *name, char far *buff);
+long res_read(char *name, char *buff);
 int load_music(int num);
 
 //G_PANEL.C
@@ -266,6 +266,6 @@ void xerase_actors(ACTOR *act, unsigned int page);
 void pal_fade_in(char *buff);
 void pal_fade_out(char *buff);
 void read_joystick(void);
-void UnLZSS(char far *src, char far *dest, int len);
+void UnLZSS(char *src, char *dest, int len);
 #define REPEAT(a) for (rep = 0; rep < a; rep++)
 #define IN_RANGE(v, l, h) (v >= l && v <= h)

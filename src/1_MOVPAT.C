@@ -26,8 +26,8 @@ extern int key_fire, key_up, key_down, key_left, key_right, key_magic, key_selec
 extern int lightning_used, tornado_used, hourglass_flag;
 extern int switch_flag;
 extern unsigned int display_page, draw_page;
-extern char far *bg_pics;
-extern char far objects[NUM_OBJECTS][262];
+extern char *bg_pics;
+extern char objects[NUM_OBJECTS][262];
 extern char object_map[240];
 extern char object_index[240];
 extern char thor_icon1, thor_icon2, thor_icon3, thor_icon4;

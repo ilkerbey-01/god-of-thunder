@@ -18,13 +18,13 @@ void ask_joystick(void);
 void display_copyright(void);
 //===========================================================================
 extern volatile unsigned int timer_cnt, extra_cnt;
-extern char far text[94][72];
+extern char text[94][72];
 extern union REGS in, out;
-extern char far *bg_pics;
-extern char far *sd_data;
+extern char *bg_pics;
+extern char *sd_data;
 extern struct sup setup;
-extern char far *mask_buff;
-extern char far *mask_buff_start;
+extern char *mask_buff;
+extern char *mask_buff_start;
 extern char *ami_buff;
 extern char abuff[AMI_LEN];
 
@@ -38,16 +38,16 @@ extern ACTOR actor[MAX_ACTORS];
 extern ACTOR *thor;
 extern char boss_loaded;
 
-extern char far *std_sound_start;
-extern char far *pcstd_sound_start;
-extern char far *std_sound;
-extern char far *pcstd_sound;
-extern char far *object_sound[26];
+extern char *std_sound_start;
+extern char *pcstd_sound_start;
+extern char *std_sound;
+extern char *pcstd_sound;
+extern char *object_sound[26];
 
-extern char far *music_start;
-extern char far *music;
-extern char far *music_buffer;
-extern char far *song;
+extern char *music_start;
+extern char *music;
+extern char *music_buffer;
+extern char *song;
 extern int rnd_array[];
 extern char demo_key[];
 
@@ -59,18 +59,18 @@ extern int joystick, joylx, joyly, joyhx, joyhy;
 extern char *tmp_buff;
 extern int key_fire, key_up, key_down, key_left, key_right, key_magic, key_select;
 extern char level_type;
-extern char far *lzss_buff;
+extern char *lzss_buff;
 
 //globals
-static void interrupt far (*old_keyboard_int)(void); // interrupt func pointer
-extern void interrupt far (*old_timer_int)(void);    // interrupt function pointer
-void interrupt far timer_int(void);
-extern char far *bleep;
-extern char far *boss_sound[3];
-extern char far *boss_pcsound[3];
+static void interrupt (*old_keyboard_int)(void); // interrupt func pointer
+extern void interrupt (*old_timer_int)(void);    // interrupt function pointer
+void interrupt timer_int(void);
+extern char *bleep;
+extern char *boss_sound[3];
+extern char *boss_pcsound[3];
 extern char res_file[];
-extern char far *pc_sound[NUM_SOUNDS];
-extern char far *dig_sound[NUM_SOUNDS];
+extern char *pc_sound[NUM_SOUNDS];
+extern char *dig_sound[NUM_SOUNDS];
 extern int current_level;
 extern char odin[4][262];
 extern char hampic[4][262];
@@ -120,17 +120,17 @@ int initialize(void)
 {
   int i;
 
-  lzss_buff = (char far *)0;
-  bg_pics = (char far *)0;
-  sd_data = (char far *)0;
-  mask_buff_start = (char far *)0;
+  lzss_buff = (char *)0;
+  bg_pics = (char *)0;
+  sd_data = (char *)0;
+  mask_buff_start = (char *)0;
   tmp_buff = (char *)0;
 
-  song = (char far *)0;
+  song = (char *)0;
   for (i = 0; i < 3; i++)
   {
-    boss_sound[i] = (char far *)0;
-    boss_pcsound[i] = (char far *)0;
+    boss_sound[i] = (char *)0;
+    boss_pcsound[i] = (char *)0;
   }
   //commandeer the KB int
   old_keyboard_int = getvect(0x09);
@@ -151,7 +151,7 @@ int initialize(void)
   memset(key_flag, 0, 100);
   memset(joy_flag, 0, 100);
   memset(tmp_flag, 0, 100);
-  sd_data = (char far *)0;
+  sd_data = (char *)0;
 
   key_fire = ALT;
   key_up = UP;
@@ -161,8 +161,8 @@ int initialize(void)
   key_magic = CTRL;
   key_select = SPACE;
 
-  bg_pics = (char far *)0;
-  sd_data = (char far *)0;
+  bg_pics = (char *)0;
+  sd_data = (char *)0;
   memset(&actor[0], 0, (sizeof(ACTOR) * MAX_ACTORS));
   boss_sound[0] = 0;
   boss_sound[1] = 0;
@@ -178,11 +178,11 @@ int initialize(void)
   if (!tmp_buff)
     return 5;
 
-  lzss_buff = farmalloc(18000lu);
+  lzss_buff =malloc(18000lu);
   if (!lzss_buff)
     return 5;
 
-  mask_buff = farmalloc(15300lu);
+  mask_buff =malloc(15300lu);
   mask_buff_start = mask_buff;
   if (!mask_buff)
     return 5;
@@ -201,15 +201,15 @@ int initialize(void)
   if (res_open("GOTRES.DAT") < 0)
     return 1;
 
-  if (res_read("RANDOM", (char far *)rnd_array) < 0)
+  if (res_read("RANDOM", (char *)rnd_array) < 0)
     return 15;
-  if (res_read("DEMO", (char far *)demo_key) < 0)
+  if (res_read("DEMO", (char *)demo_key) < 0)
     return 16;
-  if (res_read("TEXT", (char far *)text) < 0)
+  if (res_read("TEXT", (char *)text) < 0)
     return 2;
-  if (res_read("ODINPIC", (char far *)odin) < 0)
+  if (res_read("ODINPIC", (char *)odin) < 0)
     return 12;
-  if (res_read("HAMPIC", (char far *)hampic) < 0)
+  if (res_read("HAMPIC", (char *)hampic) < 0)
     return 13;
 
   if (!load_palette())
@@ -237,11 +237,11 @@ int initialize(void)
       music_flag = 0;
     }
   }
-  song = farmalloc(20000lu);
+  song =malloc(20000lu);
   if (!song)
     return 5;
 
-  //if(res_read("OPENBACK",(char far*)back)<0) return 12;
+  //if(res_read("OPENBACK",(char*)back)<0) return 12;
   if (story_flag && !cheat)
     story();
   //story();
@@ -288,24 +288,24 @@ void exit_code(int ex_flag)
 
   setvect(0x09, old_keyboard_int);
   if (lzss_buff)
-    farfree(lzss_buff);
+   free(lzss_buff);
   if (bg_pics)
-    farfree(bg_pics);
+   free(bg_pics);
   if (sd_data)
-    farfree(sd_data);
+   free(sd_data);
   if (mask_buff_start)
-    farfree(mask_buff_start);
+   free(mask_buff_start);
   if (tmp_buff)
     free(tmp_buff);
 
   if (song)
-    farfree(song);
+   free(song);
   for (i = 0; i < 3; i++)
   {
     if (boss_sound[i])
-      farfree(boss_sound[i]);
+     free(boss_sound[i]);
     if (boss_pcsound[i])
-      farfree(boss_pcsound[i]);
+     free(boss_pcsound[i]);
   }
 
   in.x.ax = 0x0003;
@@ -592,9 +592,9 @@ int setup_boss(int num)
     REPEAT(3)
     {
       if (boss_sound[rep])
-        farfree(boss_sound[rep]);
+       free(boss_sound[rep]);
       if (boss_pcsound[rep])
-        farfree(boss_pcsound[rep]);
+       free(boss_pcsound[rep]);
     }
   }
 
@@ -790,23 +790,23 @@ void story(void)
   unsigned int pg;
   unsigned int add;
   int key;
-  char far *buff;
+  char *buff;
 
   fade_out();
   xfillrectangle(0, 0, 320, 240, 38400u, 0);
   xshowpage(38400u);
-  if (res_read("OPENSONG", (char far *)song) < 0)
+  if (res_read("OPENSONG", (char *)song) < 0)
     return;
-  if (res_read("STORY1", (char far *)tmp_buff) < 0)
+  if (res_read("STORY1", (char *)tmp_buff) < 0)
     return;
-  if (res_read("OPENBACK", (char far *)back) < 0)
+  if (res_read("OPENBACK", (char *)back) < 0)
     return;
-  if (res_read("STORYPIC", (char far *)back) < 0)
+  if (res_read("STORYPIC", (char *)back) < 0)
     return;
   p = tmp_buff;
   pg = 0u;
 
-  buff = farmalloc(15000u);
+  buff =malloc(15000u);
   if (!buff)
     return;
   pg = 0u;
@@ -826,7 +826,7 @@ void story(void)
       xfarput(0, (i - 6) * 40, pg, buff);
   }
 
-  farfree(buff);
+ free(buff);
   pg = 0u;
 
   res_read("STORYPAL", pbuff);

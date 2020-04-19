@@ -13,12 +13,12 @@
 
 void play_pc_sound(int index, int priority_override);
 //===========================================================================
-extern char far *std_sounds;
-extern char far *pcstd_sounds;
-extern char far *pc_sound[NUM_SOUNDS];
-extern char far *dig_sound[NUM_SOUNDS];
-extern char far *std_sound_start;
-extern char far *pcstd_sound_start;
+extern char *std_sounds;
+extern char *pcstd_sounds;
+extern char *pc_sound[NUM_SOUNDS];
+extern char *dig_sound[NUM_SOUNDS];
+extern char *std_sound_start;
+extern char *pcstd_sound_start;
 extern int level;
 
 //enum{OW,GULP,SWISH,YAH,ELECTRIC,THUNDER,DOOR,FALL,
@@ -35,14 +35,14 @@ extern char ds_file[];
 int sound_init(void)
 {
   int i;
-  char far *p;
-  HEADER far *header;
+  char *p;
+  HEADER *header;
 
   std_sound_start = res_falloc_read("DIGSOUND");
   if (!std_sound_start)
     return 0;
   std_sounds = std_sound_start;
-  header = (HEADER far *)std_sounds;
+  header = (HEADER *)std_sounds;
   std_sounds = std_sounds + (sizeof(HEADER) * 16);
 
   p = std_sounds;
@@ -57,7 +57,7 @@ int sound_init(void)
   if (!pcstd_sound_start)
     return 0;
   pcstd_sounds = pcstd_sound_start;
-  header = (HEADER far *)pcstd_sounds;
+  header = (HEADER *)pcstd_sounds;
   pcstd_sounds = pcstd_sounds + (sizeof(HEADER) * 16);
 
   p = pcstd_sounds;
@@ -85,9 +85,9 @@ void sound_exit(void)
     ;
 
   if (std_sound_start)
-    farfree(std_sounds);
+   free(std_sounds);
   if (pcstd_sound_start)
-    farfree(pcstd_sounds);
+   free(pcstd_sounds);
 }
 //===========================================================================
 void play_sound(int index, int priority_override)
@@ -110,7 +110,7 @@ void play_sound(int index, int priority_override)
     SB_StopVOC();
   }
 
-  SB_PlayVOC((char huge *)dig_sound[index], 1);
+  SB_PlayVOC((char *)dig_sound[index], 1);
   current_priority = sound_priority[index];
 }
 //===========================================================================
@@ -124,7 +124,7 @@ void play_pc_sound(int index, int priority_override)
     FX_StopPC();
   }
 
-  FX_PlayPC((PCSound far *)pc_sound[index], pcsound_length[index]);
+  FX_PlayPC((PCSound *)pc_sound[index], pcsound_length[index]);
   current_priority = sound_priority[index];
 }
 //===========================================================================

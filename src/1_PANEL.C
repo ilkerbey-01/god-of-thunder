@@ -15,12 +15,12 @@
 extern ACTOR *thor;
 extern THOR_INFO thor_info;
 extern char *tmp_buff;
-extern char far objects[NUM_OBJECTS][262];
+extern char objects[NUM_OBJECTS][262];
 extern unsigned int page[3];
 extern volatile char key_flag[100];
 extern int key_fire, key_up, key_down, key_left, key_right, key_magic, key_select;
 extern unsigned int display_page, draw_page;
-extern char far *bg_pics;
+extern char *bg_pics;
 extern int restore_screen;
 extern char hampic[4][262];
 extern volatile unsigned int timer_cnt, extra_cnt;
@@ -35,7 +35,7 @@ char *options_slow[] = {"On  (slow computer)", "Off (fast computer)", NULL};
 char *options_menu[] = {"Sound/Music", "Skill Level", "Save Game", "Load Game",
                         "Die", "Turbo Mode", "Help", "Quit", NULL};
 char *options_quit[] = {"Continue Game", "Quit to Opening Screen", "Quit to DOS", NULL};
-extern char far *scr;
+extern char *scr;
 extern char last_setup[32];
 extern int exit_flag;
 extern char cheat;
@@ -130,15 +130,15 @@ void display_item(void)
   if (thor_info.item)
   {
     if (thor_info.item == 7)
-      xfput(282, 8, PAGES, (char far *)objects[thor_info.object + 10]);
+      xfput(282, 8, PAGES, (char *)objects[thor_info.object + 10]);
     else
-      xfput(282, 8, PAGES, (char far *)objects[thor_info.item + 25]);
+      xfput(282, 8, PAGES, (char *)objects[thor_info.item + 25]);
   }
 }
 //===========================================================================
 int init_status_panel(void)
 {
-  char far *sp;
+  char *sp;
 
   sp = res_falloc_read("STATUS");
   if (!sp)
@@ -149,7 +149,7 @@ int init_status_panel(void)
   //xfillrectangle(183,32,209,42,PAGES,STAT_COLOR);
   //xfillrectangle(222,16,272,33,PAGES,STAT_COLOR);
   display_item();
-  farfree(sp);
+ free(sp);
   return 1;
 }
 //===========================================================================
@@ -345,19 +345,19 @@ int select_option(char *option[], char *title, int ipos)
 
   xfillrectangle(x1, y1, x2, y2, pg, 215);
 
-  xfput(x1 - 16, y1 - 16, pg, (char far *)(bg_pics + (192 * 262)));
-  xfput(x2, y1 - 16, pg, (char far *)(bg_pics + (193 * 262)));
-  xfput(x1 - 16, y2, pg, (char far *)(bg_pics + (194 * 262)));
-  xfput(x2, y2, pg, (char far *)(bg_pics + (195 * 262)));
+  xfput(x1 - 16, y1 - 16, pg, (char *)(bg_pics + (192 * 262)));
+  xfput(x2, y1 - 16, pg, (char *)(bg_pics + (193 * 262)));
+  xfput(x1 - 16, y2, pg, (char *)(bg_pics + (194 * 262)));
+  xfput(x2, y2, pg, (char *)(bg_pics + (195 * 262)));
   for (i = 0; i < s; i++)
   {
-    xfput(x1 + (i * 16), y1 - 16, pg, (char far *)(bg_pics + (196 * 262)));
-    xfput(x1 + (i * 16), y2, pg, (char far *)(bg_pics + (197 * 262)));
+    xfput(x1 + (i * 16), y1 - 16, pg, (char *)(bg_pics + (196 * 262)));
+    xfput(x1 + (i * 16), y2, pg, (char *)(bg_pics + (197 * 262)));
   }
   for (i = 0; i < (num_opts + 2); i++)
   {
-    xfput(x1 - 16, y1 + (i * 16), pg, (char far *)(bg_pics + (198 * 262)));
-    xfput(x2, y1 + (i * 16), pg, (char far *)(bg_pics + (199 * 262)));
+    xfput(x1 - 16, y1 + (i * 16), pg, (char *)(bg_pics + (198 * 262)));
+    xfput(x2, y1 + (i * 16), pg, (char *)(bg_pics + (199 * 262)));
   }
   s = strlen(title) * 8;
   i = (320 - s) / 2;

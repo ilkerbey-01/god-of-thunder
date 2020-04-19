@@ -14,9 +14,9 @@
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
 //============================================================================
-extern char far *bg_pics;
-extern char far objects[NUM_OBJECTS][262];
-extern char far *sd_data;
+extern char *bg_pics;
+extern char objects[NUM_OBJECTS][262];
+extern char *sd_data;
 extern char *tmp_buff;
 //extern char file_str[10];
 extern char res_file[];
@@ -30,8 +30,8 @@ extern char level_type, slow_mode;
 extern int boss_active;
 extern char area;
 extern char test_sdf[];
-extern char far *song;
-extern char far *lzss_buff;
+extern char *song;
+extern char *lzss_buff;
 extern char *options_yesno[];
 extern int music_flag, sound_flag, pcsound_flag;
 extern char game_over;
@@ -57,7 +57,7 @@ long file_size(char *path)
 int load_bg_data(void)
 {
 
-  bg_pics = farmalloc(60460l);
+  bg_pics =malloc(60460l);
   if (!bg_pics)
     return 0;
   if (GAME1)
@@ -76,7 +76,7 @@ int load_sd_data(void)
   strcat(s, str);
 
   if (!sd_data)
-    sd_data = farmalloc(61440l);
+    sd_data =malloc(61440l);
   if (!sd_data)
     return 0;
   if (res_read(s, sd_data) < 0)
@@ -87,7 +87,7 @@ int load_sd_data(void)
 int load_objects(void)
 {
 
-  if (res_read("OBJECTS", (char far *)objects) < 0)
+  if (res_read("OBJECTS", (char *)objects) < 0)
     return 0;
   return 1;
 }
@@ -111,11 +111,11 @@ int load_speech(int index)
   int cnt;
   char tmps[30];
   char str[30];
-  char far *p;
-  char far *pm;
-  char far *sp;
+  char *p;
+  char *pm;
+  char *sp;
 
-  sp = farmalloc(30000l);
+  sp =malloc(30000l);
   if (!sp)
     return 0;
 
@@ -124,7 +124,7 @@ int load_speech(int index)
   strcat(str, tmps);
   if (res_read(str, sp) < 0)
   {
-    farfree(sp);
+   free(sp);
     return 0;
   }
 
@@ -165,7 +165,7 @@ int load_speech(int index)
     cnt++;
     if (cnt > 5799)
     {
-      farfree(sp);
+     free(sp);
       return 0;
     }
   }
@@ -174,7 +174,7 @@ int load_speech(int index)
   *p = 0;
   _fmemcpy(tmp_buff, pm, cnt);
   tmp_buff[cnt] = 0;
-  farfree(sp);
+ free(sp);
   return 1;
 }
 //===========================================================================
@@ -299,14 +299,14 @@ int load_game(int flag)
 }
 //==========================================================================
 /*
-long res_read(char *name,char far *buff){
+long res_read(char *name,char *buff){
 int num,bytes;
 size_t len;
 size_t total;
 char bf[256];
-char far *p;
+char *p;
 unsigned int clen;
-unsigned int far *up;
+unsigned int *up;
 
 if(!res_active) return RES_NOT_ACTIVE;
 if(!res_fp) return RES_NOT_OPEN;
@@ -331,7 +331,7 @@ while(total<len){
 if(res_header[num].key) res_decode(buff,len,res_header[num].key);
 else{
   p=lzss_buff;
-  up=(unsigned int far *) p;
+  up=(unsigned int *) p;
   clen=*up;
   p+=4;
   UnLZSS(p,buff,clen);

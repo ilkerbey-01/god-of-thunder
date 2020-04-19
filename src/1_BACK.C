@@ -12,12 +12,12 @@
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
 //===========================================================================
-extern char far *bg_pics;
+extern char *bg_pics;
 extern int warp_flag;
 
 extern LEVEL scrn;
 extern char *scrnp;
-extern char far *sd_data;
+extern char *sd_data;
 extern int current_level;
 extern unsigned int display_page, draw_page;
 extern struct sup setup;
@@ -25,20 +25,20 @@ extern THOR_INFO thor_info;
 extern ACTOR actor[MAX_ACTORS];
 extern ACTOR *thor;
 extern volatile char key_flag[100];
-extern char far *dig_sound[10];
+extern char *dig_sound[10];
 extern int restore_screen;
 extern int key_fire, key_up, key_down, key_left, key_right, key_magic, key_select;
 extern char *tmp_buff;
-extern char far text[94][72];
+extern char text[94][72];
 extern volatile unsigned int timer_cnt;
-extern char far *bleep;
+extern char *bleep;
 extern int last_oracle;
-extern char far objects[NUM_OBJECTS][262];
+extern char objects[NUM_OBJECTS][262];
 extern int lightning_used, tornado_used, thunder_flag;
 extern int hourglass_flag, shield_on, bomb_flag;
 extern int joystick;
 extern char level_type;
-extern char far *song;
+extern char *song;
 extern char music_current;
 extern char odin[4][262];
 extern unsigned int page[3];
@@ -75,8 +75,8 @@ void build_screen(unsigned int pg)
     {
       if (scrn.icon[y][x] != 0)
       {
-        xfput(x * 16, y * 16, pg, (char far *)(bg_pics + (scrn.bg_color * 262)));
-        xfput(x * 16, y * 16, pg, (char far *)(bg_pics + (scrn.icon[y][x] * 262)));
+        xfput(x * 16, y * 16, pg, (char *)(bg_pics + (scrn.bg_color * 262)));
+        xfput(x * 16, y * 16, pg, (char *)(bg_pics + (scrn.icon[y][x] * 262)));
       }
     }
   }
@@ -340,7 +340,7 @@ int actor_speaks(ACTOR *actr, int index, int item)
   if (!p)
     return 0;
 
-  if (res_read(str, (char far *)p) < 0)
+  if (res_read(str, (char *)p) < 0)
     pic = (char *)odin;
   else
     pic = p;
@@ -375,19 +375,19 @@ int display_speech(int item, char *pic, int tf)
   last_oracle = current_level;
 
   xfillrectangle(48, 64, 273, 145, pg, 215);
-  xfput(32, 48, pg, (char far *)(bg_pics + (192 * 262)));
-  xfput(272, 48, pg, (char far *)(bg_pics + (193 * 262)));
-  xfput(32, 144, pg, (char far *)(bg_pics + (194 * 262)));
-  xfput(272, 144, pg, (char far *)(bg_pics + (195 * 262)));
+  xfput(32, 48, pg, (char *)(bg_pics + (192 * 262)));
+  xfput(272, 48, pg, (char *)(bg_pics + (193 * 262)));
+  xfput(32, 144, pg, (char *)(bg_pics + (194 * 262)));
+  xfput(272, 144, pg, (char *)(bg_pics + (195 * 262)));
   for (l = 0; l < 14; l++)
   {
-    xfput(48 + (l * 16), 48, pg, (char far *)(bg_pics + (196 * 262)));
-    xfput(48 + (l * 16), 144, pg, (char far *)(bg_pics + (197 * 262)));
+    xfput(48 + (l * 16), 48, pg, (char *)(bg_pics + (196 * 262)));
+    xfput(48 + (l * 16), 144, pg, (char *)(bg_pics + (197 * 262)));
   }
   for (l = 0; l < 5; l++)
   {
-    xfput(32, 64 + (l * 16), pg, (char far *)(bg_pics + (198 * 262)));
-    xfput(272, 64 + (l * 16), pg, (char far *)(bg_pics + (199 * 262)));
+    xfput(32, 64 + (l * 16), pg, (char *)(bg_pics + (198 * 262)));
+    xfput(272, 64 + (l * 16), pg, (char *)(bg_pics + (199 * 262)));
   }
 
   p = tmp_buff;
@@ -399,7 +399,7 @@ int display_speech(int item, char *pic, int tf)
   pc = 0;
   xput(152, 65, pg, (pic + (pn * 262)));
   if (item)
-    xfput(176, 65, pg, (char far *)objects[item]);
+    xfput(176, 65, pg, (char *)objects[item]);
 
   wait_not_response();
   if (!tf)
@@ -512,19 +512,19 @@ void select_item(void)
   pg = display_page;
 
   xfillrectangle(72, 64, 249, 145, pg, 215);
-  xfput(56, 48, pg, (char far *)(bg_pics + (192 * 262)));
-  xfput(248, 48, pg, (char far *)(bg_pics + (193 * 262)));
-  xfput(56, 144, pg, (char far *)(bg_pics + (194 * 262)));
-  xfput(248, 144, pg, (char far *)(bg_pics + (195 * 262)));
+  xfput(56, 48, pg, (char *)(bg_pics + (192 * 262)));
+  xfput(248, 48, pg, (char *)(bg_pics + (193 * 262)));
+  xfput(56, 144, pg, (char *)(bg_pics + (194 * 262)));
+  xfput(248, 144, pg, (char *)(bg_pics + (195 * 262)));
   for (l = 0; l < 11; l++)
   {
-    xfput(72 + (l * 16), 48, pg, (char far *)(bg_pics + (196 * 262)));
-    xfput(72 + (l * 16), 144, pg, (char far *)(bg_pics + (197 * 262)));
+    xfput(72 + (l * 16), 48, pg, (char *)(bg_pics + (196 * 262)));
+    xfput(72 + (l * 16), 144, pg, (char *)(bg_pics + (197 * 262)));
   }
   for (l = 0; l < 5; l++)
   {
-    xfput(56, 64 + (l * 16), pg, (char far *)(bg_pics + (198 * 262)));
-    xfput(248, 64 + (l * 16), pg, (char far *)(bg_pics + (199 * 262)));
+    xfput(56, 64 + (l * 16), pg, (char *)(bg_pics + (198 * 262)));
+    xfput(248, 64 + (l * 16), pg, (char *)(bg_pics + (199 * 262)));
   }
   if (thor_info.inventory == 0)
   {
@@ -540,9 +540,9 @@ void select_item(void)
     if (thor_info.inventory & b)
     {
       if (l < 6)
-        xfput(82 + (l * _HRZSP), 72, pg, (char far *)objects[l + 26]);
+        xfput(82 + (l * _HRZSP), 72, pg, (char *)objects[l + 26]);
       else
-        xfput(82 + (l * _HRZSP), 72, pg, (char far *)objects[thor_info.object + 10]);
+        xfput(82 + (l * _HRZSP), 72, pg, (char *)objects[thor_info.object + 10]);
     }
     b = b << 1;
   }
@@ -744,8 +744,8 @@ void remove_objects(int y, int x)
 
   if (object_map[p] > 0)
   {
-    xfput(ix, iy, PAGE2, (char far *)(bg_pics + (scrn.bg_color * 262)));
-    xfput(ix, iy, PAGE2, (char far *)(bg_pics + (scrn.icon[y][x] * 262)));
+    xfput(ix, iy, PAGE2, (char *)(bg_pics + (scrn.bg_color * 262)));
+    xfput(ix, iy, PAGE2, (char *)(bg_pics + (scrn.icon[y][x] * 262)));
     xcopyd2d(ix, iy, ix + 16, iy + 16, ix, iy, PAGE2, draw_page, 320, 320);
     object_map[p] = 0;
     object_index[p] = 0;
@@ -759,8 +759,8 @@ void place_tile(int x, int y, int tile)
   ix = x * 16;
   iy = y * 16;
 
-  xfput(ix, iy, PAGE2, (char far *)(bg_pics + (scrn.bg_color * 262)));
-  xfput(ix, iy, PAGE2, (char far *)(bg_pics + (tile * 262)));
+  xfput(ix, iy, PAGE2, (char *)(bg_pics + (scrn.bg_color * 262)));
+  xfput(ix, iy, PAGE2, (char *)(bg_pics + (tile * 262)));
   xcopyd2d(ix, iy, ix + 16, iy + 16, ix, iy, PAGE2, draw_page, 320, 320);
   xcopyd2d(ix, iy, ix + 16, iy + 16, ix, iy, PAGE2, display_page, 320, 320);
   scrn.icon[y][x] = tile;
