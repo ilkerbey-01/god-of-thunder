@@ -14,35 +14,35 @@
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
 //============================================================================
-extern char *bg_pics;
-extern char objects[NUM_OBJECTS][262];
-extern char *sd_data;
-extern char *tmp_buff;
-//extern char file_str[10];
-extern char res_file[];
+extern uint8_t *bg_pics;
+extern uint8_t objects[NUM_OBJECTS][262];
+extern uint8_t *sd_data;
+extern uint8_t *tmp_buff;
+//extern uint8_t file_str[10];
+extern uint8_t res_file[];
 extern THOR_INFO thor_info;
-extern int current_area;
+extern int16_t current_area;
 extern ACTOR *thor;
-extern char *save_filename;
+extern uint8_t *save_filename;
 extern union REGS in, out;
 extern SETUP setup;
-extern char level_type, slow_mode;
-extern int boss_active;
-extern char area;
-extern char test_sdf[];
-extern char *song;
-extern char *lzss_buff;
-extern char *options_yesno[];
-extern int music_flag, sound_flag, pcsound_flag;
-extern char game_over;
-extern unsigned int display_page, draw_page;
-extern volatile char key_flag[100];
+extern uint8_t level_type, slow_mode;
+extern int16_t boss_active;
+extern uint8_t area;
+extern uint8_t test_sdf[];
+extern uint8_t *song;
+extern uint8_t *lzss_buff;
+extern uint8_t *options_yesno[];
+extern int16_t music_flag, sound_flag, pcsound_flag;
+extern uint8_t game_over;
+extern uint16_t display_page, draw_page;
+extern volatile uint8_t key_flag[100];
 
-char *gotres = "GOTRES.00";
+uint8_t *gotres = "GOTRES.00";
 //===========================================================================
-long file_size(char *path)
+int32_t file_size(uint8_t *path)
 {
-  long tmpl;
+  int32_t tmpl;
   FILE *tmp_fp;
 
   tmp_fp = fopen(path, "rb");
@@ -54,10 +54,10 @@ long file_size(char *path)
   return tmpl;
 }
 //===========================================================================
-int load_bg_data(void)
+int16_t load_bg_data(void)
 {
 
-  bg_pics =malloc(60460l);
+  bg_pics = malloc(60460l);
   if (!bg_pics)
     return 0;
   if (GAME1)
@@ -66,17 +66,17 @@ int load_bg_data(void)
   return 1;
 }
 //===========================================================================
-int load_sd_data(void)
+int16_t load_sd_data(void)
 {
-  char s[21];
-  char str[21];
+  uint8_t s[21];
+  uint8_t str[21];
 
   strcpy(s, "SDAT");
   itoa(area, str, 10);
   strcat(s, str);
 
   if (!sd_data)
-    sd_data =malloc(61440l);
+    sd_data = malloc(61440l);
   if (!sd_data)
     return 0;
   if (res_read(s, sd_data) < 0)
@@ -84,18 +84,18 @@ int load_sd_data(void)
   return 1;
 }
 //===========================================================================
-int load_objects(void)
+int16_t load_objects(void)
 {
 
-  if (res_read("OBJECTS", (char *)objects) < 0)
+  if (res_read("OBJECTS", (uint8_t *)objects) < 0)
     return 0;
   return 1;
 }
 //===========================================================================
-int load_actor(int file, int num)
+int16_t load_actor(int16_t file, int16_t num)
 {
-  char s[21];
-  char rs[21];
+  uint8_t s[21];
+  uint8_t rs[21];
 
   itoa(num, s, 10);
   strcpy(rs, "ACTOR");
@@ -106,16 +106,16 @@ int load_actor(int file, int num)
   return 1;
 }
 //===========================================================================
-int load_speech(int index)
+int16_t load_speech(int16_t index)
 {
-  int cnt;
-  char tmps[30];
-  char str[30];
-  char *p;
-  char *pm;
-  char *sp;
+  int16_t cnt;
+  uint8_t tmps[30];
+  uint8_t str[30];
+  uint8_t *p;
+  uint8_t *pm;
+  uint8_t *sp;
 
-  sp =malloc(30000l);
+  sp = malloc(30000l);
   if (!sp)
     return 0;
 
@@ -124,7 +124,7 @@ int load_speech(int index)
   strcat(str, tmps);
   if (res_read(str, sp) < 0)
   {
-   free(sp);
+    free(sp);
     return 0;
   }
 
@@ -165,7 +165,7 @@ int load_speech(int index)
     cnt++;
     if (cnt > 5799)
     {
-     free(sp);
+      free(sp);
       return 0;
     }
   }
@@ -174,13 +174,13 @@ int load_speech(int index)
   *p = 0;
   _fmemcpy(tmp_buff, pm, cnt);
   tmp_buff[cnt] = 0;
- free(sp);
+  free(sp);
   return 1;
 }
 //===========================================================================
-void setup_filenames(int level)
+void setup_filenames(int16_t level)
 {
-  //char s[21];
+  //uint8_t s[21];
 
   //strcpy(res_file,gotres);
   //itoa(level,s,10);
@@ -196,9 +196,9 @@ void help(void)
 //===========================================================================
 void save_game(void)
 {
-  int handle;
-  unsigned int total;
-  char buff[32];
+  int16_t handle;
+  uint16_t total;
+  uint8_t buff[32];
 
   if (game_over)
     return;
@@ -226,11 +226,11 @@ void save_game(void)
   odin_speaks(2009, 0);
 }
 //===========================================================================
-int load_game(int flag)
+int16_t load_game(int16_t flag)
 {
-  int handle;
-  unsigned int total;
-  char buff[32];
+  int16_t handle;
+  uint16_t total;
+  uint8_t buff[32];
 
   if (flag)
   {
@@ -299,14 +299,14 @@ int load_game(int flag)
 }
 //==========================================================================
 /*
-long res_read(char *name,char *buff){
-int num,bytes;
+int32_t res_read(uint8_t *name,uint8_t *buff){
+int16_t num,bytes;
 size_t len;
 size_t total;
-char bf[256];
-char *p;
-unsigned int clen;
-unsigned int *up;
+uint8_t bf[256];
+uint8_t *p;
+uint16_t clen;
+uint16_t *up;
 
 if(!res_active) return RES_NOT_ACTIVE;
 if(!res_fp) return RES_NOT_OPEN;
@@ -331,7 +331,7 @@ while(total<len){
 if(res_header[num].key) res_decode(buff,len,res_header[num].key);
 else{
   p=lzss_buff;
-  up=(unsigned int *) p;
+  up=(uint16_t *) p;
   clen=*up;
   p+=4;
   UnLZSS(p,buff,clen);
@@ -340,7 +340,7 @@ return res_header[num].length;
 }
 */
 //==========================================================================
-int load_music(int num)
+int16_t load_music(int16_t num)
 {
 
   switch (num)

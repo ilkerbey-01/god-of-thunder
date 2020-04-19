@@ -12,90 +12,90 @@
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
 
-int setup_level(void);
-int setup_player(void);
+int16_t setup_level(void);
+int16_t setup_player(void);
 void ask_joystick(void);
 void display_copyright(void);
 //===========================================================================
-extern volatile unsigned int timer_cnt, extra_cnt;
-extern char text[94][72];
+extern volatile uint16_t timer_cnt, extra_cnt;
+extern uint8_t text[94][72];
 extern union REGS in, out;
-extern char *bg_pics;
-extern char *sd_data;
+extern uint8_t *bg_pics;
+extern uint8_t *sd_data;
 extern struct sup setup;
-extern char *mask_buff;
-extern char *mask_buff_start;
-extern char *ami_buff;
-extern char abuff[AMI_LEN];
+extern uint8_t *mask_buff;
+extern uint8_t *mask_buff_start;
+extern uint8_t *ami_buff;
+extern uint8_t abuff[AMI_LEN];
 
-extern volatile char key_flag[100];
-extern volatile char joy_flag[100];
-extern volatile char tmp_flag[100];
-extern char break_code, scan_code, last_scan_code;
-extern char slow_mode;
-extern unsigned int page3_offset;
+extern volatile uint8_t key_flag[100];
+extern volatile uint8_t joy_flag[100];
+extern volatile uint8_t tmp_flag[100];
+extern uint8_t break_code, scan_code, last_scan_code;
+extern uint8_t slow_mode;
+extern uint16_t page3_offset;
 extern ACTOR actor[MAX_ACTORS];
 extern ACTOR *thor;
-extern char boss_loaded;
+extern uint8_t boss_loaded;
 
-extern char *std_sound_start;
-extern char *pcstd_sound_start;
-extern char *std_sound;
-extern char *pcstd_sound;
-extern char *object_sound[26];
+extern uint8_t *std_sound_start;
+extern uint8_t *pcstd_sound_start;
+extern uint8_t *std_sound;
+extern uint8_t *pcstd_sound;
+extern uint8_t *object_sound[26];
 
-extern char *music_start;
-extern char *music;
-extern char *music_buffer;
-extern char *song;
-extern int rnd_array[];
-extern char demo_key[];
+extern uint8_t *music_start;
+extern uint8_t *music;
+extern uint8_t *music_buffer;
+extern uint8_t *song;
+extern int16_t rnd_array[];
+extern uint8_t demo_key[];
 
 extern THOR_INFO thor_info;
-extern unsigned int joy_x, joy_y;
-extern char joy_b1, joy_b2;
-extern int joystick, joylx, joyly, joyhx, joyhy;
+extern uint16_t joy_x, joy_y;
+extern uint8_t joy_b1, joy_b2;
+extern int16_t joystick, joylx, joyly, joyhx, joyhy;
 
-extern char *tmp_buff;
-extern int key_fire, key_up, key_down, key_left, key_right, key_magic, key_select;
-extern char level_type;
-extern char *lzss_buff;
+extern uint8_t *tmp_buff;
+extern int16_t key_fire, key_up, key_down, key_left, key_right, key_magic, key_select;
+extern uint8_t level_type;
+extern uint8_t *lzss_buff;
 
 //globals
-static void interrupt (*old_keyboard_int)(void); // interrupt func pointer
-extern void interrupt (*old_timer_int)(void);    // interrupt function pointer
-void interrupt timer_int(void);
-extern char *bleep;
-extern char *boss_sound[3];
-extern char *boss_pcsound[3];
-extern char res_file[];
-extern char *pc_sound[NUM_SOUNDS];
-extern char *dig_sound[NUM_SOUNDS];
-extern int current_level;
-extern char odin[4][262];
-extern char hampic[4][262];
-extern int load_game_flag;
-extern int music_flag, sound_flag, pcsound_flag;
-extern long pcsound_length[NUM_SOUNDS];
-extern char demo_key[];
-extern int demo_cnt;
-extern char demo, record;
-extern char demo_enable;
-extern int exit_flag;
-extern char story_flag;
-extern unsigned int display_page;
-extern char music_current;
-extern char tempstr[];
-extern char area, cheat;
-extern char pbuff[768];
+static voidint16_terrupt (*old_keyboard_int)(void); //int16_terrupt func pointer
+extern voidint16_terrupt (*old_timer_int)(void);    //int16_terrupt function pointer
+voidint16_terrupt timer_int(void);
+extern uint8_t *bleep;
+extern uint8_t *boss_sound[3];
+extern uint8_t *boss_pcsound[3];
+extern uint8_t res_file[];
+extern uint8_t *pc_sound[NUM_SOUNDS];
+extern uint8_t *dig_sound[NUM_SOUNDS];
+extern int16_t current_level;
+extern uint8_t odin[4][262];
+extern uint8_t hampic[4][262];
+extern int16_t load_game_flag;
+extern int16_t music_flag, sound_flag, pcsound_flag;
+extern int32_t pcsound_length[NUM_SOUNDS];
+extern uint8_t demo_key[];
+extern int16_t demo_cnt;
+extern uint8_t demo, record;
+extern uint8_t demo_enable;
+extern int16_t exit_flag;
+extern uint8_t story_flag;
+extern uint16_t display_page;
+extern uint8_t music_current;
+extern uint8_t tempstr[];
+extern uint8_t area, cheat;
+extern uint8_t pbuff[768];
 
-//char scanc [100];
-char spic1, spic2;
-char byte;
-unsigned int word;
+//uint8_t scanc [100];
+uint8_t spic1, spic2;
+uint8_t byte;
+uint16_t word;
 void print_mem(void);
 //===========================================================================
-char *err_msg[] = {
+uint8_t *err_msg[] = {
     "(null)",
     "Can't Load GOTRES.DAT",
     "Can't Read Font",
@@ -116,24 +116,24 @@ char *err_msg[] = {
 };
 
 //===========================================================================
-int initialize(void)
+int16_t initialize(void)
 {
-  int i;
+  int16_t i;
 
-  lzss_buff = (char *)0;
-  bg_pics = (char *)0;
-  sd_data = (char *)0;
-  mask_buff_start = (char *)0;
-  tmp_buff = (char *)0;
+  lzss_buff = (uint8_t *)0;
+  bg_pics = (uint8_t *)0;
+  sd_data = (uint8_t *)0;
+  mask_buff_start = (uint8_t *)0;
+  tmp_buff = (uint8_t *)0;
 
-  song = (char *)0;
+  song = (uint8_t *)0;
   for (i = 0; i < 3; i++)
   {
-    boss_sound[i] = (char *)0;
-    boss_pcsound[i] = (char *)0;
+    boss_sound[i] = (uint8_t *)0;
+    boss_pcsound[i] = (uint8_t *)0;
   }
-  //commandeer the KB int
-  old_keyboard_int = getvect(0x09);
+  //commandeer the KBint16_t
+  old_keyboard_int16_t = getvect(0x09);
   setvect(0x09, keyboard_int);
   break_code = 1;
 
@@ -151,7 +151,7 @@ int initialize(void)
   memset(key_flag, 0, 100);
   memset(joy_flag, 0, 100);
   memset(tmp_flag, 0, 100);
-  sd_data = (char *)0;
+  sd_data = (uint8_t *)0;
 
   key_fire = ALT;
   key_up = UP;
@@ -161,8 +161,8 @@ int initialize(void)
   key_magic = CTRL;
   key_select = SPACE;
 
-  bg_pics = (char *)0;
-  sd_data = (char *)0;
+  bg_pics = (uint8_t *)0;
+  sd_data = (uint8_t *)0;
   memset(&actor[0], 0, (sizeof(ACTOR) * MAX_ACTORS));
   boss_sound[0] = 0;
   boss_sound[1] = 0;
@@ -178,17 +178,17 @@ int initialize(void)
   if (!tmp_buff)
     return 5;
 
-  lzss_buff =malloc(18000lu);
+  lzss_buff = malloc(18000lu);
   if (!lzss_buff)
     return 5;
 
-  mask_buff =malloc(15300lu);
+  mask_buff = malloc(15300lu);
   mask_buff_start = mask_buff;
   if (!mask_buff)
     return 5;
 
   memset(abuff, 0, AMI_LEN);
-  ami_buff = (char *)abuff;
+  ami_buff = (uint8_t *)abuff;
 
   //setup_filenames(0);   //out
 
@@ -201,15 +201,15 @@ int initialize(void)
   if (res_open("GOTRES.DAT") < 0)
     return 1;
 
-  if (res_read("RANDOM", (char *)rnd_array) < 0)
+  if (res_read("RANDOM", (uint8_t *)rnd_array) < 0)
     return 15;
-  if (res_read("DEMO", (char *)demo_key) < 0)
+  if (res_read("DEMO", (uint8_t *)demo_key) < 0)
     return 16;
-  if (res_read("TEXT", (char *)text) < 0)
+  if (res_read("TEXT", (uint8_t *)text) < 0)
     return 2;
-  if (res_read("ODINPIC", (char *)odin) < 0)
+  if (res_read("ODINPIC", (uint8_t *)odin) < 0)
     return 12;
-  if (res_read("HAMPIC", (char *)hampic) < 0)
+  if (res_read("HAMPIC", (uint8_t *)hampic) < 0)
     return 13;
 
   if (!load_palette())
@@ -237,11 +237,11 @@ int initialize(void)
       music_flag = 0;
     }
   }
-  song =malloc(20000lu);
+  song = malloc(20000lu);
   if (!song)
     return 5;
 
-  //if(res_read("OPENBACK",(char*)back)<0) return 12;
+  //if(res_read("OPENBACK",(uint8_t*)back)<0) return 12;
   if (story_flag && !cheat)
     story();
   //story();
@@ -278,9 +278,9 @@ int initialize(void)
   return 0;
 }
 //===========================================================================
-void exit_code(int ex_flag)
+void exit_code(int16_t ex_flag)
 {
-  int i;
+  int16_t i;
 
   res_close();
   sound_exit();
@@ -288,28 +288,28 @@ void exit_code(int ex_flag)
 
   setvect(0x09, old_keyboard_int);
   if (lzss_buff)
-   free(lzss_buff);
+    free(lzss_buff);
   if (bg_pics)
-   free(bg_pics);
+    free(bg_pics);
   if (sd_data)
-   free(sd_data);
+    free(sd_data);
   if (mask_buff_start)
-   free(mask_buff_start);
+    free(mask_buff_start);
   if (tmp_buff)
     free(tmp_buff);
 
   if (song)
-   free(song);
+    free(song);
   for (i = 0; i < 3; i++)
   {
     if (boss_sound[i])
-     free(boss_sound[i]);
+      free(boss_sound[i]);
     if (boss_pcsound[i])
-     free(boss_pcsound[i]);
+      free(boss_pcsound[i]);
   }
 
   in.x.ax = 0x0003;
-  int86(0x10, &in, &out);
+  int16_t86(0x10, &in, &out);
 
   if (ex_flag > 0)
   {
@@ -318,11 +318,11 @@ void exit_code(int ex_flag)
   }
 }
 //===========================================================================
-void interrupt keyboard_int()
+voidint16_terrupt keyboard_int()
 {
-  char flag;
-  int key;
-  //static int num=0;
+  uint8_t flag;
+  int16_t key;
+  //staticint16_t num=0;
 
   scan_code = inportb(0x60);
   byte = inportb(0x61);
@@ -374,7 +374,7 @@ done:
 //===========================================================================
 void demo_key_set(void)
 {
-  char sc, flag;
+  uint8_t sc, flag;
 
   if (demo_key[demo_cnt])
   {
@@ -413,7 +413,7 @@ void wait_not_response(void)
   }
 }
 //===========================================================================
-int wait_response(void)
+int16_t wait_response(void)
 {
 
   wait_not_response();
@@ -440,7 +440,7 @@ int wait_response(void)
   }
 }
 //===========================================================================
-int get_response(void)
+int16_t get_response(void)
 {
 
   if (joystick)
@@ -463,7 +463,7 @@ int get_response(void)
   return 0;
 }
 //===========================================================================
-void wait_not_key(int index)
+void wait_not_key(int16_t index)
 {
 
   while (key_flag[index])
@@ -530,7 +530,7 @@ void merge_keys(void)
   key_flag[key_magic] = tmp_flag[key_magic] | joy_flag[key_magic];
 }
 //===========================================================================
-int setup_level(void)
+int16_t setup_level(void)
 {
 
   if (!load_bg_data())
@@ -542,7 +542,7 @@ int setup_level(void)
   return 1;
 }
 //===========================================================================
-int setup_player(void)
+int16_t setup_player(void)
 {
 
   memset(&thor_info, 0, sizeof(THOR_INFO));
@@ -578,12 +578,12 @@ int setup_player(void)
   return 1;
 }
 //===========================================================================
-int setup_boss(int num)
+int16_t setup_boss(int16_t num)
 {
-  int rep;
-  char s[21];
-  char str[21];
-  char ress[21];
+  int16_t rep;
+  uint8_t s[21];
+  uint8_t str[21];
+  uint8_t ress[21];
 
   if (boss_loaded == num)
     return 1;
@@ -592,9 +592,9 @@ int setup_boss(int num)
     REPEAT(3)
     {
       if (boss_sound[rep])
-       free(boss_sound[rep]);
+        free(boss_sound[rep]);
       if (boss_pcsound[rep])
-       free(boss_pcsound[rep]);
+        free(boss_pcsound[rep]);
     }
   }
 
@@ -682,7 +682,7 @@ void ask_joystick(void)
 //===========================================================================
 void set_joy(void)
 {
-  char *p;
+  uint8_t *p;
 
   p = strtok(tempstr, ",:");
   joylx = atoi(p);
@@ -701,7 +701,7 @@ void set_joy(void)
 //===========================================================================
 void story_animate(void)
 {
-  //static int cnt=0;
+  //staticint16_t cnt=0;
 
   return;
   /*
@@ -725,9 +725,9 @@ if(cnt==6){
 */
 }
 //===========================================================================
-int story_wait(void)
+int16_t story_wait(void)
 {
-  int key;
+  int16_t key;
 
   while (1)
   {
@@ -745,8 +745,8 @@ int story_wait(void)
 //===========================================================================
 void set_palette(void)
 {
-  int i;
-  char r, g, b, n;
+  int16_t i;
+  uint8_t r, g, b, n;
 #define DAC_READ_INDEX 03c7h
 #define DAC_WRITE_INDEX 03c8h
 #define DAC_DATA 03c9h
@@ -782,31 +782,31 @@ void set_palette(void)
 //===========================================================================
 void story(void)
 {
-  int i, x, y, color;
-  char s[21];
-  char str[40];
-  char back[4][262];
-  char *p;
-  unsigned int pg;
-  unsigned int add;
-  int key;
-  char *buff;
+  int16_t i, x, y, color;
+  uint8_t s[21];
+  uint8_t str[40];
+  uint8_t back[4][262];
+  uint8_t *p;
+  uint16_t pg;
+  uint16_t add;
+  int16_t key;
+  uint8_t *buff;
 
   fade_out();
   xfillrectangle(0, 0, 320, 240, 38400u, 0);
   xshowpage(38400u);
-  if (res_read("OPENSONG", (char *)song) < 0)
+  if (res_read("OPENSONG", (uint8_t *)song) < 0)
     return;
-  if (res_read("STORY1", (char *)tmp_buff) < 0)
+  if (res_read("STORY1", (uint8_t *)tmp_buff) < 0)
     return;
-  if (res_read("OPENBACK", (char *)back) < 0)
+  if (res_read("OPENBACK", (uint8_t *)back) < 0)
     return;
-  if (res_read("STORYPIC", (char *)back) < 0)
+  if (res_read("STORYPIC", (uint8_t *)back) < 0)
     return;
   p = tmp_buff;
   pg = 0u;
 
-  buff =malloc(15000u);
+  buff = malloc(15000u);
   if (!buff)
     return;
   pg = 0u;
@@ -826,7 +826,7 @@ void story(void)
       xfarput(0, (i - 6) * 40, pg, buff);
   }
 
- free(buff);
+  free(buff);
   pg = 0u;
 
   res_read("STORYPAL", pbuff);

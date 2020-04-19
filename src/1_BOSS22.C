@@ -9,40 +9,40 @@
 #include <g_proto.h>
 
 //===========================================================================
-extern int new_level, current_level;
-extern char *bg_pics;
+extern int16_t new_level, current_level;
+extern uint8_t *bg_pics;
 extern LEVEL scrn;
 extern ACTOR actor[MAX_ACTORS];
 extern ACTOR *thor;
-extern int thor_x1, thor_y1, thor_x2, thor_y2, thor_real_y1;
+extern int16_t thor_x1, thor_y1, thor_x2, thor_y2, thor_real_y1;
 extern ACTOR *hammer;
-extern int key_fire, key_up, key_down, key_left, key_right, key_magic, key_select;
-extern int lightning_used, tornado_used, hourglass_flag;
-extern unsigned int display_page, draw_page;
+extern int16_t key_fire, key_up, key_down, key_left, key_right, key_magic, key_select;
+extern int16_t lightning_used, tornado_used, hourglass_flag;
+extern uint16_t display_page, draw_page;
 extern THOR_INFO thor_info;
-extern int boss_dead;
-extern int boss_active;
-extern char pge;
+extern int16_t boss_dead;
+extern int16_t boss_active;
+extern uint8_t pge;
 extern ACTOR explosion;
-extern volatile char key_flag[100];
-extern volatile unsigned int timer_cnt;
+extern volatile uint8_t key_flag[100];
+extern volatile uint16_t timer_cnt;
 extern SETUP setup;
-extern int rand1, rand2;
-extern int thunder_flag;
+extern int16_t rand1, rand2;
+extern int16_t thunder_flag;
 //===========================================================================
-char exp[] = {61, 62, 65, 66, 69, 70, 73, 74, 77, 78,
-              81, 82, 85, 86, 89, 90, 93, 94, 97, 98,
-              101, 102, 105, 106, 109, 110, 113, 114, 117, 118,
-              121, 122, 125, 126, 129, 130, 133, 134, 137, 138,
-              141, 142, 145, 146, 149, 150, 153, 154, 157, 158,
-              161, 162, 165, 166, 169, 170, 173, 174, 177, 178};
-char expf[60];
+uint8_t exp[] = {61, 62, 65, 66, 69, 70, 73, 74, 77, 78,
+                 81, 82, 85, 86, 89, 90, 93, 94, 97, 98,
+                 101, 102, 105, 106, 109, 110, 113, 114, 117, 118,
+                 121, 122, 125, 126, 129, 130, 133, 134, 137, 138,
+                 141, 142, 145, 146, 149, 150, 153, 154, 157, 158,
+                 161, 162, 165, 166, 169, 170, 173, 174, 177, 178};
+uint8_t expf[60];
 
 //===========================================================================
-int boss22_movement(ACTOR *actr)
+int16_t boss22_movement(ACTOR *actr)
 { //boss - skull
-  int d, f, x;
-  static int drop_flag = 0;
+  int16_t d, f, x;
+  staticint16_t drop_flag = 0;
 
   if (boss_dead)
     return boss_dead22();
@@ -132,7 +132,7 @@ done:
   return d;
 }
 //===========================================================================
-void boss22_set(int d, int x, int y)
+void boss22_set(int16_t d, int16_t x, int16_t y)
 {
 
   actor[4].next = actor[3].next;
@@ -150,9 +150,9 @@ void boss22_set(int d, int x, int y)
   actor[6].y = y + 16;
 }
 //===========================================================================
-void check_boss22_hit(ACTOR *actr, int x1, int y1, int x2, int y2, int act_num)
+void check_boss22_hit(ACTOR *actr, int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t act_num)
 {
-  int rep;
+  int16_t rep;
 
   if ((!actor[3].vunerable))
   {
@@ -201,8 +201,8 @@ void check_boss22_hit(ACTOR *actr, int x1, int y1, int x2, int y2, int act_num)
 //===========================================================================
 void boss_level22(void)
 {
-  int x;
-  char s[41];
+  int16_t x;
+  uint8_t s[41];
 
   strcpy(s, "Are You Ready for Nognir?");
   x = ((40 - strlen(s)) / 2) * 8;
@@ -235,9 +235,9 @@ void boss_level22(void)
   //music_play(4,1);
 }
 //===========================================================================
-int boss_dead22(void)
+int16_t boss_dead22(void)
 {
-  int rep, n, x, y, r, x1, y1;
+  int16_t rep, n, x, y, r, x1, y1;
 
   hourglass_flag = 0;
   thunder_flag = 0;
@@ -276,7 +276,7 @@ int boss_dead22(void)
 //===========================================================================
 void closing_sequence22(void)
 {
-  int rep;
+  int16_t rep;
 
   music_play(0, 1);
   odin_speaks(1003, 16);
@@ -290,9 +290,9 @@ void closing_sequence22(void)
   show_level(BOSS_LEVEL22);
 }
 //===========================================================================
-int boss22a_movement(ACTOR *actr)
+int16_t boss22a_movement(ACTOR *actr)
 { //boss - skull (explode)
-  int an, x, y, r;
+  int16_t an, x, y, r;
 
   next_frame(actr);
   actor[4].next = actr->next;
@@ -322,9 +322,9 @@ int boss22a_movement(ACTOR *actr)
   actor[an].x = x;
   actor[an].y = y;
 
-  xfput(x, y, display_page, (char *)(bg_pics + (scrn.bg_color * 262)));
-  xfput(x, y, draw_page, (char *)(bg_pics + (scrn.bg_color * 262)));
-  xfput(x, y, PAGE2, (char *)(bg_pics + (scrn.bg_color * 262)));
+  xfput(x, y, display_page, (uint8_t *)(bg_pics + (scrn.bg_color * 262)));
+  xfput(x, y, draw_page, (uint8_t *)(bg_pics + (scrn.bg_color * 262)));
+  xfput(x, y, PAGE2, (uint8_t *)(bg_pics + (scrn.bg_color * 262)));
   scrn.icon[y / 16][x / 16] = scrn.bg_color;
 
   actor[3].i2++;
@@ -337,10 +337,10 @@ int boss22a_movement(ACTOR *actr)
   return 0;
 }
 //===========================================================================
-int boss22b_movement(ACTOR *actr)
+int16_t boss22b_movement(ACTOR *actr)
 { //boss - skull - shake
-  int rep, an, hx, hy, d;
-  char su[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  int16_t rep, an, hx, hy, d;
+  uint8_t su[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
   if (hammer->used && hammer->move != 5)
   {

@@ -12,61 +12,61 @@
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
 //===========================================================================
-extern char *bg_pics;
-extern int warp_flag;
+extern uint8_t *bg_pics;
+extern int16_t warp_flag;
 
 extern LEVEL scrn;
-extern char *scrnp;
-extern char *sd_data;
-extern int current_level;
-extern unsigned int display_page, draw_page;
+extern uint8_t *scrnp;
+extern uint8_t *sd_data;
+extern int16_t current_level;
+extern uint16_t display_page, draw_page;
 extern struct sup setup;
 extern THOR_INFO thor_info;
 extern ACTOR actor[MAX_ACTORS];
 extern ACTOR *thor;
-extern volatile char key_flag[100];
-extern char *dig_sound[10];
-extern int restore_screen;
-extern int key_fire, key_up, key_down, key_left, key_right, key_magic, key_select;
-extern char *tmp_buff;
-extern char text[94][72];
-extern volatile unsigned int timer_cnt;
-extern char *bleep;
-extern int last_oracle;
-extern char objects[NUM_OBJECTS][262];
-extern int lightning_used, tornado_used, thunder_flag;
-extern int hourglass_flag, shield_on, bomb_flag;
-extern int joystick;
-extern char level_type;
-extern char *song;
-extern char music_current;
-extern char odin[4][262];
-extern unsigned int page[3];
-extern int boss_dead, boss_active;
+extern volatile uint8_t key_flag[100];
+extern uint8_t *dig_sound[10];
+extern int16_t restore_screen;
+extern int16_t key_fire, key_up, key_down, key_left, key_right, key_magic, key_select;
+extern uint8_t *tmp_buff;
+extern uint8_t text[94][72];
+extern volatile uint16_t timer_cnt;
+extern uint8_t *bleep;
+extern int16_t last_oracle;
+extern uint8_t objects[NUM_OBJECTS][262];
+extern int16_t lightning_used, tornado_used, thunder_flag;
+extern int16_t hourglass_flag, shield_on, bomb_flag;
+extern int16_t joystick;
+extern uint8_t level_type;
+extern uint8_t *song;
+extern uint8_t music_current;
+extern uint8_t odin[4][262];
+extern uint16_t page[3];
+extern int16_t boss_dead, boss_active;
 extern ACTOR explosion;
-extern char pge, slow_mode, scroll_flag;
-extern volatile unsigned int magic_cnt;
-extern int exit_flag;
-extern char object_map[240];
-extern char object_index[240];
-extern char warp_scroll;
-extern char startup;
-extern char last_setup[32];
-extern char auto_load;
-extern char area;
-extern char dialog_color[16];
+extern uint8_t pge, slow_mode, scroll_flag;
+extern volatile uint16_t magic_cnt;
+extern int16_t exit_flag;
+extern uint8_t object_map[240];
+extern uint8_t object_index[240];
+extern uint8_t warp_scroll;
+extern uint8_t startup;
+extern uint8_t last_setup[32];
+extern uint8_t auto_load;
+extern uint8_t area;
+extern uint8_t dialog_color[16];
 
-char *object_names[] = {"Shrub", "Child's Doll", "UNUSED", "FUTURE",
-                        "FUTURE", "FUTURE", "FUTURE", "FUTURE", "FUTURE",
-                        "FUTURE", "FUTURE", "FUTURE", "FUTURE", "FUTURE",
-                        "FUTURE"};
-char *item_name[] = {"Enchanted Apple", "Lightning Power",
-                     "Winged Boots", "Wind Power",
-                     "Amulet of Protection", "Thunder Power"};
+uint8_t *object_names[] = {"Shrub", "Child's Doll", "UNUSED", "FUTURE",
+                           "FUTURE", "FUTURE", "FUTURE", "FUTURE", "FUTURE",
+                           "FUTURE", "FUTURE", "FUTURE", "FUTURE", "FUTURE",
+                           "FUTURE"};
+uint8_t *item_name[] = {"Enchanted Apple", "Lightning Power",
+                        "Winged Boots", "Wind Power",
+                        "Amulet of Protection", "Thunder Power"};
 //===========================================================================
-void build_screen(unsigned int pg)
+void build_screen(uint16_t pg)
 {
-  int x, y;
+  int16_t x, y;
 
   xfillrectangle(0, 0, 320, 192, pg, 0);
   for (y = 0; y < 12; y++)
@@ -75,16 +75,16 @@ void build_screen(unsigned int pg)
     {
       if (scrn.icon[y][x] != 0)
       {
-        xfput(x * 16, y * 16, pg, (char *)(bg_pics + (scrn.bg_color * 262)));
-        xfput(x * 16, y * 16, pg, (char *)(bg_pics + (scrn.icon[y][x] * 262)));
+        xfput(x * 16, y * 16, pg, (uint8_t *)(bg_pics + (scrn.bg_color * 262)));
+        xfput(x * 16, y * 16, pg, (uint8_t *)(bg_pics + (scrn.icon[y][x] * 262)));
       }
     }
   }
 }
 //===========================================================================
-void show_level(int new_level)
+void show_level(int16_t new_level)
 {
-  int f, save_d;
+  int16_t f, save_d;
 
   boss_active = 0;
   if (!shield_on)
@@ -107,7 +107,7 @@ void show_level(int new_level)
   movedata(FP_SEG(sd_data + (new_level * 512)), FP_OFF(sd_data + (new_level * 512)),
            FP_SEG(&scrn), FP_OFF(&scrn), sizeof(LEVEL));
 
-  scrnp = (char *)&scrn;
+  scrnp = (uint8_t *)&scrn;
   level_type = scrn.type;
 
   thor->next = 0;
@@ -207,7 +207,7 @@ void show_level(int new_level)
 //===========================================================================
 void scroll_level_left(void)
 {
-  int i;
+  int16_t i;
 
   for (i = 10; i > 0; i--)
   {
@@ -221,7 +221,7 @@ void scroll_level_left(void)
 //===========================================================================
 void scroll_level_up(void)
 {
-  int i;
+  int16_t i;
 
   for (i = 12; i > 0; i--)
   {
@@ -235,7 +235,7 @@ void scroll_level_up(void)
 //===========================================================================
 void scroll_level_right(void)
 {
-  int i;
+  int16_t i;
 
   for (i = 10; i > 0; i--)
   {
@@ -249,7 +249,7 @@ void scroll_level_right(void)
 //===========================================================================
 void scroll_level_down(void)
 {
-  int i;
+  int16_t i;
 
   for (i = 12; i > 0; i--)
   {
@@ -263,8 +263,8 @@ void scroll_level_down(void)
 //===========================================================================
 void phase_level(void)
 {
-  int r, cnt;
-  char done[240];
+  int16_t r, cnt;
+  uint8_t done[240];
 
   memset(done, 0, 240);
   cnt = 0;
@@ -285,19 +285,19 @@ void phase_level(void)
   }
 }
 //===========================================================================
-void copy_bg_icon(int num, unsigned int src_page, unsigned int dst_page)
+void copy_bg_icon(int16_t num, uint16_t src_page, uint16_t dst_page)
 {
-  int x, y;
+  int16_t x, y;
 
   y = (num / 20) * 16;
   x = (num % 20) * 16;
   xcopyd2d(x, y, x + 16, y + 16, x, y, src_page, dst_page, 320, 320);
 }
 //===========================================================================
-int odin_speaks(int index, int item)
+int16_t odin_speaks(int16_t index, int16_t item)
 {
 
-  execute_script((long)index, (char *)odin);
+  execute_script((int32_t)index, (uint8_t *)odin);
   if (!thor->health)
   {
     thor->show = 0;
@@ -318,14 +318,14 @@ void d_restore(void)
   xerase_actors(actor, draw_page);
 }
 //===========================================================================
-int actor_speaks(ACTOR *actr, int index, int item)
+int16_t actor_speaks(ACTOR *actr, int16_t index, int16_t item)
 {
-  char *p;
-  char str[21];
-  char s[21];
-  int v;
-  char *pic;
-  long lind;
+  uint8_t *p;
+  uint8_t str[21];
+  uint8_t s[21];
+  int16_t v;
+  uint8_t *pic;
+  int32_t lind;
 
   if (actr->type != 4)
     return 0;
@@ -340,14 +340,14 @@ int actor_speaks(ACTOR *actr, int index, int item)
   if (!p)
     return 0;
 
-  if (res_read(str, (char *)p) < 0)
-    pic = (char *)odin;
+  if (res_read(str, (uint8_t *)p) < 0)
+    pic = (uint8_t *)odin;
   else
     pic = p;
 
-  lind = (long)current_level;
+  lind = (int32_t)current_level;
   lind = lind * 1000;
-  lind += (long)actr->actor_num;
+  lind += (int32_t)actr->actor_num;
   execute_script(lind, pic);
   if (!thor->health)
   {
@@ -361,13 +361,13 @@ int actor_speaks(ACTOR *actr, int index, int item)
   return 1;
 }
 //===========================================================================
-int display_speech(int item, char *pic, int tf)
+int16_t display_speech(int16_t item, uint8_t *pic, int16_t tf)
 {
-  int l, x, color, lc, pn, pc, key;
-  unsigned int pg;
-  char *p;
-  unsigned int magic_str;
-  char ch;
+  int16_t l, x, color, lc, pn, pc, key;
+  uint16_t pg;
+  uint8_t *p;
+  uint16_t magic_str;
+  uint8_t ch;
 
   magic_str = magic_cnt;
 
@@ -375,19 +375,19 @@ int display_speech(int item, char *pic, int tf)
   last_oracle = current_level;
 
   xfillrectangle(48, 64, 273, 145, pg, 215);
-  xfput(32, 48, pg, (char *)(bg_pics + (192 * 262)));
-  xfput(272, 48, pg, (char *)(bg_pics + (193 * 262)));
-  xfput(32, 144, pg, (char *)(bg_pics + (194 * 262)));
-  xfput(272, 144, pg, (char *)(bg_pics + (195 * 262)));
+  xfput(32, 48, pg, (uint8_t *)(bg_pics + (192 * 262)));
+  xfput(272, 48, pg, (uint8_t *)(bg_pics + (193 * 262)));
+  xfput(32, 144, pg, (uint8_t *)(bg_pics + (194 * 262)));
+  xfput(272, 144, pg, (uint8_t *)(bg_pics + (195 * 262)));
   for (l = 0; l < 14; l++)
   {
-    xfput(48 + (l * 16), 48, pg, (char *)(bg_pics + (196 * 262)));
-    xfput(48 + (l * 16), 144, pg, (char *)(bg_pics + (197 * 262)));
+    xfput(48 + (l * 16), 48, pg, (uint8_t *)(bg_pics + (196 * 262)));
+    xfput(48 + (l * 16), 144, pg, (uint8_t *)(bg_pics + (197 * 262)));
   }
   for (l = 0; l < 5; l++)
   {
-    xfput(32, 64 + (l * 16), pg, (char *)(bg_pics + (198 * 262)));
-    xfput(272, 64 + (l * 16), pg, (char *)(bg_pics + (199 * 262)));
+    xfput(32, 64 + (l * 16), pg, (uint8_t *)(bg_pics + (198 * 262)));
+    xfput(272, 64 + (l * 16), pg, (uint8_t *)(bg_pics + (199 * 262)));
   }
 
   p = tmp_buff;
@@ -399,7 +399,7 @@ int display_speech(int item, char *pic, int tf)
   pc = 0;
   xput(152, 65, pg, (pic + (pn * 262)));
   if (item)
-    xfput(176, 65, pg, (char *)objects[item]);
+    xfput(176, 65, pg, (uint8_t *)objects[item]);
 
   wait_not_response();
   if (!tf)
@@ -498,9 +498,9 @@ int display_speech(int item, char *pic, int tf)
 //===========================================================================
 void select_item(void)
 {
-  int l, b, p, op;
-  unsigned int pg;
-  char *objn;
+  int16_t l, b, p, op;
+  uint16_t pg;
+  uint8_t *objn;
 
 #define _HRZSP 24
 
@@ -512,19 +512,19 @@ void select_item(void)
   pg = display_page;
 
   xfillrectangle(72, 64, 249, 145, pg, 215);
-  xfput(56, 48, pg, (char *)(bg_pics + (192 * 262)));
-  xfput(248, 48, pg, (char *)(bg_pics + (193 * 262)));
-  xfput(56, 144, pg, (char *)(bg_pics + (194 * 262)));
-  xfput(248, 144, pg, (char *)(bg_pics + (195 * 262)));
+  xfput(56, 48, pg, (uint8_t *)(bg_pics + (192 * 262)));
+  xfput(248, 48, pg, (uint8_t *)(bg_pics + (193 * 262)));
+  xfput(56, 144, pg, (uint8_t *)(bg_pics + (194 * 262)));
+  xfput(248, 144, pg, (uint8_t *)(bg_pics + (195 * 262)));
   for (l = 0; l < 11; l++)
   {
-    xfput(72 + (l * 16), 48, pg, (char *)(bg_pics + (196 * 262)));
-    xfput(72 + (l * 16), 144, pg, (char *)(bg_pics + (197 * 262)));
+    xfput(72 + (l * 16), 48, pg, (uint8_t *)(bg_pics + (196 * 262)));
+    xfput(72 + (l * 16), 144, pg, (uint8_t *)(bg_pics + (197 * 262)));
   }
   for (l = 0; l < 5; l++)
   {
-    xfput(56, 64 + (l * 16), pg, (char *)(bg_pics + (198 * 262)));
-    xfput(248, 64 + (l * 16), pg, (char *)(bg_pics + (199 * 262)));
+    xfput(56, 64 + (l * 16), pg, (uint8_t *)(bg_pics + (198 * 262)));
+    xfput(248, 64 + (l * 16), pg, (uint8_t *)(bg_pics + (199 * 262)));
   }
   if (thor_info.inventory == 0)
   {
@@ -540,9 +540,9 @@ void select_item(void)
     if (thor_info.inventory & b)
     {
       if (l < 6)
-        xfput(82 + (l * _HRZSP), 72, pg, (char *)objects[l + 26]);
+        xfput(82 + (l * _HRZSP), 72, pg, (uint8_t *)objects[l + 26]);
       else
-        xfput(82 + (l * _HRZSP), 72, pg, (char *)objects[thor_info.object + 10]);
+        xfput(82 + (l * _HRZSP), 72, pg, (uint8_t *)objects[thor_info.object + 10]);
     }
     b = b << 1;
   }
@@ -640,9 +640,9 @@ void select_item(void)
   }
 }
 //===========================================================================
-int switch_icons(void)
+int16_t switch_icons(void)
 {
-  int x, y, ix, iy;
+  int16_t x, y, ix, iy;
 
   play_sound(WOOP, 0);
   for (y = 0; y < 12; y++)
@@ -670,9 +670,9 @@ int switch_icons(void)
   return 0;
 }
 //===========================================================================
-int rotate_arrows(void)
+int16_t rotate_arrows(void)
 {
-  int x, y;
+  int16_t x, y;
 
   play_sound(WOOP, 0);
   for (y = 0; y < 12; y++)
@@ -692,9 +692,9 @@ int rotate_arrows(void)
   return 0;
 }
 //===========================================================================
-void kill_enemies(int iy, int ix)
+void kill_enemies(int16_t iy, int16_t ix)
 {
-  int i, x1, y1, x2, y2;
+  int16_t i, x1, y1, x2, y2;
 
   for (i = 3; i < MAX_ACTORS; i++)
   {
@@ -734,9 +734,9 @@ dead:
   exit_flag = 2;
 }
 //===========================================================================
-void remove_objects(int y, int x)
+void remove_objects(int16_t y, int16_t x)
 {
-  int p, ix, iy;
+  int16_t p, ix, iy;
 
   p = (y * 20) + x;
   ix = x * 16;
@@ -744,30 +744,30 @@ void remove_objects(int y, int x)
 
   if (object_map[p] > 0)
   {
-    xfput(ix, iy, PAGE2, (char *)(bg_pics + (scrn.bg_color * 262)));
-    xfput(ix, iy, PAGE2, (char *)(bg_pics + (scrn.icon[y][x] * 262)));
+    xfput(ix, iy, PAGE2, (uint8_t *)(bg_pics + (scrn.bg_color * 262)));
+    xfput(ix, iy, PAGE2, (uint8_t *)(bg_pics + (scrn.icon[y][x] * 262)));
     xcopyd2d(ix, iy, ix + 16, iy + 16, ix, iy, PAGE2, draw_page, 320, 320);
     object_map[p] = 0;
     object_index[p] = 0;
   }
 }
 //==========================================================================
-void place_tile(int x, int y, int tile)
+void place_tile(int16_t x, int16_t y, int16_t tile)
 {
-  int ix, iy;
+  int16_t ix, iy;
 
   ix = x * 16;
   iy = y * 16;
 
-  xfput(ix, iy, PAGE2, (char *)(bg_pics + (scrn.bg_color * 262)));
-  xfput(ix, iy, PAGE2, (char *)(bg_pics + (tile * 262)));
+  xfput(ix, iy, PAGE2, (uint8_t *)(bg_pics + (scrn.bg_color * 262)));
+  xfput(ix, iy, PAGE2, (uint8_t *)(bg_pics + (tile * 262)));
   xcopyd2d(ix, iy, ix + 16, iy + 16, ix, iy, PAGE2, draw_page, 320, 320);
   xcopyd2d(ix, iy, ix + 16, iy + 16, ix, iy, PAGE2, display_page, 320, 320);
   scrn.icon[y][x] = tile;
   remove_objects(y, x);
 }
 //==========================================================================
-int bgtile(int x, int y)
+int16_t bgtile(int16_t x, int16_t y)
 {
 
   if (x < 0 || x > 319 || y < 0 || y > 191)

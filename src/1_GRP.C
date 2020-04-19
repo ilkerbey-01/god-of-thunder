@@ -10,19 +10,19 @@
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
 //===========================================================================
-extern char text[94][72];
+extern uint8_t text[94][72];
 extern union REGS in, out;
-char pbuff[768];
-extern char dialog_color[16];
-extern char cheat;
-extern unsigned int display_page, draw_page;
-extern volatile char key_flag[100];
+uint8_t pbuff[768];
+extern uint8_t dialog_color[16];
+extern uint8_t cheat;
+extern uint16_t display_page, draw_page;
+extern volatile uint8_t key_flag[100];
 extern ACTOR actor[MAX_ACTORS];
 //===========================================================================
-void xprint(int x, int y, char *string, unsigned int page, int color)
+void xprint(int16_t x, int16_t y, char *string, uint16_t page, int16_t color)
 {
-  char ch;
-  char str[4];
+  uint8_t ch;
+  uint8_t str[4];
 
   str[3] = 0;
   x &= 0xfffc;
@@ -50,11 +50,11 @@ void xprint(int x, int y, char *string, unsigned int page, int color)
   }
 }
 //===========================================================================
-void xprintx(int x, int y, char *string, unsigned int page, int color)
+void xprintx(int16_t x, int16_t y, char *string, uint16_t page, int16_t color)
 {
-  char ch;
-  char str[4];
-  int c;
+  uint8_t ch;
+  uint8_t str[4];
+  int16_t c;
 
   c = 26;
   str[3] = 0;
@@ -126,15 +126,15 @@ out dx,al
   }
 }
 //===========================================================================
-int load_palette(void)
+int16_t load_palette(void)
 {
-  int i;
-  char r, g, b, n;
+  int16_t i;
+  uint8_t r, g, b, n;
 #define DAC_READ_INDEX 03c7h
 #define DAC_WRITE_INDEX 03c8h
 #define DAC_DATA 03c9h
 
-  if (res_read("palette", (char *)pbuff) < 0)
+  if (res_read("palette", (uint8_t *)pbuff) < 0)
     return 0;
   for (i = 0; i < 768; i++)
     pbuff[i] = pbuff[i] >> 2;
@@ -183,7 +183,7 @@ int load_palette(void)
   return 1;
 }
 /*=========================================================================*/
-void xbox(int x1, int y1, int x2, int y2, unsigned page, int color)
+void xbox(int16_t x1, int16_t y1, int16_t x2, int16_t y2, unsigned page, int16_t color)
 {
 
   xline(x1, y1, x2, y1, page, color);
@@ -192,9 +192,9 @@ void xbox(int x1, int y1, int x2, int y2, unsigned page, int color)
   xline(x2, y1, x2, y2, page, color);
 }
 /*=========================================================================*/
-void xline(int x0, int y0, int x1, int y1, int page, int color)
+void xline(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t page, int16_t color)
 {
-  int x, y;
+  int16_t x, y;
 
   if (x0 == x1 && y0 == y1)
     xpset(x0, y0, page, color);
@@ -212,7 +212,7 @@ void xline(int x0, int y0, int x1, int y1, int page, int color)
     }
     for (x = x0; x <= x1; x++)
     {
-      y = (int)(y0 + ((x - x0) * (long)(y1 - y0)) / (x1 - x0));
+      y = (int)(y0 + ((x - x0) * (int32_t)(y1 - y0)) / (x1 - x0));
       xpset(x, y, page, color);
     }
   }
@@ -229,7 +229,7 @@ void xline(int x0, int y0, int x1, int y1, int page, int color)
     }
     for (y = y0; y <= y1; y++)
     {
-      x = (int)(x0 + ((y - y0) * (long)(x1 - x0)) / (y1 - y0));
+      x = (int)(x0 + ((y - y0) * (int32_t)(x1 - x0)) / (y1 - y0));
       xpset(x, y, page, color);
     }
   }
@@ -298,7 +298,7 @@ void screen_dump(void)
 //==========================================================================
 void show_all_actors(void)
 {
-  int i;
+  int16_t i;
 
   for (i = 0; i < MAX_ACTORS; i++)
     actor[i].show = 0;

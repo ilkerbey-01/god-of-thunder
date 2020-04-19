@@ -6,166 +6,187 @@
 #include <string.h>
 #include <time.h>
 #include <memory.h>
+#include <ctype.h>
+#include <time.h>
 
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
 //#include "mu_man.h"
 
 //========================= Global Declarations ==============================
-unsigned int page[3] = {PAGE0, PAGE1, PAGE2};
-unsigned int display_page, draw_page;
-unsigned int page3_offset;
-char pge;
-int exit_flag;
+uint16_t page[3] = {PAGE0, PAGE1, PAGE2};
+uint16_t display_page, draw_page;
+uint16_t page3_offset;
+uint8_t pge;
+int16_t exit_flag;
 
-volatile char key_flag[100];
-volatile char joy_flag[100];
-volatile char tmp_flag[100];
-char break_code;
-char scan_code, last_scan_code;
-char diag;
-char slow_mode, startup;
-char shot_ok;
-int thor_x1, thor_y1, thor_x2, thor_y2, thor_real_y1;
-int thor_pos;
-int max_shot;
+volatile uint8_t key_flag[100];
+volatile uint8_t joy_flag[100];
+volatile uint8_t tmp_flag[100];
+uint8_t break_code;
+uint8_t scan_code, last_scan_code;
+uint8_t diag;
+uint8_t slow_mode, startup;
+uint8_t shot_ok;
+int16_t thor_x1, thor_y1, thor_x2, thor_y2, thor_real_y1;
+int16_t thor_pos;
+int16_t max_shot;
 
-volatile unsigned int timer_cnt, vbl_cnt, magic_cnt, extra_cnt;
+volatile uint16_t timer_cnt, vbl_cnt, magic_cnt, extra_cnt;
 
-char text[94][72];
-union REGS in, out;
-struct SREGS seg;
-char *bg_pics;
-//char bg_header[200];
-char objects[NUM_OBJECTS][262];
-int ox, oy, of;
-char object_map[240];
-char object_index[240];
-char *bleep;
-char thor_icon1, thor_icon2, thor_icon3, thor_icon4;
-char level_type;
-char *song;
-char music_current;
-char boss_loaded;
-char apple_drop;
-char cheat;
-char area;
-char last_setup[32];
+uint8_t text[94][72];
+uint8_t *bg_pics;
+//uint8_t bg_header[200];
+uint8_t objects[NUM_OBJECTS][262];
+int16_t ox, oy, of;
+uint8_t object_map[240];
+uint8_t object_index[240];
+uint8_t *bleep;
+uint8_t thor_icon1, thor_icon2, thor_icon3, thor_icon4;
+uint8_t level_type;
+uint8_t *song;
+uint8_t music_current;
+uint8_t boss_loaded;
+uint8_t apple_drop;
+uint8_t cheat;
+uint8_t area;
+uint8_t last_setup[32];
 
 LEVEL scrn;
-char *scrnp;
+uint8_t *scrnp;
 
-char *sd_data;
-int current_level, new_level, new_level_tile, current_area;
-//char file_str[10];
+uint8_t *sd_data;
+int16_t current_level, new_level, new_level_tile, current_area;
+//uint8_t file_str[10];
 
 SETUP setup;
-char *tmp_buff;
-int reps;
+uint8_t *tmp_buff;
+int16_t reps;
 
-char *mask_buff;
-char *mask_buff_start;
-char abuff[AMI_LEN];
-char *ami_buff;
+uint8_t *mask_buff;
+uint8_t *mask_buff_start;
+uint8_t abuff[AMI_LEN];
+uint8_t *ami_buff;
 ACTOR actor[MAX_ACTORS];  //current actors
 ACTOR enemy[MAX_ENEMIES]; //current enemies
 ACTOR shot[MAX_ENEMIES];  //current shots
-char enemy_type[MAX_ENEMIES];
+uint8_t enemy_type[MAX_ENEMIES];
 
 ACTOR magic_item[2];
-char magic_pic[2][1024];
+uint8_t magic_pic[2][1024];
 
 //ACTOR enemy[4];   //4 different available actors
-//char enemy_used[4];
-//char enemy_type[4];
-//char enemy_complex[4];
-//unsigned int enemy_buff[4];
-//int enemy_mask_offset[4];
+//uint8_t enemy_used[4];
+//uint8_t enemy_type[4];
+//uint8_t enemy_complex[4];
+//uint16_t enemy_buff[4];
+//int16_t enemy_mask_offset[4];
 
 //ACTOR shot[4];    //4 shots
-//unsigned int shot_buff[4];
-//int shot_mask_offset[4];
-char warp_scroll;
+//uint16_t shot_buff[4];
+//int16_t shot_mask_offset[4];
+uint8_t warp_scroll;
 
-//char *enemy_data;     //points to four actors/sounds
+//uint8_t *enemy_data;     //points to four actors/sounds
 
 ACTOR *thor;
 ACTOR *hammer;
 ACTOR explosion;
 ACTOR sparkle;
 THOR_INFO thor_info;
-int key_fire, key_up, key_down, key_left, key_right, key_magic, key_select;
-int boss_dead;
+int16_t key_fire, key_up, key_down, key_left, key_right, key_magic, key_select;
+int16_t boss_dead;
 
-int warp_flag;
+int16_t warp_flag;
 
-char *std_sound_start;
-char *pcstd_sound_start;
-char *std_sound;
-char *pcstd_sounds;
-char *boss_sound[3];
-char *boss_pcsound[3];
-long pcsound_length[NUM_SOUNDS];
-int rand1, rand2;
-int restore_screen;
-int last_oracle;
-int hourglass_flag, thunder_flag, shield_on, lightning_used, tornado_used;
-int apple_flag, bomb_flag;
-int switch_flag;
-unsigned int joy_x, joy_y;
-char joy_b1, joy_b2;
-int joystick, joylx, joyly, joyhx, joyhy;
+uint8_t *std_sound_start;
+uint8_t *pcstd_sound_start;
+uint8_t *std_sound;
+uint8_t *pcstd_sounds;
+uint8_t *boss_sound[3];
+uint8_t *boss_pcsound[3];
+int32_t pcsound_length[NUM_SOUNDS];
+int16_t rand1, rand2;
+int16_t restore_screen;
+int16_t last_oracle;
+int16_t hourglass_flag, thunder_flag, shield_on, lightning_used, tornado_used;
+int16_t apple_flag, bomb_flag;
+int16_t switch_flag;
+uint16_t joy_x, joy_y;
+uint8_t joy_b1, joy_b2;
+int16_t joystick, joylx, joyly, joyhx, joyhy;
 char res_file[16];
-char odin[4][262];
-char hampic[4][262];
-int load_game_flag;
-int music_flag, sound_flag, pcsound_flag;
-int cash1_inform, cash2_inform, door_inform, magic_inform, carry_inform;
-int killgg_inform;
-char dialog_color[] = {14, 54, 120, 138, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+uint8_t odin[4][262];
+uint8_t hampic[4][262];
+int16_t load_game_flag;
+int16_t music_flag, sound_flag, pcsound_flag;
+int16_t cash1_inform, cash2_inform, door_inform, magic_inform, carry_inform;
+int16_t killgg_inform;
+uint8_t dialog_color[] = {14, 54, 120, 138, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 //norm,good,bad,sign,white
 
-char *std_sounds;
-char *pc_sound[NUM_SOUNDS];
-char *dig_sound[NUM_SOUNDS];
-int boss_active;
-char story_flag;
-char *save_filename = "XXXXXXXX.XXX";
-char *scr;
-char demo_key[DEMO_LEN];
-int demo_cnt;
-char demo, record;
-char demo_enable;
-int rnd_index;
-int rnd_array[100];
-char rdemo;
-char test_sdf[80];
-char *options_yesno[] = {"Yes", "No", NULL};
-char *lzss_buff;
-char game_over;
-char noal, nosb, ret;
+uint8_t *std_sounds;
+uint8_t *pc_sound[NUM_SOUNDS];
+uint8_t *dig_sound[NUM_SOUNDS];
+int16_t boss_active;
+uint8_t story_flag;
+char save_filename[] = "XXXXXXXX.XXX";
+uint8_t *scr;
+uint8_t demo_key[DEMO_LEN];
+int16_t demo_cnt;
+uint8_t demo, record;
+uint8_t demo_enable;
+int16_t rnd_index;
+int16_t rnd_array[100];
+uint8_t rdemo;
+uint8_t test_sdf[80];
+char options_yesno[3][4] = {"Yes", "No", NULL};
+uint8_t *lzss_buff;
+uint8_t game_over;
+uint8_t noal, nosb, ret;
 char tempstr[80];
-char auto_load;
-char ide_run, fast_exit, nojoy, gr, xdos;
-char main_loop;
-char end_tile;
+uint8_t auto_load;
+uint8_t ide_run, fast_exit, nojoy, gr, xdos;
+uint8_t main_loop;
+uint8_t end_tile;
 
-void interrupt (*old_timer_int)(void); // interrupt function pointer
-void interrupt timer_int(void);
+void (*old_timer_int)(void); //int16_terrupt function pointer
+void timer_int(void);
 
-void xdisplay_actors(ACTOR *act, unsigned int page);
-void xerase_actors(ACTOR *act, unsigned int page);
+void xdisplay_actors(ACTOR *act, uint16_t page);
+void xerase_actors(ACTOR *act, uint16_t page);
 void setup_load(void);
-//============================================================================
-void main(int argc, char *argv[])
+
+void delay(int milliseconds)
 {
-  int err, i;
+  long pause;
+  clock_t now, then;
+
+  pause = milliseconds * (CLOCKS_PER_SEC / 1000);
+  now = then = clock();
+  while ((now - then) < pause)
+    now = clock();
+}
+
+void strupr(char *s)
+{
+  while (*s)
+  {
+    *s = toupper((unsigned char)*s);
+    s++;
+  }
+}
+
+//============================================================================
+int main(int argc, char *argv[])
+{
+  int16_t err, i;
   char s[21];
-  int vbl_flag;
-  int ma, rp;
-  int po[4] = {-1, 1, -80, 80};
-  int loop, vl;
-  int opt;
+  int16_t vbl_flag;
+  int16_t ma, rp;
+  int16_t po[4] = {-1, 1, -80, 80};
+  int16_t loop, vl;
+  int16_t opt;
   FILE *fp;
 
   //chdir("\\gottest");
@@ -355,8 +376,9 @@ void main(int argc, char *argv[])
     display_score();
   }
   new_level = current_level;
-  movedata(FP_SEG(sd_data + (new_level * 512)), FP_OFF(sd_data + (new_level * 512)),
-           FP_SEG(&scrn), FP_OFF(&scrn), sizeof(LEVEL));
+  // TODO
+  // movedata(FP_SEG(sd_data + (new_level * 512)), FP_OFF(sd_data + (new_level * 512)),
+  //          FP_SEG(&scrn), FP_OFF(&scrn), sizeof(LEVEL));
   show_level(current_level);
   exit_flag = 0;
   pge = 0;
@@ -419,7 +441,7 @@ void main(int argc, char *argv[])
       //      else demo_key[demo_cnt+1]=scan_code;
       //    }
       //    if(cheat){
-      itoa(demo_cnt, s, 10);
+      sprintf(s, "%d", demo_cnt);
       xfillrectangle(0, 40, 296 + 24, 40 + 8, PAGES, 0);
       xprint(0, 39, s, PAGES, 14);
       //    }
@@ -435,12 +457,16 @@ void main(int argc, char *argv[])
     {
       if (key_flag[_THREE])
       {
-        asm mov dx, status_Reg1 asm in al, dx asm mov dx, atr_Index asm mov al, atr_Overscan asm out dx, al asm mov al, 10 // green
-            asm out dx,
-            al asm mov al, 20h // normal
-            asm out dx,
-            al
-                vbl_flag = 1;
+        // asm("mov dx, status_Reg1");
+        // asm("in al, dx");
+        // asm("asm mov dx, atr_Index");
+        // asm("mov al, atr_Overscan");
+        // asm("out dx, al");
+        // asm("mov al, 10"); // green
+        // asm("out dx, al");
+        // asm("mov al, 20h"); // normal
+        // asm("out dx, al");
+        vbl_flag = 1;
       }
       else
         vbl_flag = 0;
@@ -465,11 +491,15 @@ void main(int argc, char *argv[])
     {
       if (vbl_flag)
       {
-        asm mov dx, status_Reg1 asm in al, dx asm mov dx, atr_Index asm mov al, atr_Overscan asm out dx, al asm mov al, 0 // black
-            asm out dx,
-            al asm mov al, 20h // normal
-            asm out dx,
-            al
+        // asm("mov dx, status_Reg1");
+        // asm("in al, dx");
+        // asm("mov dx, atr_Index");
+        // asm("mov al, atr_Overscan");
+        // asm("out dx, al");
+        // asm("mov al, 0"); // black
+        // asm("out dx, al");
+        // asm("mov al, 20h"); // normal
+        // asm("out dx, al");
       }
     }
     if (restore_screen)
@@ -640,7 +670,7 @@ void main(int argc, char *argv[])
       if (cheat && !demo)
       {
         xfillrectangle(296, 0, 296 + 24, 10, PAGES, 0);
-        itoa(current_level, s, 10);
+        sprintf(s, "%d", current_level);
         xprint(296, 0, s, PAGES, 14);
       }
     }
@@ -694,18 +724,20 @@ void main(int argc, char *argv[])
   //if(xdos==3 && cheat) exit(0);
   if ((!cheat) || demo)
   {
-    _AX = 0x0100;
-    _CX = 0x2000;
-    geninterrupt(0x10);
+    // TODO
+    // _AX = 0x0100;
+    // _CX = 0x2000;
+    // geninterrupt(0x10);
   }
   run_gotm();
   exit(0);
+  return 0;
 }
-extern int SBResetCount;
+extern int16_t SBResetCount;
 //===========================================================================
 void run_gotm(void)
 {
-  int num;
+  int16_t num;
   char s[36];
   char *args[] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL,
                   NULL, NULL, NULL, NULL, NULL};
@@ -755,7 +787,7 @@ void run_gotm(void)
   }
   if (game_over)
   {
-    ltoa(thor_info.score, s, 10);
+    sprintf(s, "%d", thor_info.score);
     strcpy(res_file, "/SCORE:");
     strcat(res_file, s);
     args[num] = res_file;
@@ -773,23 +805,24 @@ void run_gotm(void)
   //printf("%d\r\n",SBResetCount);
   //getch();
 
-  if (!ide_run)
-    execv("GOT.EXE", args);
+  // TODO
+  //if (!ide_run)
+  //  execv("GOT.EXE", args);
   exit(0);
 }
 //===========================================================================
-void printt(int val)
+void printt(int16_t val)
 {
   char s[21];
 
-  itoa(val, s, 10);
+  sprintf(s, "%d", val);
   xfillrectangle(200, 16, 224, 40, PAGES, 20);
   xprint(200, 16, s, PAGES, 12);
 }
 //===========================================================================
 void thor_dies(void)
 {
-  int li, ln;
+  int16_t li, ln;
 
   for (li = 0; li < MAX_ACTORS; li++)
     actor[li].show = 0;
@@ -849,8 +882,9 @@ void thor_dies(void)
   actor[1].used = 0;
   actor[2].used = 0;
   thor->speed_count = 6;
-  movedata(FP_SEG(sd_data + (new_level * 512)), FP_OFF(sd_data + (new_level * 512)),
-           FP_SEG(&scrn), FP_OFF(&scrn), sizeof(LEVEL));
+  // TODO
+  // movedata(FP_SEG(sd_data + (new_level * 512)), FP_OFF(sd_data + (new_level * 512)),
+  //          FP_SEG(&scrn), FP_OFF(&scrn), sizeof(LEVEL));
   display_health();
   display_magic();
   display_jewels();
@@ -861,11 +895,11 @@ void thor_dies(void)
   set_thor_vars();
 }
 //===========================================================================
-void thor_spins(int flag)
+void thor_spins(int16_t flag)
 {
-  int i, d, c;
-  unsigned int dr, di, sw;
-  char da[] = {0, 2, 1, 3};
+  int16_t i, d, c;
+  uint16_t dr, di, sw;
+  uint8_t da[] = {0, 2, 1, 3};
 
   if (of)
   { //replace tile after object is picked up
@@ -944,8 +978,9 @@ void setup_load(void)
   actor[1].used = 0;
   actor[2].used = 0;
   thor->speed_count = 6;
-  movedata(FP_SEG(sd_data + (new_level * 512)), FP_OFF(sd_data + (new_level * 512)),
-           FP_SEG(&scrn), FP_OFF(&scrn), sizeof(LEVEL));
+  // TODO
+  // movedata(FP_SEG(sd_data + (new_level * 512)), FP_OFF(sd_data + (new_level * 512)),
+  //          FP_SEG(&scrn), FP_OFF(&scrn), sizeof(LEVEL));
   display_health();
   display_magic();
   display_jewels();
@@ -956,7 +991,7 @@ void setup_load(void)
   show_level(new_level);
 }
 //===========================================================================
-void pause(int delay)
+void pause(int16_t delay)
 {
 
   timer_cnt = 0;
@@ -976,9 +1011,9 @@ void rotate_pal(void)
   xshowpage(display_page);
 }
 //===========================================================================
-int rnd(int max)
+int16_t rnd(int16_t max)
 {
-  int r;
+  int16_t r;
 
   if (demo || rdemo || record)
   {

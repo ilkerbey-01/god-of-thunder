@@ -14,35 +14,35 @@
 
 extern ACTOR *thor;
 extern THOR_INFO thor_info;
-extern char *tmp_buff;
-extern char objects[NUM_OBJECTS][262];
-extern unsigned int page[3];
-extern volatile char key_flag[100];
-extern int key_fire, key_up, key_down, key_left, key_right, key_magic, key_select;
-extern unsigned int display_page, draw_page;
-extern char *bg_pics;
-extern int restore_screen;
-extern char hampic[4][262];
-extern volatile unsigned int timer_cnt, extra_cnt;
-extern char level_type, slow_mode;
+extern uint8_t *tmp_buff;
+extern uint8_t objects[NUM_OBJECTS][262];
+extern uint16_t page[3];
+extern volatile uint8_t key_flag[100];
+extern int16_t key_fire, key_up, key_down, key_left, key_right, key_magic, key_select;
+extern uint16_t display_page, draw_page;
+extern uint8_t *bg_pics;
+extern int16_t restore_screen;
+extern uint8_t hampic[4][262];
+extern volatile uint16_t timer_cnt, extra_cnt;
+extern uint8_t level_type, slow_mode;
 extern struct sup setup;
-extern int music_flag, sound_flag, pcsound_flag, boss_active;
-extern char *options_yesno[];
-char *options_onoff[] = {"On", "Off", NULL};
-char *options_sound[] = {"None", "PC Speaker", "Digitized", NULL};
-char *options_skill[] = {"Easy Enemies", "Normal Enemies", "Tough Enemies", NULL};
-char *options_slow[] = {"On  (slow computer)", "Off (fast computer)", NULL};
-char *options_menu[] = {"Sound/Music", "Skill Level", "Save Game", "Load Game",
-                        "Die", "Turbo Mode", "Help", "Quit", NULL};
-char *options_quit[] = {"Continue Game", "Quit to Opening Screen", "Quit to DOS", NULL};
-extern char *scr;
-extern char last_setup[32];
-extern int exit_flag;
-extern char cheat;
+extern int16_t music_flag, sound_flag, pcsound_flag, boss_active;
+extern uint8_t *options_yesno[];
+uint8_t *options_onoff[] = {"On", "Off", NULL};
+uint8_t *options_sound[] = {"None", "PC Speaker", "Digitized", NULL};
+uint8_t *options_skill[] = {"Easy Enemies", "Normal Enemies", "Tough Enemies", NULL};
+uint8_t *options_slow[] = {"On  (slow computer)", "Off (fast computer)", NULL};
+uint8_t *options_menu[] = {"Sound/Music", "Skill Level", "Save Game", "Load Game",
+                           "Die", "Turbo Mode", "Help", "Quit", NULL};
+uint8_t *options_quit[] = {"Continue Game", "Quit to Opening Screen", "Quit to DOS", NULL};
+extern uint8_t *scr;
+extern uint8_t last_setup[32];
+extern int16_t exit_flag;
+extern uint8_t cheat;
 //===========================================================================
 //void status_panel(void){
-//int i;
-//int c[]={23,25,27,29,20};
+//int16_t i;
+//int16_t c[]={23,25,27,29,20};
 
 //for(i=0;i<5;i++) xfillrectangle(0+i,0+i,320-i,48-i,PAGES,c[i]);
 //xprint(8,6,"Health",PAGES,6);
@@ -55,7 +55,7 @@ extern char cheat;
 //===========================================================================
 void display_health(void)
 {
-  int b;
+  int16_t b;
 
   b = 59 + thor->health;
   xfillrectangle(59, 8, b, 12, PAGES, 32);
@@ -64,7 +64,7 @@ void display_health(void)
 //===========================================================================
 void display_magic(void)
 {
-  int b;
+  int16_t b;
 
   b = 59 + thor_info.magic;
   xfillrectangle(59, 20, b, 24, PAGES, 96);
@@ -73,8 +73,8 @@ void display_magic(void)
 //===========================================================================
 void display_jewels(void)
 {
-  char s[21];
-  int x, l;
+  uint8_t s[21];
+  int16_t x, l;
 
   itoa(thor_info.jewels, s, 10);
   l = strlen(s);
@@ -92,8 +92,8 @@ void display_jewels(void)
 //===========================================================================
 void display_score(void)
 {
-  char s[21];
-  int x, l;
+  uint8_t s[21];
+  int16_t x, l;
 
   ultoa(thor_info.score, s, 10);
 
@@ -106,8 +106,8 @@ void display_score(void)
 //===========================================================================
 void display_keys(void)
 {
-  char s[21];
-  int x, l;
+  uint8_t s[21];
+  int16_t x, l;
 
   itoa(thor_info.keys, s, 10);
   l = strlen(s);
@@ -130,15 +130,15 @@ void display_item(void)
   if (thor_info.item)
   {
     if (thor_info.item == 7)
-      xfput(282, 8, PAGES, (char *)objects[thor_info.object + 10]);
+      xfput(282, 8, PAGES, (uint8_t *)objects[thor_info.object + 10]);
     else
-      xfput(282, 8, PAGES, (char *)objects[thor_info.item + 25]);
+      xfput(282, 8, PAGES, (uint8_t *)objects[thor_info.item + 25]);
   }
 }
 //===========================================================================
-int init_status_panel(void)
+int16_t init_status_panel(void)
 {
-  char *sp;
+  uint8_t *sp;
 
   sp = res_falloc_read("STATUS");
   if (!sp)
@@ -149,13 +149,13 @@ int init_status_panel(void)
   //xfillrectangle(183,32,209,42,PAGES,STAT_COLOR);
   //xfillrectangle(222,16,272,33,PAGES,STAT_COLOR);
   display_item();
- free(sp);
+  free(sp);
   return 1;
 }
 //===========================================================================
-void add_jewels(int num)
+void add_jewels(int16_t num)
 {
-  int n;
+  int16_t n;
 
   n = thor_info.jewels + num;
   if (n > 999)
@@ -166,11 +166,11 @@ void add_jewels(int num)
   display_jewels();
 }
 //===========================================================================
-void add_score(int num)
+void add_score(int16_t num)
 {
-  long n;
+  int32_t n;
 
-  n = thor_info.score + (long)num;
+  n = thor_info.score + (int32_t)num;
   if (n > 999999l)
     n = 999999l;
   else if (n < 0)
@@ -179,9 +179,9 @@ void add_score(int num)
   display_score();
 }
 //===========================================================================
-void add_magic(int num)
+void add_magic(int16_t num)
 {
-  int n;
+  int16_t n;
 
   n = thor_info.magic + num;
   if (n > 150)
@@ -192,9 +192,9 @@ void add_magic(int num)
   display_magic();
 }
 //===========================================================================
-void add_health(int num)
+void add_health(int16_t num)
 {
-  int n;
+  int16_t n;
 
   n = thor->health + num;
   if (n > 150)
@@ -207,9 +207,9 @@ void add_health(int num)
     exit_flag = 2;
 }
 //===========================================================================
-void add_keys(int num)
+void add_keys(int16_t num)
 {
-  int n;
+  int16_t n;
 
   n = thor_info.keys + num;
   if (n > 99)
@@ -240,7 +240,7 @@ void fill_magic(void)
   //}
 }
 //===========================================================================
-void fill_score(int num)
+void fill_score(int16_t num)
 {
 
   while (num)
@@ -281,9 +281,9 @@ void score_for_inv(void)
   }
 }
 //===========================================================================
-void boss_status(int health)
+void boss_status(int16_t health)
 {
-  int rep, i, c;
+  int16_t rep, i, c;
 
   if (health == -1)
   {
@@ -309,12 +309,12 @@ void boss_status(int health)
   }
 }
 //===========================================================================
-int select_option(char *option[], char *title, int ipos)
+int16_t select_option(uint8_t *option[], uint8_t *title, int16_t ipos)
 {
-  int num_opts, x1, y1, x2, y2, w, h;
-  int s, i, pic, pos, key, y, kf, ret;
-  unsigned int pg;
-  char **op;
+  int16_t num_opts, x1, y1, x2, y2, w, h;
+  int16_t s, i, pic, pos, key, y, kf, ret;
+  uint16_t pg;
+  uint8_t **op;
 
   show_all_actors();
   num_opts = 0;
@@ -345,19 +345,19 @@ int select_option(char *option[], char *title, int ipos)
 
   xfillrectangle(x1, y1, x2, y2, pg, 215);
 
-  xfput(x1 - 16, y1 - 16, pg, (char *)(bg_pics + (192 * 262)));
-  xfput(x2, y1 - 16, pg, (char *)(bg_pics + (193 * 262)));
-  xfput(x1 - 16, y2, pg, (char *)(bg_pics + (194 * 262)));
-  xfput(x2, y2, pg, (char *)(bg_pics + (195 * 262)));
+  xfput(x1 - 16, y1 - 16, pg, (uint8_t *)(bg_pics + (192 * 262)));
+  xfput(x2, y1 - 16, pg, (uint8_t *)(bg_pics + (193 * 262)));
+  xfput(x1 - 16, y2, pg, (uint8_t *)(bg_pics + (194 * 262)));
+  xfput(x2, y2, pg, (uint8_t *)(bg_pics + (195 * 262)));
   for (i = 0; i < s; i++)
   {
-    xfput(x1 + (i * 16), y1 - 16, pg, (char *)(bg_pics + (196 * 262)));
-    xfput(x1 + (i * 16), y2, pg, (char *)(bg_pics + (197 * 262)));
+    xfput(x1 + (i * 16), y1 - 16, pg, (uint8_t *)(bg_pics + (196 * 262)));
+    xfput(x1 + (i * 16), y2, pg, (uint8_t *)(bg_pics + (197 * 262)));
   }
   for (i = 0; i < (num_opts + 2); i++)
   {
-    xfput(x1 - 16, y1 + (i * 16), pg, (char *)(bg_pics + (198 * 262)));
-    xfput(x2, y1 + (i * 16), pg, (char *)(bg_pics + (199 * 262)));
+    xfput(x1 - 16, y1 + (i * 16), pg, (uint8_t *)(bg_pics + (198 * 262)));
+    xfput(x2, y1 + (i * 16), pg, (uint8_t *)(bg_pics + (199 * 262)));
   }
   s = strlen(title) * 8;
   i = (320 - s) / 2;
@@ -442,21 +442,21 @@ int select_option(char *option[], char *title, int ipos)
   return ret;
 }
 //===========================================================================
-int option_menu(void)
+int16_t option_menu(void)
 {
 
   return select_option(options_menu, "Options Menu", 0);
 }
 //===========================================================================
-int ask_exit(void)
+int16_t ask_exit(void)
 {
 
   return select_option(options_quit, "Quit Game?", 0);
 }
 //===========================================================================
-int select_sound(void)
+int16_t select_sound(void)
 {
-  int ret, sel;
+  int16_t ret, sel;
 
   sel = 0;
   if (setup.pc_sound)
@@ -492,9 +492,9 @@ int select_sound(void)
   return 1;
 }
 //===========================================================================
-int select_music(void)
+int16_t select_music(void)
 {
-  int ret;
+  int16_t ret;
 
   if (!music_flag)
     return 1;
@@ -525,9 +525,9 @@ int select_music(void)
   return 1;
 }
 //===========================================================================
-int select_slow(void)
+int16_t select_slow(void)
 {
-  int ret;
+  int16_t ret;
 
   ret = select_option(options_slow, "Fast Mode", 1 - slow_mode);
   if (!ret)
@@ -541,9 +541,9 @@ int select_slow(void)
   return 1;
 }
 //===========================================================================
-int select_scroll(void)
+int16_t select_scroll(void)
 {
-  int ret;
+  int16_t ret;
 
   ret = select_option(options_yesno, "Scroll Between Screens?", 1 - setup.scroll_flag);
   if (!ret)
@@ -565,7 +565,7 @@ void select_fastmode(void)
 //===========================================================================
 void select_skill(void)
 {
-  int ret, sel;
+  int16_t ret, sel;
 
   sel = setup.skill;
   ret = select_option(options_skill, "  Set Skill Level ", sel);
@@ -576,9 +576,9 @@ void select_skill(void)
   memcpy(last_setup, &setup, 32);
 }
 //===========================================================================
-void hammer_smack(int x, int y)
+void hammer_smack(int16_t x, int16_t y)
 {
-  int i;
+  int16_t i;
 
   for (i = 0; i < 4; i++)
   {

@@ -8,58 +8,58 @@
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
 //===========================================================================
-extern char pge;
-extern unsigned int draw_page, display_page, page3_offset;
-extern int current_level, new_level;
-extern char *ami_buff;
-extern char abuff[AMI_LEN];
-extern char *mask_buff;
-extern char *mask_buff_start;
+extern uint8_t pge;
+extern uint16_t draw_page, display_page, page3_offset;
+extern int16_t current_level, new_level;
+extern uint8_t *ami_buff;
+extern uint8_t abuff[AMI_LEN];
+extern uint8_t *mask_buff;
+extern uint8_t *mask_buff_start;
 extern ACTOR actor[MAX_ACTORS];  //current actors
 extern ACTOR enemy[MAX_ENEMIES]; //current enemies
 extern ACTOR shot[MAX_ENEMIES];  //current shots
-extern char enemy_type[MAX_ENEMIES];
-int etype[MAX_ENEMIES];
-unsigned int latch_mem;
-char *enemy_mb;
-unsigned int enemy_lm;
-char *enemy_ami;
+extern uint8_t enemy_type[MAX_ENEMIES];
+int16_t etype[MAX_ENEMIES];
+uint16_t latch_mem;
+uint8_t *enemy_mb;
+uint16_t enemy_lm;
+uint8_t *enemy_ami;
 
-extern int thor_x1, thor_y1, thor_x2, thor_y2;
+extern int16_t thor_x1, thor_y1, thor_x2, thor_y2;
 extern ACTOR *thor;
 extern ACTOR *hammer;
 extern ACTOR explosion;
 extern ACTOR sparkle;
 extern THOR_INFO thor_info;
-extern char *tmp_buff;
+extern uint8_t *tmp_buff;
 
 extern LEVEL scrn;
-extern char *sd_data;
-extern char sd_header[128];
-extern int current_level;
+extern uint8_t *sd_data;
+extern uint8_t sd_header[128];
+extern int16_t current_level;
 extern SETUP setup;
-extern char play_speed;
-extern int max_shot;
+extern uint8_t play_speed;
+extern int16_t max_shot;
 extern ACTOR magic_item[];
-extern char magic_pic[][1024];
+extern uint8_t magic_pic[][1024];
 
-char *magic_ami;
-char *magic_mask_buff;
+uint8_t *magic_ami;
+uint8_t *magic_mask_buff;
 
-char *ami_store1, *ami_store2;
-char *mask_store1, *mask_store2;
+uint8_t *ami_store1, *ami_store2;
+uint8_t *mask_store1, *mask_store2;
 //===========================================================================
-unsigned int make_mask(MASK_IMAGE *new_image,
-                       unsigned int page_start, char *Image, int image_width,
-                       int image_height)
+uint16_t make_mask(MASK_IMAGE *new_image,
+                   uint16_t page_start, uint8_t *Image, int16_t image_width,
+                   int16_t image_height)
 {
-   unsigned int page_offset, size;
-   int align, set;
+   uint16_t page_offset, size;
+   int16_t align, set;
    ALIGNED_MASK_IMAGE *work_ami;
-   int scan_line, bit_num, temp_image_width;
-   unsigned char mask_temp;
-   char *new_mask_ptr;
-   char *old_mask_ptr;
+   int16_t scan_line, bit_num, temp_image_width;
+   unsigned uint8_t mask_temp;
+   uint8_t *new_mask_ptr;
+   uint8_t *old_mask_ptr;
 
    page_offset = page_start;
    set = 0;
@@ -80,7 +80,7 @@ unsigned int make_mask(MASK_IMAGE *new_image,
       /* Calculate the number of bytes needed to store the mask in
          nibble (Map Mask-ready) form, then allocate that space */
       size = work_ami->image_width * image_height;
-      work_ami->mask_ptr = (char *)mask_buff;
+      work_ami->mask_ptr = (uint8_t *)mask_buff;
       mask_buff += size;
 
       /* Generate this nibble oriented (Map Mask-ready) alignment of
@@ -118,7 +118,7 @@ unsigned int make_mask(MASK_IMAGE *new_image,
    return page_offset - page_start;
 }
 //===========================================================================
-void setup_actor(ACTOR *actr, char num, char dir, int x, int y)
+void setup_actor(ACTOR *actr, uint8_t num, uint8_t dir, int16_t x, int16_t y)
 {
 
    actr->next = 0; //next frame to be shown
@@ -164,7 +164,7 @@ void setup_actor(ACTOR *actr, char num, char dir, int x, int y)
 //===========================================================================
 void make_actor_mask(ACTOR *actr)
 {
-   int d, f;
+   int16_t d, f;
 
    for (d = 0; d < actr->directions; d++)
    {
@@ -182,7 +182,7 @@ void make_actor_mask(ACTOR *actr)
    }
 }
 //===========================================================================
-int load_standard_actors(void)
+int16_t load_standard_actors(void)
 {
 
    latch_mem = 50160u;
@@ -251,7 +251,7 @@ int load_standard_actors(void)
 //===========================================================================
 void show_enemies(void)
 {
-   int i, d, r;
+   int16_t i, d, r;
 
    for (i = 3; i < MAX_ACTORS; i++)
       actor[i].used = 0; //was i=3
@@ -289,9 +289,9 @@ void show_enemies(void)
    }
 }
 //===========================================================================
-int load_enemy(int type)
+int16_t load_enemy(int16_t type)
 {
-   int i, f, d, e;
+   int16_t i, f, d, e;
    ACTOR *enm;
 
    for (i = 0; i < MAX_ENEMIES; i++)
@@ -350,9 +350,9 @@ int load_enemy(int type)
    return e;
 }
 //===========================================================================
-int actor_visible(int invis_num)
+int16_t actor_visible(int16_t invis_num)
 {
-   int i, d;
+   int16_t i, d;
 
    for (i = 0; i < MAX_ENEMIES; i++)
    {
@@ -376,11 +376,11 @@ int actor_visible(int invis_num)
    return -1;
 }
 //===========================================================================
-void setup_magic_item(int item)
+void setup_magic_item(int16_t item)
 {
-   int i;
-   char *ami;
-   char *mb;
+   int16_t i;
+   uint8_t *ami;
+   uint8_t *mb;
 
    mb = mask_buff;
    mask_buff = magic_mask_buff;
@@ -398,9 +398,9 @@ void setup_magic_item(int item)
 //===========================================================================
 void load_new_thor(void)
 {
-   int rep;
-   char *ami;
-   char *mb;
+   int16_t rep;
+   uint8_t *ami;
+   uint8_t *mb;
 
    mb = mask_buff;
    ami = ami_buff;

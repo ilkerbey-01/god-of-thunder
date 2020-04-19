@@ -9,24 +9,24 @@
 #include <g_proto.h>
 #include <res_man.h>
 //===========================================================================
-extern volatile unsigned int timer_cnt;
+extern volatile uint16_t timer_cnt;
 extern LEVEL scrn;
 extern ACTOR actor[MAX_ACTORS];
 extern ACTOR *thor;
-extern int thor_x1, thor_y1, thor_x2, thor_y2, thor_real_y1;
-extern int exit_flag;
-extern int switch_flag;
-extern unsigned int display_page, draw_page;
-extern char *bg_pics;
-extern char objects[NUM_OBJECTS][262];
-extern char object_map[240];
-extern char object_index[240];
+extern int16_t thor_x1, thor_y1, thor_x2, thor_y2, thor_real_y1;
+extern int16_t exit_flag;
+extern int16_t switch_flag;
+extern uint16_t display_page, draw_page;
+extern uint8_t *bg_pics;
+extern uint8_t objects[NUM_OBJECTS][262];
+extern uint8_t object_map[240];
+extern uint8_t object_index[240];
 extern THOR_INFO thor_info;
-extern int rand1, rand2;
-extern char cheat;
-extern char *options_yesno[];
+extern int16_t rand1, rand2;
+extern uint8_t cheat;
+extern uint8_t *options_yesno[];
 extern SETUP setup;
-extern char *sd_data;
+extern uint8_t *sd_data;
 
 #define GOTKEY1 setup.f00
 #define TROLL_SHRUB setup.f01
@@ -39,22 +39,22 @@ extern char *sd_data;
 #define INFO1 setup.f08
 #define INFO2 setup.f09
 //==========================================================================
-int dialog_one(ACTOR *actr);
-int dialog_two(ACTOR *actr);
-int dialog_three(ACTOR *actr);
-int dialog_four(ACTOR *actr);
-int dialog_five(ACTOR *actr);
-int dialog_six(ACTOR *actr);
-int dialog_seven(ACTOR *actr);
-int dialog_eight(ACTOR *actr);
-int dialog_nine(ACTOR *actr);
-int dialog_ten(ACTOR *actr);
-int dialog_eleven(ACTOR *actr);
-int dialog_twelve(ACTOR *actr);
-int dialog_thirteen(ACTOR *actr);
-int dialog_fourteen(ACTOR *actr);
+int16_t dialog_one(ACTOR *actr);
+int16_t dialog_two(ACTOR *actr);
+int16_t dialog_three(ACTOR *actr);
+int16_t dialog_four(ACTOR *actr);
+int16_t dialog_five(ACTOR *actr);
+int16_t dialog_six(ACTOR *actr);
+int16_t dialog_seven(ACTOR *actr);
+int16_t dialog_eight(ACTOR *actr);
+int16_t dialog_nine(ACTOR *actr);
+int16_t dialog_ten(ACTOR *actr);
+int16_t dialog_eleven(ACTOR *actr);
+int16_t dialog_twelve(ACTOR *actr);
+int16_t dialog_thirteen(ACTOR *actr);
+int16_t dialog_fourteen(ACTOR *actr);
 
-int (*dialog_func[])(ACTOR *actr) =
+int16_t (*dialog_func[])(ACTOR *actr) =
     {
         dialog_one,
         dialog_two,
@@ -72,47 +72,47 @@ int (*dialog_func[])(ACTOR *actr) =
         dialog_fourteen,
 };
 //===========================================================================
-char *d_howmany = "So, How Many Ya Want?";
-char *d_canihave = "Well, Can I have it?";
-char *d_whichisit = "What Needs Fixed?";
-char *d_whichbridge = "Which Bridge?";
-char *d_whatsprob = "What's the Problem?";
-char *d_whatcanido = "What do you want to know?";
-char *d_have100jewels = "Can I have 100 jewels?";
-char *d_wellhowdo = "Well, how we gonna do this?";
-char *d_wannatrade = "Well, Do you want to trade?";
-char *options_buy1[] = {
+uint8_t *d_howmany = "So, How Many Ya Want?";
+uint8_t *d_canihave = "Well, Can I have it?";
+uint8_t *d_whichisit = "What Needs Fixed?";
+uint8_t *d_whichbridge = "Which Bridge?";
+uint8_t *d_whatsprob = "What's the Problem?";
+uint8_t *d_whatcanido = "What do you want to know?";
+uint8_t *d_have100jewels = "Can I have 100 jewels?";
+uint8_t *d_wellhowdo = "Well, how we gonna do this?";
+uint8_t *d_wannatrade = "Well, Do you want to trade?";
+uint8_t *options_buy1[] = {
     "5 Apples Please",
     "Fill 'er Up",
     "Never mind",
     NULL};
-char *options_bobstv[] = {
+uint8_t *options_bobstv[] = {
     "My TV",
     "A Bridge ",
     "Forget it",
     NULL};
-char *options_tv[] = {
+uint8_t *options_tv[] = {
     "Bad Picture Tube",
     "Horizontal Syncopation ",
     "Nothing",
     NULL};
-char *options_bridge1[] = {
+uint8_t *options_bridge1[] = {
     "London Bridge",
     "Dental Bridge",
     "I forgot",
     NULL};
-char *options_bridge2[] = {
+uint8_t *options_bridge2[] = {
     "London Bridge",
     "Dental Bridge",
     "Creekin's Bridge",
     "I forgot",
     NULL};
-char *options_hermit[] = {
+uint8_t *options_hermit[] = {
     "What's the doll for?",
     "How do I find Jormangund?",
     "Nothing",
     NULL};
-char *options_mailphone[] = {
+uint8_t *options_mailphone[] = {
     "I want to order by mail",
     "I want to order by phone",
     NULL};
@@ -130,9 +130,9 @@ void d_restore(void)
   //xdisplay_actors(&actor[MAX_ACTORS-1],display_page);
 }
 //===========================================================================
-void buy_apples(ACTOR *actr, int num, int amount)
+void buy_apples(ACTOR *actr, int16_t num, int16_t amount)
 {
-  int flag;
+  int16_t flag;
 
   flag = 0;
   while (num)
@@ -168,9 +168,9 @@ void buy_apples(ACTOR *actr, int num, int amount)
   }
 }
 //===========================================================================
-int dialog_one(ACTOR *act)
+int16_t dialog_one(ACTOR *act)
 { //merchant $5
-  int sel;
+  int16_t sel;
 
   act = act;
   actor_speaks(act, 3001, 0);
@@ -184,9 +184,9 @@ int dialog_one(ACTOR *act)
   return 0;
 }
 //===========================================================================
-int dialog_two(ACTOR *act)
+int16_t dialog_two(ACTOR *act)
 { //merchant $2
-  int sel;
+  int16_t sel;
 
   act = act;
   actor_speaks(act, 3002, 0);
@@ -205,7 +205,7 @@ int dialog_two(ACTOR *act)
   return 0;
 }
 //===========================================================================
-int dialog_three(ACTOR *act)
+int16_t dialog_three(ACTOR *act)
 { //keyman/treasure
 
   act = act;
@@ -226,9 +226,9 @@ int dialog_three(ACTOR *act)
   return 0;
 }
 //===========================================================================
-int dialog_four(ACTOR *act)
+int16_t dialog_four(ACTOR *act)
 { //troll
-  int sel;
+  int16_t sel;
 
   if (TROLL_SHRUB)
   {
@@ -269,7 +269,7 @@ int dialog_four(ACTOR *act)
   return 0;
 }
 //===========================================================================
-int dialog_five(ACTOR *act)
+int16_t dialog_five(ACTOR *act)
 { //bridge sign
 
   if (!BRIDGE_FIXED)
@@ -283,7 +283,7 @@ int dialog_five(ACTOR *act)
 //===========================================================================
 void d_fix_tv(ACTOR *act)
 {
-  int sel;
+  int16_t sel;
 
   if (!actor_speaks(act, 3012, 0))
     return;
@@ -308,7 +308,7 @@ void d_fix_tv(ACTOR *act)
 //===========================================================================
 void d_fix_bridge(ACTOR *act)
 {
-  int sel;
+  int16_t sel;
   LEVEL *lvl;
 
   if (!actor_speaks(act, 3015, 0))
@@ -351,9 +351,9 @@ void d_fix_bridge(ACTOR *act)
   }
 }
 //===========================================================================
-int dialog_six(ACTOR *act)
+int16_t dialog_six(ACTOR *act)
 { //carpenter
-  int sel;
+  int16_t sel;
 
   if (!HERMIT_HAS_DOLL)
   {
@@ -383,9 +383,9 @@ int dialog_six(ACTOR *act)
   return 0;
 }
 //===========================================================================
-int dialog_seven(ACTOR *act)
+int16_t dialog_seven(ACTOR *act)
 { //hermit/doll
-  int sel;
+  int16_t sel;
 
   if (HERMIT_HAS_DOLL)
   {
@@ -429,7 +429,7 @@ int dialog_seven(ACTOR *act)
   return 0;
 }
 //===========================================================================
-int dialog_eight(ACTOR *act)
+int16_t dialog_eight(ACTOR *act)
 { //hermit underground
 
   act = act;
@@ -450,9 +450,9 @@ int dialog_eight(ACTOR *act)
   return 0;
 }
 //===========================================================================
-int dialog_nine(ACTOR *act)
+int16_t dialog_nine(ACTOR *act)
 { //ending salesman
-  int sel;
+  int16_t sel;
 
   actor_speaks(act, 3026, 0);
   d_restore();
@@ -477,9 +477,9 @@ int dialog_nine(ACTOR *act)
   return 0;
 }
 //===========================================================================
-int dialog_ten(ACTOR *act)
+int16_t dialog_ten(ACTOR *act)
 { //jewels/info 1
-  int sel;
+  int16_t sel;
 
   if (INFO1 && INFO2)
   {
@@ -518,9 +518,9 @@ int dialog_ten(ACTOR *act)
   return 0;
 }
 //===========================================================================
-int dialog_eleven(ACTOR *act)
+int16_t dialog_eleven(ACTOR *act)
 { //jewels/thanks
-  int sel;
+  int16_t sel;
 
   play_sound(WOOP, 1);
   sel = select_option(options_yesno, d_have100jewels, 1);
@@ -544,7 +544,7 @@ int dialog_eleven(ACTOR *act)
 }
 
 //===========================================================================
-int dialog_twelve(ACTOR *act)
+int16_t dialog_twelve(ACTOR *act)
 { //guy punch
 
   actor_speaks(act, 11, 0);
@@ -558,7 +558,7 @@ int dialog_twelve(ACTOR *act)
   return 0;
 }
 //===========================================================================
-int dialog_thirteen(ACTOR *act)
+int16_t dialog_thirteen(ACTOR *act)
 { //spill guts girl
   LEVEL *lvl;
 
@@ -578,9 +578,9 @@ int dialog_thirteen(ACTOR *act)
   return 0;
 }
 //===========================================================================
-int dialog_fourteen(ACTOR *act)
+int16_t dialog_fourteen(ACTOR *act)
 { //magic shop guy
-  int sel;
+  int16_t sel;
 
   if (GOTKEY3)
   {

@@ -11,31 +11,31 @@
 #include "MU_Manc.h"
 #include "SB_Manc.h"
 
-void play_pc_sound(int index, int priority_override);
+void play_pc_sound(int16_t index, int16_t priority_override);
 //===========================================================================
-extern char *std_sounds;
-extern char *pcstd_sounds;
-extern char *pc_sound[NUM_SOUNDS];
-extern char *dig_sound[NUM_SOUNDS];
-extern char *std_sound_start;
-extern char *pcstd_sound_start;
-extern int level;
+extern uint8_t *std_sounds;
+extern uint8_t *pcstd_sounds;
+extern uint8_t *pc_sound[NUM_SOUNDS];
+extern uint8_t *dig_sound[NUM_SOUNDS];
+extern uint8_t *std_sound_start;
+extern uint8_t *pcstd_sound_start;
+extern int16_t level;
 
 //enum{OW,GULP,SWISH,YAH,ELECTRIC,THUNDER,DOOR,FALL,
 //     ANGEL,WOOP,ANGEL,BRAAPP,WIND,PUNCH1,CLANG,EXPLODE
 //     BOSS11,BOSS12,BOSS13
-int sound_priority[] = {1, 2, 3, 3, 3, 1, 4, 4, 4, 5, 4, 3, 1, 2, 2, 5, 1, 3, 1};
-extern long pcsound_length[NUM_SOUNDS];
+int16_t sound_priority[] = {1, 2, 3, 3, 3, 1, 4, 4, 4, 5, 4, 3, 1, 2, 2, 5, 1, 3, 1};
+extern int32_t pcsound_length[NUM_SOUNDS];
 
-int current_priority;
+int16_t current_priority;
 //===========================================================================
 extern SETUP setup;
-extern char ds_file[];
+extern uint8_t ds_file[];
 //===========================================================================
-int sound_init(void)
+int16_t sound_init(void)
 {
-  int i;
-  char *p;
+  int16_t i;
+  uint8_t *p;
   HEADER *header;
 
   std_sound_start = res_falloc_read("DIGSOUND");
@@ -85,12 +85,12 @@ void sound_exit(void)
     ;
 
   if (std_sound_start)
-   free(std_sounds);
+    free(std_sounds);
   if (pcstd_sound_start)
-   free(pcstd_sounds);
+    free(pcstd_sounds);
 }
 //===========================================================================
-void play_sound(int index, int priority_override)
+void play_sound(int16_t index, int16_t priority_override)
 {
 
   if (index >= NUM_SOUNDS)
@@ -110,11 +110,11 @@ void play_sound(int index, int priority_override)
     SB_StopVOC();
   }
 
-  SB_PlayVOC((char *)dig_sound[index], 1);
+  SB_PlayVOC((uint8_t *)dig_sound[index], 1);
   current_priority = sound_priority[index];
 }
 //===========================================================================
-void play_pc_sound(int index, int priority_override)
+void play_pc_sound(int16_t index, int16_t priority_override)
 {
 
   if (FX_PCPlaying())
@@ -128,7 +128,7 @@ void play_pc_sound(int index, int priority_override)
   current_priority = sound_priority[index];
 }
 //===========================================================================
-int sound_playing(void)
+int16_t sound_playing(void)
 {
 
   return SB_VOCPlaying();

@@ -6,10 +6,10 @@
 
 typedef struct
 {
-   int ImageWidth;        //image width in addresses in display memory
-                          //(also mask width in bytes)
-   unsigned int ImagePtr; //offset of image bitmap in display mem
-   char *MaskPtr;         //pointer to mask bitmap
+   int16_t ImageWidth; //image width in addresses in display memory
+                       //(also mask width in bytes)
+   uint16_t ImagePtr;  //offset of image bitmap in display mem
+   uint8_t *MaskPtr;   //pointer to mask bitmap
 } AlignedMaskedImage;
 
 //Describes all four alignments of a mask-image pair

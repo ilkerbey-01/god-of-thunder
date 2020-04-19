@@ -11,29 +11,29 @@
 
 void check_boss21_hit(void);
 //===========================================================================
-extern int new_level, current_level;
+extern int16_t new_level, current_level;
 extern LEVEL scrn;
 extern ACTOR actor[MAX_ACTORS];
 extern ACTOR *thor;
-extern int thor_x1, thor_y1, thor_x2, thor_y2, thor_real_y1;
+extern int16_t thor_x1, thor_y1, thor_x2, thor_y2, thor_real_y1;
 extern ACTOR *hammer;
-extern int key_fire, key_up, key_down, key_left, key_right, key_magic, key_select;
-extern int lightning_used, tornado_used, hourglass_flag;
-extern unsigned int display_page, draw_page;
+extern int16_t key_fire, key_up, key_down, key_left, key_right, key_magic, key_select;
+extern int16_t lightning_used, tornado_used, hourglass_flag;
+extern uint16_t display_page, draw_page;
 extern THOR_INFO thor_info;
-extern int boss_dead;
-extern int boss_active;
-extern char pge;
+extern int16_t boss_dead;
+extern int16_t boss_active;
+extern uint8_t pge;
 extern ACTOR explosion;
-extern volatile char key_flag[100];
-extern volatile unsigned int timer_cnt;
+extern volatile uint8_t key_flag[100];
+extern volatile uint16_t timer_cnt;
 extern SETUP setup;
-extern int rand1, rand2;
-extern char apple_drop;
+extern int16_t rand1, rand2;
+extern uint8_t apple_drop;
 //===========================================================================
-int boss21_movement(ACTOR *actr)
+int16_t boss21_movement(ACTOR *actr)
 { //boss - wraith
-  int d, x1, y1, f, ox, oy;
+  int16_t d, x1, y1, f, ox, oy;
 
   if (boss_dead)
     return boss_dead21();
@@ -228,7 +228,7 @@ done:
 //===========================================================================
 void check_boss21_hit(void)
 {
-  int rep;
+  int16_t rep;
 
   if (actor[3].magic_hit || actor[4].magic_hit ||
       actor[5].magic_hit || actor[6].magic_hit)
@@ -278,9 +278,9 @@ void boss_level21(void)
   apple_drop = 0;
 }
 //===========================================================================
-int boss_dead21(void)
+int16_t boss_dead21(void)
 {
-  int rep, n, x, y, r, x1, y1;
+  int16_t rep, n, x, y, r, x1, y1;
 
   hourglass_flag = 0;
   if (boss_dead == 1)
@@ -318,7 +318,7 @@ int boss_dead21(void)
 //===========================================================================
 void closing_sequence21(void)
 {
-  int rep;
+  int16_t rep;
 
   music_play(0, 1);
   odin_speaks(1002, 0);

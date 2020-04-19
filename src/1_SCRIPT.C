@@ -12,88 +12,88 @@
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
 //====================== Functions Declarations============================
-int read_script_file(void);
-void script_error(int err_num);
-int get_command(void);
-int skip_colon(void);
-int calc_value(void);
-int get_next_val(void);
-int calc_string(int mode);
+int16_t read_script_file(void);
+void script_error(int16_t err_num);
+int16_t get_command(void);
+int16_t skip_colon(void);
+int16_t calc_value(void);
+int16_t get_next_val(void);
+int16_t calc_string(int16_t mode);
 void get_str(void);
-int get_internal_variable(void);
-int exec_command(int num);
+int16_t get_internal_variable(void);
+int16_t exec_command(int16_t num);
 void script_entry(void);
 void script_exit(void);
 //============================ Externals ==================================
 extern ACTOR *thor;
 extern THOR_INFO thor_info;
-extern int current_level;
-extern char odin[4][262];
-extern char *tmp_buff;
-extern char *sd_data;
-extern char cheat;
-extern volatile char key_flag[100];
-extern int key_magic;
-extern char *object_names[];
+extern int16_t current_level;
+extern uint8_t odin[4][262];
+extern uint8_t *tmp_buff;
+extern uint8_t *sd_data;
+extern uint8_t cheat;
+extern volatile uint8_t key_flag[100];
+extern int16_t key_magic;
+extern uint8_t *object_names[];
 extern SETUP setup;
-extern char area;
-extern unsigned int display_page, draw_page;
+extern uint8_t area;
+extern uint16_t display_page, draw_page;
 extern ACTOR actor[MAX_ACTORS];
-extern int new_level, current_level, new_level_tile;
+extern int16_t new_level, current_level, new_level_tile;
 extern LEVEL scrn;
-extern char objects[NUM_OBJECTS][262];
-extern char object_map[240];
-extern char object_index[240];
-extern int thunder_flag;
+extern uint8_t objects[NUM_OBJECTS][262];
+extern uint8_t object_map[240];
+extern uint8_t object_index[240];
+extern int16_t thunder_flag;
 //============================= Globals ==================================
-long num_var[26];       //numeric variables
-char str_var[26][81];   //string vars
-char line_label[32][9]; //line label look up table
-char *line_ptr[32];     //line label pointers
-char *new_ptr;
-int num_labels;            //number of labels
-char *gosub_stack[32]; //stack for GOSUB return addresses
-char gosub_ptr;            //GOSUB stack pointer
-char *for_stack[10];   //FOR stack
-long for_val[10];          //current FOR value
-char for_var[10];          //ending FOR value (target var)
-char for_ptr;              //FOR stack pointer
-char *buff_ptr;        //pointer to current command
-char *buff_end;        //pointer to end of buffer
-char *buffer;          //buffer space (malloc'ed)
-long scr_index;
-char *scr_pic;
-long lvalue;
-long ltemp;
-char temps[255];
+int32_t num_var[26];       //numeric variables
+uint8_t str_var[26][81];   //string vars
+uint8_t line_label[32][9]; //line label look up table
+uint8_t *line_ptr[32];     //line label pointers
+uint8_t *new_ptr;
+int16_t num_labels;       //number of labels
+uint8_t *gosub_stack[32]; //stack for GOSUB return addresses
+uint8_t gosub_ptr;        //GOSUB stack pointer
+uint8_t *for_stack[10];   //FOR stack
+int32_t for_val[10];      //current FOR value
+uint8_t for_var[10];      //ending FOR value (target var)
+uint8_t for_ptr;          //FOR stack pointer
+uint8_t *buff_ptr;        //pointer to current command
+uint8_t *buff_end;        //pointer to end of buffer
+uint8_t *buffer;          //buffer space (malloc'ed)
+int32_t scr_index;
+uint8_t *scr_pic;
+int32_t lvalue;
+int32_t ltemp;
+uint8_t temps[255];
 
 #define SCR_BUFF_SIZE 5000
-char *scr_command[] = {"!@#$%", "END", "GOTO", "GOSUB", "RETURN", "FOR", "NEXT",
-                           "IF", "ELSE", "RUN",
-                           "ADDJEWELS", "ADDHEALTH", "ADDMAGIC", "ADDKEYS",
-                           "ADDSCORE", "SAY", "ASK", "SOUND", "PLACETILE",
-                           "ITEMGIVE", "ITEMTAKE", "ITEMSAY", "SETFLAG", "LTOA",
-                           "PAUSE", "TEXT", "EXEC", "VISIBLE", "RANDOM",
-                           NULL};
+uint8_t *scr_command[] = {"!@#$%", "END", "GOTO", "GOSUB", "RETURN", "FOR", "NEXT",
+                          "IF", "ELSE", "RUN",
+                          "ADDJEWELS", "ADDHEALTH", "ADDMAGIC", "ADDKEYS",
+                          "ADDSCORE", "SAY", "ASK", "SOUND", "PLACETILE",
+                          "ITEMGIVE", "ITEMTAKE", "ITEMSAY", "SETFLAG", "LTOA",
+                          "PAUSE", "TEXT", "EXEC", "VISIBLE", "RANDOM",
+                          NULL};
 
-char *internal_variable[] = {"@JEWELS", "@HEALTH", "@MAGIC", "@SCORE",
-                                 "@SCREEN", "@KEYS",
-                                 "@OW", "@GULP", "@SWISH", "@YAH", "@ELECTRIC",
-                                 "@THUNDER", "@DOOR", "@FALL", "@ANGEL", "@WOOP",
-                                 "@DEAD", "@BRAAPP", "@WIND", "@PUNCH", "@CLANG",
-                                 "@EXPLODE", "@FLAG", "@ITEM", "@THORTILE",
-                                 "@THORPOS", NULL};
+uint8_t *internal_variable[] = {"@JEWELS", "@HEALTH", "@MAGIC", "@SCORE",
+                                "@SCREEN", "@KEYS",
+                                "@OW", "@GULP", "@SWISH", "@YAH", "@ELECTRIC",
+                                "@THUNDER", "@DOOR", "@FALL", "@ANGEL", "@WOOP",
+                                "@DEAD", "@BRAAPP", "@WIND", "@PUNCH", "@CLANG",
+                                "@EXPLODE", "@FLAG", "@ITEM", "@THORTILE",
+                                "@THORPOS", NULL};
 
-char *scr_error[] = {"!@#$%", "Out of Memory", "Can't Read Script",
-                         "Too Many Labels", "No END",
-                         "Syntax", "Out of Range", "Undefined Label",
-                         "RETURN Without GOSUB", "Nesting",
-                         "NEXT Without FOR", NULL};
+uint8_t *scr_error[] = {"!@#$%", "Out of Memory", "Can't Read Script",
+                        "Too Many Labels", "No END",
+                        "Syntax", "Out of Range", "Undefined Label",
+                        "RETURN Without GOSUB", "Nesting",
+                        "NEXT Without FOR", NULL};
 #define ERROR_MAX 10
 //============================ Functions ==================================
-void execute_script(long index, char *pic)
+void execute_script(int32_t index, uint8_t *pic)
 {
-  int i, ret, re_execute;
+  int16_t i, ret, re_execute;
 
   for (i = 0; i < MAX_ACTORS; i++)
     actor[i].show = 0;
@@ -111,7 +111,7 @@ void execute_script(long index, char *pic)
   _fmemset(&str_var, 0, 81 * 26);
 
   re_execute = 0;
-run_script: //jump point for RUN command
+run_script: //jump point16_t for RUN command
 
   _fmemset(line_label, 0, 32 * 9); //clear line label buffer
   _fmemset(line_ptr, 0, 4 * 32);   //clear line ptrs
@@ -156,7 +156,7 @@ run_script: //jump point for RUN command
       { //RUN command
         re_execute = 1;
         if (buffer)
-         free(buffer);
+          free(buffer);
         goto run_script;
       }
       if (!ret)
@@ -176,10 +176,10 @@ void script_exit(void)
 
   //xshowpage(display_page);
   if (buffer)
-   free(buffer);
+    free(buffer);
 }
 //=========================================================================
-int skip_colon(void)
+int16_t skip_colon(void)
 {
 
   while (*buff_ptr == 0 || *buff_ptr == ':')
@@ -191,9 +191,9 @@ int skip_colon(void)
   return 1;
 }
 //=========================================================================
-int get_command(void)
+int16_t get_command(void)
 {
-  int ret, i, len;
+  int16_t ret, i, len;
 
   if (!skip_colon())
     return -1;
@@ -204,7 +204,7 @@ int get_command(void)
     if (!scr_command[i])
       break; //lookup command
     len = _fstrlen(scr_command[i]);
-    if (!_fstrncmp(buff_ptr, (char *)scr_command[i], len))
+    if (!_fstrncmp(buff_ptr, (uint8_t *)scr_command[i], len))
     {
       buff_ptr += len;
       return i;
@@ -244,10 +244,10 @@ int get_command(void)
   return -2;
 }
 //=========================================================================
-int calc_string(int mode)
+int16_t calc_string(int16_t mode)
 { //if mode==1 stop at comma
-  char varstr[255];
-  char varnum;
+  uint8_t varstr[255];
+  uint8_t varnum;
 
   strcpy(varstr, "");
 
@@ -259,7 +259,7 @@ strloop:
   {
     get_str();
     if (strlen(varstr) + _fstrlen(temps) < 255)
-      _fstrcat((char *)varstr, temps);
+      _fstrcat((uint8_t *)varstr, temps);
     goto nextstr;
   }
   if (isalpha(*buff_ptr))
@@ -268,7 +268,7 @@ strloop:
     {
       varnum = (*buff_ptr) - 65;
       if (strlen(varstr) + _fstrlen(str_var[varnum]) < 255)
-        _fstrcat((char *)varstr, str_var[varnum]);
+        _fstrcat((uint8_t *)varstr, str_var[varnum]);
       buff_ptr += 2;
       goto nextstr;
     }
@@ -294,13 +294,13 @@ nextstr:
 strdone:
   if (strlen(varstr) > 255)
     return -1;
-  _fstrcpy(temps, (char *)varstr);
+  _fstrcpy(temps, (uint8_t *)varstr);
   return 1;
 }
 //=========================================================================
 void get_str(void)
 {
-  int t;
+  int16_t t;
 
   buff_ptr++;
   t = 0;
@@ -318,11 +318,11 @@ void get_str(void)
   }
 }
 //=========================================================================
-int calc_value(void)
+int16_t calc_value(void)
 {
-  long tmpval2;
-  char exptype;
-  char ch;
+  int32_t tmpval2;
+  uint8_t exptype;
+  uint8_t ch;
 
   tmpval2 = 0;
   exptype = 1;
@@ -370,11 +370,11 @@ int calc_value(void)
   }
 }
 //=========================================================================
-int get_next_val(void)
+int16_t get_next_val(void)
 {
-  char ch;
-  char tmpstr[25];
-  int t;
+  uint8_t ch;
+  uint8_t tmpstr[25];
+  int16_t t;
 
   ch = *buff_ptr;
   if (ch == 0 || ch == ':')
@@ -409,19 +409,19 @@ int get_next_val(void)
   return 0;
 }
 //=========================================================================
-int get_internal_variable(void)
+int16_t get_internal_variable(void)
 {
-  int i, len;
-  char b;
-  char *sp;
+  int16_t i, len;
+  uint8_t b;
+  uint8_t *sp;
 
   i = 0;
   while (1)
   {
     if (!internal_variable[i])
-      return 0; //lookup internal variable
+      return 0; //lookupint16_ternal variable
     len = _fstrlen(internal_variable[i]);
-    if (!_fstrncmp(buff_ptr, internal_variable[i], len))
+    if (!_fstrncmp(buff_ptr, int16_ternal_variable[i], len))
     {
       buff_ptr += len;
       break;
@@ -464,7 +464,7 @@ int get_internal_variable(void)
   case 19:
   case 20:
   case 21:
-    ltemp = (long)(i - 5l);
+    ltemp = (int32_t)(i - 5l);
     break;
   case 22:
     if (!calc_value())
@@ -472,7 +472,7 @@ int get_internal_variable(void)
     i = (int)lvalue;
     if (i < 1 || i > 64)
       return 0;
-    sp = (char *)&setup;
+    sp = (uint8_t *)&setup;
     sp += (i / 8);
     b = 1;
     b = b << (i % 8);
@@ -499,9 +499,9 @@ int get_internal_variable(void)
   return 1;
 }
 //=========================================================================
-int get_line(char *src, char *dst)
+int16_t get_line(uint8_t *src, uint8_t *dst)
 {
-  int cnt;
+  int16_t cnt;
 
   cnt = 0;
   while (*src != 13)
@@ -520,18 +520,18 @@ int get_line(char *src, char *dst)
   return cnt;
 }
 //=========================================================================
-int read_script_file(void)
+int16_t read_script_file(void)
 {
-  char temp_buff[255];
-  char quote_flag;
-  int i, len, p, ret, cnt;
-  char ch;
-  char tmps[255];
-  char *sb;
-  char *sbuff;
-  char str[21];
+  uint8_t temp_buff[255];
+  uint8_t quote_flag;
+  int16_t i, len, p, ret, cnt;
+  uint8_t ch;
+  uint8_t tmps[255];
+  uint8_t *sb;
+  uint8_t *sbuff;
+  uint8_t str[21];
 
-  buffer =malloc(SCR_BUFF_SIZE);
+  buffer = malloc(SCR_BUFF_SIZE);
   if (!buffer)
   {
     ret = 1;
@@ -540,7 +540,7 @@ int read_script_file(void)
   buff_ptr = buffer;
   _fmemset(buffer, 0, SCR_BUFF_SIZE);
 
-  sbuff =malloc(25000l);
+  sbuff = malloc(25000l);
   if (!sbuff)
   {
     ret = 1;
@@ -563,7 +563,7 @@ int read_script_file(void)
 
   while (1)
   {
-    cnt = get_line(sb, (char *)tmps);
+    cnt = get_line(sb, (uint8_t *)tmps);
     sb += cnt;
     if (!strcmp(tmps, "|EOF"))
     {
@@ -576,7 +576,7 @@ int read_script_file(void)
   num_labels = 0;
   while (1)
   {
-    cnt = get_line(sb, (char *)tmps);
+    cnt = get_line(sb, (uint8_t *)tmps);
     if (!strcmp(tmps, "|STOP"))
     {
       if (buff_ptr != buffer)
@@ -627,7 +627,7 @@ int read_script_file(void)
     { //line label
       temp_buff[len - 1] = 0;
       line_ptr[num_labels] = buff_ptr;
-      _fstrcpy(line_label[num_labels++], (char *)temp_buff);
+      _fstrcpy(line_label[num_labels++], (uint8_t *)temp_buff);
       if (num_labels > 31)
       {
         ret = 3;
@@ -637,23 +637,23 @@ int read_script_file(void)
       buff_ptr++;
       continue;
     }
-    _fstrcpy(buff_ptr, (char *)temp_buff);
+    _fstrcpy(buff_ptr, (uint8_t *)temp_buff);
     buff_ptr += strlen(temp_buff);
     *buff_ptr = 0;
     buff_ptr++;
   }
 done:
   if (sbuff)
-   free(sbuff);
+    free(sbuff);
   return ret;
 }
 //=========================================================================
-void script_error(int err_num)
+void script_error(int16_t err_num)
 {
-  int line_num;
-  char s[17];
-  char *tb;
-  char ts[81];
+  int16_t line_num;
+  uint8_t s[17];
+  uint8_t *tb;
+  uint8_t ts[81];
 
   line_num = 1;
   tb = buffer;
@@ -670,7 +670,7 @@ void script_error(int err_num)
   if (err_num > ERROR_MAX)
     err_num = 5; //unknown=syntax
 
-  _fstrcpy((char *)ts, scr_error[err_num]);
+  _fstrcpy((uint8_t *)ts, scr_error[err_num]);
   itoa(line_num, s, 10);
   strcat(ts, " in Line #");
   strcat(ts, s);
@@ -683,7 +683,7 @@ void script_error(int err_num)
   }
 }
 //=========================================================================
-int get_string(void)
+int16_t get_string(void)
 {
 
   _fmemset(temps, 0, 255);
@@ -707,11 +707,11 @@ int get_string(void)
   return 0;
 }
 //=========================================================================
-int cmd_goto(void)
+int16_t cmd_goto(void)
 {
-  int i, len;
-  char s[255];
-  char *p;
+  int16_t i, len;
+  uint8_t s[255];
+  uint8_t *p;
 
   _fstrcpy(s, buff_ptr);
   p = strchr(s, ':');
@@ -723,7 +723,7 @@ int cmd_goto(void)
     len = strlen(s);
     if (len == 0)
       break;
-    if (!_fstrcmp((char *)s, line_label[i]))
+    if (!_fstrcmp((uint8_t *)s, line_label[i]))
     {
       new_ptr = line_ptr[i];
       buff_ptr += len;
@@ -733,10 +733,10 @@ int cmd_goto(void)
   return 8;
 }
 //=========================================================================
-int cmd_if(void)
+int16_t cmd_if(void)
 {
-  long tmpval1, tmpval2;
-  char exptype, ch;
+  int32_t tmpval1, tmpval2;
+  uint8_t exptype, ch;
 
   if (!calc_value())
     return 5;
@@ -799,7 +799,7 @@ iftrue:
   return 0;
 }
 //=========================================================================
-int cmd_run(void)
+int16_t cmd_run(void)
 {
 
   if (!calc_value())
@@ -809,7 +809,7 @@ int cmd_run(void)
   return -100;
 }
 //=========================================================================
-int cmd_addjewels(void)
+int16_t cmd_addjewels(void)
 {
 
   if (!calc_value())
@@ -819,7 +819,7 @@ int cmd_addjewels(void)
   return 0;
 }
 //=========================================================================
-int cmd_addhealth(void)
+int16_t cmd_addhealth(void)
 {
 
   if (!calc_value())
@@ -829,7 +829,7 @@ int cmd_addhealth(void)
   return 0;
 }
 //=========================================================================
-int cmd_addmagic(void)
+int16_t cmd_addmagic(void)
 {
 
   if (!calc_value())
@@ -839,7 +839,7 @@ int cmd_addmagic(void)
   return 0;
 }
 //=========================================================================
-int cmd_addkeys(void)
+int16_t cmd_addkeys(void)
 {
 
   if (!calc_value())
@@ -849,7 +849,7 @@ int cmd_addkeys(void)
   return 0;
 }
 //=========================================================================
-int cmd_addscore(void)
+int16_t cmd_addscore(void)
 {
 
   if (!calc_value())
@@ -859,10 +859,10 @@ int cmd_addscore(void)
   return 0;
 }
 //=========================================================================
-int cmd_say(int mode, int type)
+int16_t cmd_say(int16_t mode, int16_t type)
 {
-  char *p;
-  int obj;
+  uint8_t *p;
+  int16_t obj;
 
   if (mode)
   {
@@ -879,26 +879,26 @@ int cmd_say(int mode, int type)
     obj = 0;
 
   memset(tmp_buff, 0, TMP_SIZE);
-  p = (char *)tmp_buff;
+  p = (uint8_t *)tmp_buff;
   while (calc_string(0))
   {
-    _fstrcpy((char *)p, temps);
+    _fstrcpy((uint8_t *)p, temps);
     p += _fstrlen(temps);
     *(p) = 10;
     p++;
   }
   *(p - 1) = 0;
-  display_speech(obj, (char *)scr_pic, type);
+  display_speech(obj, (uint8_t *)scr_pic, type);
   d_restore();
   return 0;
 }
 //=========================================================================
-int cmd_ask(void)
+int16_t cmd_ask(void)
 {
-  int i, v, p;
-  char title[41];
-  char *op[] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
-  char opts[10][41];
+  int16_t i, v, p;
+  uint8_t title[41];
+  uint8_t *op[] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+  uint8_t opts[10][41];
 
   memset(tmp_buff, 0, TMP_SIZE);
   memset(opts, 0, 10 * 41);
@@ -919,7 +919,7 @@ int cmd_ask(void)
 
   if (!calc_string(1))
     return 5;
-  _fstrncpy((char *)title, temps, 41);
+  _fstrncpy((uint8_t *)title, temps, 41);
   title[40] = 0;
 
   if (*buff_ptr == ',')
@@ -936,7 +936,7 @@ int cmd_ask(void)
   i = 0;
   while (calc_string(0))
   {
-    _fstrncpy((char *)opts[i], temps, 41);
+    _fstrncpy((uint8_t *)opts[i], temps, 41);
     opts[i][40] = 0;
     op[i] = opts[i];
     i++;
@@ -950,7 +950,7 @@ int cmd_ask(void)
   return 0;
 }
 //=========================================================================
-int cmd_sound(void)
+int16_t cmd_sound(void)
 {
 
   if (!calc_value())
@@ -962,9 +962,9 @@ int cmd_sound(void)
   return 0;
 }
 //=========================================================================
-int cmd_settile(void)
+int16_t cmd_settile(void)
 {
-  int screen, pos, tile;
+  int16_t screen, pos, tile;
   LEVEL *lvl;
 
   if (!calc_value())
@@ -996,9 +996,9 @@ int cmd_settile(void)
   return 0;
 }
 //=========================================================================
-int cmd_itemgive(void)
+int16_t cmd_itemgive(void)
 {
-  int i;
+  int16_t i;
 
   if (!calc_value())
     return 5;
@@ -1015,25 +1015,25 @@ int cmd_itemgive(void)
   return 0;
 }
 //=========================================================================
-int cmd_itemtake(void)
+int16_t cmd_itemtake(void)
 {
 
   delete_object();
   return 0;
 }
 //=========================================================================
-int cmd_setflag(void)
+int16_t cmd_setflag(void)
 {
-  int i;
-  char b;
-  char *sp;
+  int16_t i;
+  uint8_t b;
+  uint8_t *sp;
 
   if (!calc_value())
     return 5;
   i = (int)lvalue;
   if (i < 1 || i > 64)
     return 6;
-  sp = (char *)&setup;
+  sp = (uint8_t *)&setup;
   sp += (i / 8);
   b = 1;
   b = b << (i % 8);
@@ -1041,10 +1041,10 @@ int cmd_setflag(void)
   return 0;
 }
 //=========================================================================
-int cmd_ltoa(void)
+int16_t cmd_ltoa(void)
 {
-  int sv;
-  char str[21];
+  int16_t sv;
+  uint8_t str[21];
 
   if (!calc_value())
     return 5;
@@ -1064,11 +1064,11 @@ int cmd_ltoa(void)
     return 5;
 
   ltoa(lvalue, str, 10);
-  _fstrcpy(str_var[sv], (char *)str);
+  _fstrcpy(str_var[sv], (uint8_t *)str);
   return 0;
 }
 //=========================================================================
-int cmd_pause(void)
+int16_t cmd_pause(void)
 {
 
   if (!calc_value())
@@ -1081,7 +1081,7 @@ int cmd_pause(void)
   return 0;
 }
 //=========================================================================
-int cmd_visible(void)
+int16_t cmd_visible(void)
 {
 
   if (!calc_value())
@@ -1094,9 +1094,9 @@ int cmd_visible(void)
   return 0;
 }
 //=========================================================================
-int cmd_random(void)
+int16_t cmd_random(void)
 {
-  int v, r;
+  int16_t v, r;
 
   if (isalpha(*buff_ptr))
   {
@@ -1138,7 +1138,7 @@ void scr_func1(void)
   thor->show = 2;
 }
 //=========================================================================
-char *offense[] = {
+uint8_t *offense[] = {
     "Cussing",
     "Rebellion",
     "Kissing Your Mother Goodbye",
@@ -1147,7 +1147,7 @@ char *offense[] = {
     "Carrying a Concealed Hammer",
 };
 
-char *reason[] = {
+uint8_t *reason[] = {
     "We heard you say 'Booger'.",
     "You look kind of rebellious.",
     "Your mother turned you in.",
@@ -1158,7 +1158,7 @@ char *reason[] = {
 //=========================================================================
 void scr_func2(void)
 {
-  int r;
+  int16_t r;
 
   r = rnd(6);
   _fstrcpy(str_var[0], offense[r]);
@@ -1167,7 +1167,7 @@ void scr_func2(void)
 //=========================================================================
 void scr_func3(void)
 {
-  int p, x, y, o;
+  int16_t p, x, y, o;
 
   p = (((thor->y + 8) / 16) * 20) + ((thor->x + 7) / 16);
   y = p / 20;
@@ -1210,7 +1210,7 @@ void scr_func3(void)
       object_index[p] = 31; //actor is 3-15
       x = (p % 20) * 16;
       y = (p / 20) * 16;
-      xfput(x, y, PAGE2, (char *)objects[o - 1]);
+      xfput(x, y, PAGE2, (uint8_t *)objects[o - 1]);
       xcopyd2d(x, y, x + 16, y + 16, x, y, PAGE2, draw_page, 320, 320);
       xcopyd2d(x, y, x + 16, y + 16, x, y, PAGE2, display_page, 320, 320);
       pause(30);
@@ -1245,7 +1245,7 @@ void (*scr_func[])() =
         scr_func5,
 };
 //=========================================================================
-int cmd_exec(void)
+int16_t cmd_exec(void)
 {
 
   if (!calc_value())
@@ -1258,10 +1258,10 @@ int cmd_exec(void)
   return 0;
 }
 //=========================================================================
-int exec_command(int num)
+int16_t exec_command(int16_t num)
 {
-  int ret;
-  char ch;
+  int16_t ret;
+  uint8_t ch;
 
   ret = 0;
   switch (num)

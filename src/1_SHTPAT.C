@@ -10,22 +10,22 @@
 //===========================================================================
 extern ACTOR actor[MAX_ACTORS]; //current actors
 extern ACTOR *thor;
-extern int thor_x1, thor_y1, thor_x2, thor_y2, thor_real_y1;
-extern int rand1, rand2;
-extern int thor_pos;
+extern int16_t thor_x1, thor_y1, thor_x2, thor_y2, thor_real_y1;
+extern int16_t rand1, rand2;
+extern int16_t thor_pos;
 extern SETUP setup;
 //===========================================================================
-int shot_pattern_none(ACTOR *actr);
-int shot_pattern_one(ACTOR *actr);
-int shot_pattern_two(ACTOR *actr);
-int shot_pattern_three(ACTOR *actr);
-int shot_pattern_four(ACTOR *actr);
-int shot_pattern_five(ACTOR *actr);
-int shot_pattern_six(ACTOR *actr);
-int shot_pattern_seven(ACTOR *actr);
-int shot_pattern_eight(ACTOR *actr);
+int16_t shot_pattern_none(ACTOR *actr);
+int16_t shot_pattern_one(ACTOR *actr);
+int16_t shot_pattern_two(ACTOR *actr);
+int16_t shot_pattern_three(ACTOR *actr);
+int16_t shot_pattern_four(ACTOR *actr);
+int16_t shot_pattern_five(ACTOR *actr);
+int16_t shot_pattern_six(ACTOR *actr);
+int16_t shot_pattern_seven(ACTOR *actr);
+int16_t shot_pattern_eight(ACTOR *actr);
 
-int (*shot_pattern_func[])(ACTOR *actr) =
+int16_t (*shot_pattern_func[])(ACTOR *actr) =
     {
         shot_pattern_none,
         shot_pattern_one,
@@ -38,14 +38,14 @@ int (*shot_pattern_func[])(ACTOR *actr) =
         shot_pattern_eight,
 };
 //===========================================================================
-int shot_pattern_none(ACTOR *actr)
+int16_t shot_pattern_none(ACTOR *actr)
 { //no shooting
 
   actr = actr;
   return 0;
 }
 //===========================================================================
-int shot_pattern_one(ACTOR *actr)
+int16_t shot_pattern_one(ACTOR *actr)
 { //uni-directional seek
 
   switch (actr->last_dir)
@@ -94,7 +94,7 @@ int shot_pattern_one(ACTOR *actr)
   return 0;
 }
 //===========================================================================
-int shot_pattern_two(ACTOR *actr)
+int16_t shot_pattern_two(ACTOR *actr)
 { //omni directional
 
   if (abs(thor->x - actr->x) < 8)
@@ -119,9 +119,9 @@ int shot_pattern_two(ACTOR *actr)
   return 1;
 }
 //===========================================================================
-int shot_pattern_three(ACTOR *actr)
+int16_t shot_pattern_three(ACTOR *actr)
 { //uni directional (backwards)
-  int ld;
+  int16_t ld;
 
   ld = actr->last_dir;
   if (shot_pattern_one(actr))
@@ -135,7 +135,7 @@ int shot_pattern_three(ACTOR *actr)
   return 1;
 }
 //===========================================================================
-int shot_pattern_four(ACTOR *actr)
+int16_t shot_pattern_four(ACTOR *actr)
 { //omni-directional not solid shot
 
   if (abs(thor->x - actr->x) < 8)
@@ -160,9 +160,9 @@ int shot_pattern_four(ACTOR *actr)
   return 1;
 }
 //===========================================================================
-int shot_pattern_five(ACTOR *actr)
+int16_t shot_pattern_five(ACTOR *actr)
 { //boss - snake
-  int num;
+  int16_t num;
 
   if (rand1 < 15)
   {
@@ -185,9 +185,9 @@ int shot_pattern_five(ACTOR *actr)
   return 0;
 }
 //===========================================================================
-int shot_pattern_six(ACTOR *actr)
+int16_t shot_pattern_six(ACTOR *actr)
 { //4 surrounding squares
-  int pos;
+  int16_t pos;
 
   pos = ((actr->x) / 16) + (((actr->y) / 16) * 20);
 
@@ -207,14 +207,14 @@ int shot_pattern_six(ACTOR *actr)
   return 1;
 }
 //===========================================================================
-int shot_pattern_seven(ACTOR *actr)
+int16_t shot_pattern_seven(ACTOR *actr)
 { //none
 
   actr = actr;
   return 0;
 }
 //===========================================================================
-int shot_pattern_eight(ACTOR *actr)
+int16_t shot_pattern_eight(ACTOR *actr)
 { //random
 
   if (!actr->i2)

@@ -9,32 +9,32 @@
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
 //===========================================================================
-extern char *tmp_buff;
-extern int new_level, current_level;
+extern uint8_t *tmp_buff;
+extern int16_t new_level, current_level;
 extern LEVEL scrn;
 extern ACTOR actor[MAX_ACTORS];
 extern ACTOR *thor;
-extern int thor_x1, thor_y1, thor_x2, thor_y2, thor_real_y1;
+extern int16_t thor_x1, thor_y1, thor_x2, thor_y2, thor_real_y1;
 extern ACTOR *hammer;
-extern int key_fire, key_up, key_down, key_left, key_right, key_magic, key_select;
-extern int lightning_used, tornado_used, hourglass_flag;
-extern unsigned int display_page, draw_page;
+extern int16_t key_fire, key_up, key_down, key_left, key_right, key_magic, key_select;
+extern int16_t lightning_used, tornado_used, hourglass_flag;
+extern uint16_t display_page, draw_page;
 extern THOR_INFO thor_info;
-extern int boss_dead;
-extern int boss_active;
-extern char pge;
+extern int16_t boss_dead;
+extern int16_t boss_active;
+extern uint8_t pge;
 extern ACTOR explosion;
-extern volatile char key_flag[100];
-extern volatile unsigned int timer_cnt;
+extern volatile uint8_t key_flag[100];
+extern volatile uint16_t timer_cnt;
 extern SETUP setup;
-extern char *sd_data;
-extern char game_over;
-extern char cheat;
-extern int exit_flag;
+extern uint8_t *sd_data;
+extern uint8_t game_over;
+extern uint8_t cheat;
+extern int16_t exit_flag;
 //===========================================================================
-int boss1_movement(ACTOR *actr)
+int16_t boss1_movement(ACTOR *actr)
 { //boss - snake
-  int d, x1, y1, f;
+  int16_t d, x1, y1, f;
 
   if (boss_dead)
     return boss_dead1();
@@ -201,9 +201,9 @@ done1:
   return d;
 }
 //===========================================================================
-void check_boss1_hit(ACTOR *actr, int x1, int y1, int x2, int y2, int act_num)
+void check_boss1_hit(ACTOR *actr, int16_t x1, int16_t y1, int16_t x2, int16_t y2, int16_t act_num)
 {
-  int rep;
+  int16_t rep;
 
   if (actr->move == 15 && act_num == 4)
   {
@@ -243,9 +243,9 @@ void boss_level1(void)
   music_play(5, 1);
 }
 //===========================================================================
-int boss_dead1(void)
+int16_t boss_dead1(void)
 {
-  int rep, n, x, y, r, x1, y1;
+  int16_t rep, n, x, y, r, x1, y1;
 
   hourglass_flag = 0;
   if (boss_dead == 1)
@@ -287,7 +287,7 @@ int boss_dead1(void)
 void closing_sequence1(void)
 {
   LEVEL *lvl;
-  int rep;
+  int16_t rep;
 
   music_play(4, 1);
   odin_speaks(1001, 13);

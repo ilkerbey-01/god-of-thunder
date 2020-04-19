@@ -13,16 +13,16 @@
 #include "SB_Man.h"
 
 extern SETUP setup;
-extern char AdLibPresent;
-extern volatile unsigned int timer_cnt, vbl_cnt, magic_cnt, extra_cnt;
-extern int music_flag, sound_flag, pcsound_flag;
-extern char noal, nosb;
+extern uint8_t AdLibPresent;
+extern volatile uint16_t timer_cnt, vbl_cnt, magic_cnt, extra_cnt;
+extern int16_t music_flag, sound_flag, pcsound_flag;
+extern uint8_t noal, nosb;
 
-void interrupt (*t0OldService)(void);
-long TimerDivisor, TimerCount;
-volatile long TickCount2, TickCount;
+voidint16_terrupt (*t0OldService)(void);
+int32_t TimerDivisor, TimerCount;
+volatile int32_t TickCount2, TickCount;
 //===========================================================================
-void interrupt t0Service(void)
+voidint16_terrupt t0Service(void)
 {
 
   timer_cnt++;
@@ -44,12 +44,12 @@ void interrupt t0Service(void)
   else
     outportb(0x20, 0x20); // Do the EOI
 }
-char *SB_DetectAdLib(void);
+uint8_t *SB_DetectAdLib(void);
 //===========================================================================
-int sbfx_init(void)
+int16_t sbfx_init(void)
 {
   unsigned speed;
-  char *sberr;
+  uint8_t *sberr;
 
   t0OldService = getvect(8);
   setvect(8, t0Service);
@@ -99,7 +99,7 @@ int sbfx_init(void)
 //===========================================================================
 void sbfx_exit(void)
 {
-  int i;
+  int16_t i;
 
   if (setup.pc_sound)
     FX_StopPC();

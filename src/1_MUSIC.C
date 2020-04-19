@@ -13,11 +13,11 @@
 #include "MU_Manc.h"
 #include "SB_Manc.h"
 
-extern char *song;
-extern char music_current;
+extern uint8_t *song;
+extern uint8_t music_current;
 extern struct sup setup;
 //=========================================================================
-int music_init(void)
+int16_t music_init(void)
 {
 
   if (!setup.music)
@@ -26,7 +26,7 @@ int music_init(void)
   return 1;
 }
 //=========================================================================
-void music_play(int num, int override)
+void music_play(int16_t num, int16_t override)
 {
 
   if (!setup.music)
@@ -56,7 +56,7 @@ void music_resume(void)
   MU_MusicOn();
 }
 //=========================================================================
-int music_is_on(void)
+int16_t music_is_on(void)
 {
 
   if (!setup.music)
