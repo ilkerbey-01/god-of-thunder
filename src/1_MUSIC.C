@@ -18,42 +18,49 @@ extern char far *song;
 extern char music_current;
 extern struct sup setup;
 //=========================================================================
-int music_init(void){
+int music_init(void)
+{
 
-if(!setup.music) return 0;
-music_current=-1;
-return 1;
+  if (!setup.music)
+    return 0;
+  music_current = -1;
+  return 1;
 }
 //=========================================================================
-void music_play(int num,int override){
+void music_play(int num, int override)
+{
 
-if(!setup.music) return;
-if((num!=music_current) || override){
-  if(num!=music_current) load_music(num);
-  MU_StartMusic(song,1);
-  music_current=num;
-}
-}
-//=========================================================================
-void music_pause(void){
-
-if(!setup.music) return;
-MU_MusicOff();
+  if (!setup.music)
+    return;
+  if ((num != music_current) || override)
+  {
+    if (num != music_current)
+      load_music(num);
+    MU_StartMusic(song, 1);
+    music_current = num;
+  }
 }
 //=========================================================================
-void music_resume(void){
+void music_pause(void)
+{
 
-if(!setup.music) return;
-MU_MusicOn();
+  if (!setup.music)
+    return;
+  MU_MusicOff();
 }
 //=========================================================================
-int music_is_on(void){
+void music_resume(void)
+{
 
-if(!setup.music) return 0;
-return MU_MusicPlaying();
+  if (!setup.music)
+    return;
+  MU_MusicOn();
 }
+//=========================================================================
+int music_is_on(void)
+{
 
-
-
-
-
+  if (!setup.music)
+    return 0;
+  return MU_MusicPlaying();
+}

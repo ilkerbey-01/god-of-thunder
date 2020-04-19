@@ -1,11 +1,11 @@
 //Source code released to the public domain on March 27th, 2020.
 
-
 //XMASKIM.H: structures used for storing and manipulating masked images
 
 //Describes one alignment of a mask-image pair
 
-typedef struct {
+typedef struct
+{
    int ImageWidth;        //image width in addresses in display memory
                           //(also mask width in bytes)
    unsigned int ImagePtr; //offset of image bitmap in display mem
@@ -14,7 +14,8 @@ typedef struct {
 
 //Describes all four alignments of a mask-image pair
 
-typedef struct {
+typedef struct
+{
    AlignedMaskedImage *Alignments[4]; //ptrs to AlignedMaskedImage
                                       //structs for four possible destination
                                       //image alignments
