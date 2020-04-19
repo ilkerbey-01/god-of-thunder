@@ -3,16 +3,14 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <dos.h>
-#include <alloc.h>
+#include <memory.h>
 #include <string.h>
 #include <dir.h>
-#include <conio.h>
 #include <ctype.h>
 
 #include <res_man.h>
-#include <1_define.h>
-#include <1_proto.h>
+#include "1_DEFINE.H"
+#include "1_PROTO.H"
 
 int setup_level(void);
 int setup_player(void);

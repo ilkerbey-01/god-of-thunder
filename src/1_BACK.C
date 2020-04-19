@@ -4,14 +4,13 @@
 //
 #include <stdlib.h>
 #include <stdio.h>
-#include <dos.h>
 #include <string.h>
-#include <alloc.h>
+#include <memory.h>
 #include <bios.h>
 #include <ctype.h>
 
-#include <1_define.h>
-#include <1_proto.h>
+#include "1_DEFINE.H"
+#include "1_PROTO.H"
 //===========================================================================
 extern char far *bg_pics;
 extern int warp_flag;

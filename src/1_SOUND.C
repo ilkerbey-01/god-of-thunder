@@ -1,10 +1,10 @@
 //Source code released to the public domain on March 27th, 2020.
 
 #include <stdio.h>
-#include <alloc.h>
+#include <memory.h>
 
-#include <1_define.h>
-#include <1_proto.h>
+#include "1_DEFINE.H"
+#include "1_PROTO.H"
 #include <res_man.h>
 
 #include "FX_Manc.h"

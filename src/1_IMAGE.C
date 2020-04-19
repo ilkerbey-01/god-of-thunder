@@ -3,11 +3,10 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <dos.h>
 #include <string.h>
 
-#include <1_define.h>
-#include <1_proto.h>
+#include "1_DEFINE.H"
+#include "1_PROTO.H"
 //===========================================================================
 extern char pge;
 extern unsigned int draw_page, display_page, page3_offset;

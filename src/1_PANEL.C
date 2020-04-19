@@ -3,13 +3,12 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <dos.h>
 #include <malloc.h>
 #include <string.h>
 
 #include <res_man.h>
-#include <1_define.h>
-#include <1_proto.h>
+#include "1_DEFINE.H"
+#include "1_PROTO.H"
 
 #define STAT_COLOR 206
 

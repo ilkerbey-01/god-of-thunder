@@ -1,15 +1,13 @@
 //Source code released to the public domain on March 27th, 2020.
 
 #include <bios.h>
-#include <dos.h>
 #include <fcntl.h>
 #include <io.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <conio.h>
 
-#include <1_define.h>
-#include <1_proto.h>
+#include "1_DEFINE.H"
+#include "1_PROTO.H"
 #include "FX_Man.h"
 #include "MU_Man.h"
 #include "SB_Man.h"

@@ -3,16 +3,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
-#include <dos.h>
 #include <string.h>
 #include <time.h>
-#include <alloc.h>
-#include <process.h>
+#include <memory.h>
 
-#include <1_define.h>
-#include <1_proto.h>
-#include <mu_man.h>
+#include "1_DEFINE.H"
+#include "1_PROTO.H"
+//#include "mu_man.h"
 
 //========================= Global Declarations ==============================
 unsigned int page[3] = {PAGE0, PAGE1, PAGE2};

@@ -3,11 +3,10 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <dos.h>
 #include <string.h>
 
-#include <1_define.h>
-#include <1_proto.h>
+#include "1_DEFINE.H"
+#include "1_PROTO.H"
 //===========================================================================
 extern ACTOR actor[MAX_ACTORS];
 extern int thor_x1, thor_y1, thor_x2, thor_y2, thor_real_y1;

@@ -3,18 +3,16 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <dos.h>
 #include <mem.h>
-#include <alloc.h>
+#include <memory.h>
 #include <string.h>
 #include <fcntl.h>
 #include <share.h>
-#include <dos.h>
 #include <dir.h>
 
 #include <res_man.h>
-#include <1_define.h>
-#include <1_proto.h>
+#include "1_DEFINE.H"
+#include "1_PROTO.H"
 //============================================================================
 extern char far *bg_pics;
 extern char far objects[NUM_OBJECTS][262];
