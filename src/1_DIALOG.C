@@ -24,7 +24,7 @@ extern uint8_t object_index[240];
 extern THOR_INFO thor_info;
 extern int16_t rand1, rand2;
 extern uint8_t cheat;
-extern uint8_t *options_yesno[];
+extern char *options_yesno[];
 extern SETUP setup;
 extern uint8_t *sd_data;
 

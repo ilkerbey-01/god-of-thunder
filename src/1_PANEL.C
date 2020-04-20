@@ -27,14 +27,14 @@ extern volatile uint16_t timer_cnt, extra_cnt;
 extern uint8_t level_type, slow_mode;
 extern struct sup setup;
 extern int16_t music_flag, sound_flag, pcsound_flag, boss_active;
-extern uint8_t *options_yesno[];
-uint8_t *options_onoff[] = {"On", "Off", NULL};
-uint8_t *options_sound[] = {"None", "PC Speaker", "Digitized", NULL};
-uint8_t *options_skill[] = {"Easy Enemies", "Normal Enemies", "Tough Enemies", NULL};
-uint8_t *options_slow[] = {"On  (slow computer)", "Off (fast computer)", NULL};
-uint8_t *options_menu[] = {"Sound/Music", "Skill Level", "Save Game", "Load Game",
+extern char *options_yesno[];
+char *options_onoff[] = {"On", "Off", NULL};
+char *options_sound[] = {"None", "PC Speaker", "Digitized", NULL};
+char *options_skill[] = {"Easy Enemies", "Normal Enemies", "Tough Enemies", NULL};
+char *options_slow[] = {"On  (slow computer)", "Off (fast computer)", NULL};
+char *options_menu[] = {"Sound/Music", "Skill Level", "Save Game", "Load Game",
                            "Die", "Turbo Mode", "Help", "Quit", NULL};
-uint8_t *options_quit[] = {"Continue Game", "Quit to Opening Screen", "Quit to DOS", NULL};
+char *options_quit[] = {"Continue Game", "Quit to Opening Screen", "Quit to DOS", NULL};
 extern uint8_t *scr;
 extern uint8_t last_setup[32];
 extern int16_t exit_flag;
@@ -73,10 +73,10 @@ void display_magic(void)
 //===========================================================================
 void display_jewels(void)
 {
-  uint8_t s[21];
+  char s[21];
   int16_t x, l;
 
-  itoa(thor_info.jewels, s, 10);
+  sprintf(s, "%d", thor_info.jewels);
   l = strlen(s);
 
   if (l == 1)
@@ -92,10 +92,10 @@ void display_jewels(void)
 //===========================================================================
 void display_score(void)
 {
-  uint8_t s[21];
+  char s[21];
   int16_t x, l;
 
-  ultoa(thor_info.score, s, 10);
+  sprintf(s, "%d", thor_info.score);
 
   l = strlen(s);
   x = 276 - (l * 8);
@@ -106,10 +106,10 @@ void display_score(void)
 //===========================================================================
 void display_keys(void)
 {
-  uint8_t s[21];
+  char s[21];
   int16_t x, l;
 
-  itoa(thor_info.keys, s, 10);
+  sprintf(s, "%d", thor_info.keys);
   l = strlen(s);
 
   if (l == 1)
@@ -309,12 +309,12 @@ void boss_status(int16_t health)
   }
 }
 //===========================================================================
-int16_t select_option(uint8_t *option[], uint8_t *title, int16_t ipos)
+int16_t select_option(char *option[], const char *title, int16_t ipos)
 {
   int16_t num_opts, x1, y1, x2, y2, w, h;
   int16_t s, i, pic, pos, key, y, kf, ret;
   uint16_t pg;
-  uint8_t **op;
+  char **op;
 
   show_all_actors();
   num_opts = 0;

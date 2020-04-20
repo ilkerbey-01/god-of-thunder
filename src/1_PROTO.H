@@ -131,7 +131,7 @@ void fill_magic(void);
 void fill_score(int16_t num);
 void score_for_inv(void);
 void boss_status(int16_t health);
-int16_t select_option(uint8_t *option[], uint8_t *title, int16_t ipos);
+int16_t select_option(char *option[], const char *title, int16_t ipos);
 int16_t option_menu(void);
 int16_t ask_exit(void);
 int16_t select_sound(void);
