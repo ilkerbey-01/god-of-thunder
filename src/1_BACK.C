@@ -308,17 +308,6 @@ int16_t odin_speaks(int16_t index, int16_t item)
   return 1;
 }
 //===========================================================================
-void d_restore(void)
-{
-
-  xdisplay_actors(&actor[MAX_ACTORS - 1], draw_page);
-  xshowpage(draw_page);
-  xcopyd2d(0, 0, 320, 192, 0, 0, PAGE2, display_page, 320, 320);
-  xdisplay_actors(&actor[MAX_ACTORS - 1], display_page);
-  xshowpage(display_page);
-  xerase_actors(actor, draw_page);
-}
-//===========================================================================
 int16_t actor_speaks(ACTOR *actr, int16_t index, int16_t item)
 {
   uint8_t *p;
