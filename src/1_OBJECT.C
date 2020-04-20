@@ -31,7 +31,7 @@ extern int16_t hourglass_flag, thunder_flag, shield_on, lightning_used, tornado_
 extern int16_t apple_flag, bomb_flag;
 extern volatile uint16_t timer_cnt;
 extern int16_t magic_inform, carry_inform;
-extern uint8_t *object_names[];
+extern char *object_names[];
 extern int16_t exit_flag;
 extern SETUP setup;
 
@@ -523,7 +523,7 @@ int16_t use_object(int16_t flag)
 //===========================================================================
 void use_item(void)
 {
-  staticint16_t flag = 0;
+  static int16_t flag = 0;
   int16_t kf, ret, mf;
 
   kf = key_flag[key_magic];

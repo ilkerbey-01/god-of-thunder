@@ -33,7 +33,7 @@ extern uint8_t *sd_data;
 extern uint8_t cheat;
 extern volatile uint8_t key_flag[100];
 extern int16_t key_magic;
-extern uint8_t *object_names[];
+extern char *object_names[];
 extern SETUP setup;
 extern uint8_t area;
 extern uint16_t display_page, draw_page;
