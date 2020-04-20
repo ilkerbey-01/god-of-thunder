@@ -5,12 +5,13 @@
 #include <stdio.h>
 #include <memory.h>
 #include <string.h>
-#include <dir.h>
+// #include <dir.h>
 #include <ctype.h>
 
-#include <res_man.h>
+#include "res_man.h"
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
+#include "utility.h"
 
 int16_t setup_level(void);
 int16_t setup_player(void);
@@ -62,9 +63,9 @@ extern uint8_t level_type;
 extern uint8_t *lzss_buff;
 
 //globals
-static voidint16_terrupt (*old_keyboard_int)(void); //int16_terrupt func pointer
-extern voidint16_terrupt (*old_timer_int)(void);    //int16_terrupt function pointer
-voidint16_terrupt timer_int(void);
+static void (*old_keyboard_int)(void); //int16_terrupt func pointer
+extern void (*old_timer_int)(void);    //int16_terrupt function pointer
+void timer_int(void);
 extern uint8_t *bleep;
 extern uint8_t *boss_sound[3];
 extern uint8_t *boss_pcsound[3];
@@ -85,7 +86,7 @@ extern int16_t exit_flag;
 extern uint8_t story_flag;
 extern uint16_t display_page;
 extern uint8_t music_current;
-extern uint8_t tempstr[];
+extern char tempstr[];
 extern uint8_t area, cheat;
 extern uint8_t pbuff[768];
 
@@ -95,7 +96,7 @@ uint8_t byte;
 uint16_t word;
 void print_mem(void);
 //===========================================================================
-uint8_t *err_msg[] = {
+const char *err_msg[] = {
     "(null)",
     "Can't Load GOTRES.DAT",
     "Can't Read Font",
@@ -133,8 +134,9 @@ int16_t initialize(void)
     boss_pcsound[i] = (uint8_t *)0;
   }
   //commandeer the KBint16_t
-  old_keyboard_int16_t = getvect(0x09);
-  setvect(0x09, keyboard_int);
+  // TODO 
+  //old_keyboard_int16_t = getvect(0x09);
+  //setvect(0x09, keyboard_int);
   break_code = 1;
 
   //setup default values
@@ -148,9 +150,9 @@ int16_t initialize(void)
   setup.speed = slow_mode;
   setup.skill = 1;
 
-  memset(key_flag, 0, 100);
-  memset(joy_flag, 0, 100);
-  memset(tmp_flag, 0, 100);
+  memset((void*)key_flag, 0, 100);
+  memset((void*)joy_flag, 0, 100);
+  memset((void*)tmp_flag, 0, 100);
   sd_data = (uint8_t *)0;
 
   key_fire = ALT;
@@ -174,15 +176,15 @@ int16_t initialize(void)
   std_sound_start = 0;
   pcstd_sound_start = 0;
 
-  tmp_buff = malloc(TMP_SIZE);
+  tmp_buff = (uint8_t *)malloc(TMP_SIZE);
   if (!tmp_buff)
     return 5;
 
-  lzss_buff = malloc(18000lu);
+  lzss_buff = (uint8_t *)malloc(18000lu);
   if (!lzss_buff)
     return 5;
 
-  mask_buff = malloc(15300lu);
+  mask_buff = (uint8_t *)malloc(15300lu);
   mask_buff_start = mask_buff;
   if (!mask_buff)
     return 5;
@@ -237,7 +239,7 @@ int16_t initialize(void)
       music_flag = 0;
     }
   }
-  song = malloc(20000lu);
+  song = (uint8_t *)malloc(20000lu);
   if (!song)
     return 5;
 
@@ -286,7 +288,8 @@ void exit_code(int16_t ex_flag)
   sound_exit();
   sbfx_exit();
 
-  setvect(0x09, old_keyboard_int);
+  // TODO 
+  //setvect(0x09, old_keyboard_int);
   if (lzss_buff)
     free(lzss_buff);
   if (bg_pics)
@@ -308,8 +311,9 @@ void exit_code(int16_t ex_flag)
       free(boss_pcsound[i]);
   }
 
-  in.x.ax = 0x0003;
-  int16_t86(0x10, &in, &out);
+  // TODO 
+  //in.x.ax = 0x0003;
+  //int16_t86(0x10, &in, &out);
 
   if (ex_flag > 0)
   {
@@ -318,18 +322,18 @@ void exit_code(int16_t ex_flag)
   }
 }
 //===========================================================================
-voidint16_terrupt keyboard_int()
+void keyboard_int()
 {
   uint8_t flag;
   int16_t key;
   //staticint16_t num=0;
 
-  scan_code = inportb(0x60);
-  byte = inportb(0x61);
-  byte |= 0x80;
-  outportb(0x61, byte);
-  byte &= 0x7f;
-  outportb(0x61, byte);
+  // TODO scan_code = inportb(0x60);
+  // TODO byte = inportb(0x61);
+  // TODO byte |= 0x80;
+  // TODO outportb(0x61, byte);
+  // TODO byte &= 0x7f;
+  // TODO outportb(0x61, byte);
   //scanc[num++]=scan_code;
   //if(scan_code==0xe0) goto done;
 
@@ -368,8 +372,10 @@ voidint16_terrupt keyboard_int()
   else if (demo)
     exit_flag = 5;
 
-done:
-  outportb(0x20, 0x20);
+done: {
+
+}
+  // TODO outportb(0x20, 0x20);
 }
 //===========================================================================
 void demo_key_set(void)
@@ -581,9 +587,9 @@ int16_t setup_player(void)
 int16_t setup_boss(int16_t num)
 {
   int16_t rep;
-  uint8_t s[21];
-  uint8_t str[21];
-  uint8_t ress[21];
+  char s[21];
+  char str[21];
+  char ress[21];
 
   if (boss_loaded == num)
     return 1;
@@ -598,7 +604,7 @@ int16_t setup_boss(int16_t num)
     }
   }
 
-  itoa(num, s, 10);
+  sprintf(s, "%d", num);
   strcpy(str, "BOSSV");
   strcat(str, s);
 
@@ -624,7 +630,7 @@ int16_t setup_boss(int16_t num)
     return 0;
   dig_sound[NUM_SOUNDS - 1] = boss_sound[2];
 
-  itoa(num, s, 10);
+  sprintf(s, "%d", num);
   strcpy(str, "BOSSP");
   strcat(str, s);
   if (num == 2)
@@ -682,19 +688,19 @@ void ask_joystick(void)
 //===========================================================================
 void set_joy(void)
 {
-  uint8_t *p;
+  char *p;
 
   p = strtok(tempstr, ",:");
-  joylx = atoi(p);
+  joylx = parse_decimal_int16_t(p);
 
   p = strtok(NULL, ",");
-  joyhx = atoi(p);
+  joyhx = parse_decimal_int16_t(p);
 
   p = strtok(NULL, ",");
-  joyly = atoi(p);
+  joyly = parse_decimal_int16_t(p);
 
   p = strtok(NULL, ",");
-  joyhy = atoi(p);
+  joyhy = parse_decimal_int16_t(p);
 
   joystick = 1;
 }
@@ -757,34 +763,35 @@ void set_palette(void)
     r = pbuff[i * 3];
     g = pbuff[(i * 3) + 1];
     b = pbuff[(i * 3) + 2];
-    asm mov al, n asm mov dx, DAC_WRITE_INDEX // Tell DAC what colour index to
-        asm out dx,
-        al // write to
-        asm mov dx,
-        DAC_DATA
+    // TODO
+    // asm mov al, n asm mov dx, DAC_WRITE_INDEX // Tell DAC what colour index to
+    //     asm out dx,
+    //     al // write to
+    //     asm mov dx,
+    //     DAC_DATA
 
-        asm mov bl,
-        r asm mov al, bl // Set the red component
-        asm out dx,
-        al
+    //     asm mov bl,
+    //     r asm mov al, bl // Set the red component
+    //     asm out dx,
+    //     al
 
-        asm mov ch,
-        g asm mov al, ch // Set the green component
-        asm out dx,
-        al
+    //     asm mov ch,
+    //     g asm mov al, ch // Set the green component
+    //     asm out dx,
+    //     al
 
-        asm mov cl,
-        b asm mov al, cl // Set the blue component
-        asm out dx,
-        al
+    //     asm mov cl,
+    //     b asm mov al, cl // Set the blue component
+    //     asm out dx,
+    //     al
   }
 }
 //===========================================================================
 void story(void)
 {
   int16_t i, x, y, color;
-  uint8_t s[21];
-  uint8_t str[40];
+  char s[21];
+  char str[40];
   uint8_t back[4][262];
   uint8_t *p;
   uint16_t pg;
@@ -806,7 +813,7 @@ void story(void)
   p = tmp_buff;
   pg = 0u;
 
-  buff = malloc(15000u);
+  buff = (uint8_t *)malloc(15000u);
   if (!buff)
     return;
   pg = 0u;
@@ -816,7 +823,7 @@ void story(void)
     {
       pg = 19200u;
     }
-    itoa(i + 1, s, 10);
+    sprintf(s, "%d", i + 1);
     strcpy(str, "OPENP");
     strcat(str, s);
     res_read(str, buff);
@@ -868,7 +875,7 @@ void story(void)
       s[1] = *p++;
       s[2] = *p++;
       s[3] = 0;
-      color = atoi(s);
+      color = parse_decimal_int16_t(s);
     }
     else if (*p != 10)
     {

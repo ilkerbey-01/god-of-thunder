@@ -19,7 +19,7 @@ extern uint16_t display_page, draw_page;
 extern volatile uint8_t key_flag[100];
 extern ACTOR actor[MAX_ACTORS];
 //===========================================================================
-void xprint(int16_t x, int16_t y, char *string, uint16_t page, int16_t color)
+void xprint(int16_t x, int16_t y, const char *string, uint16_t page, int16_t color)
 {
   uint8_t ch;
   uint8_t str[4];
@@ -50,7 +50,7 @@ void xprint(int16_t x, int16_t y, char *string, uint16_t page, int16_t color)
   }
 }
 //===========================================================================
-void xprintx(int16_t x, int16_t y, char *string, uint16_t page, int16_t color)
+void xprintx(int16_t x, int16_t y, const char *string, uint16_t page, int16_t color)
 {
   uint8_t ch;
   uint8_t str[4];

@@ -18,11 +18,11 @@ extern volatile uint16_t timer_cnt, vbl_cnt, magic_cnt, extra_cnt;
 extern int16_t music_flag, sound_flag, pcsound_flag;
 extern uint8_t noal, nosb;
 
-voidint16_terrupt (*t0OldService)(void);
+void (*t0OldService)(void);
 int32_t TimerDivisor, TimerCount;
 volatile int32_t TickCount2, TickCount;
 //===========================================================================
-voidint16_terrupt t0Service(void)
+void t0Service(void)
 {
 
   timer_cnt++;

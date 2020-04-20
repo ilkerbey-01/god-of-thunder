@@ -1,6 +1,7 @@
 // THOR - The God of Thunder
 //Source code released to the public domain on March 27th, 2020.
 
+#pragma once
 #include <stdint.h>
 
 //G_LIB.LIB
@@ -64,8 +65,8 @@ int16_t rnd(int16_t max);
 
 //G_GRP.C
 
-void xprint(int16_t x, int16_t y, char *string, uint16_t page, int16_t color);
-void xprintx(int16_t x, int16_t y, char *string, uint16_t page, int16_t color);
+void xprint(int16_t x, int16_t y, const char *string, uint16_t page, int16_t color);
+void xprintx(int16_t x, int16_t y, const char *string, uint16_t page, int16_t color);
 void split_screen(void);
 int16_t load_palette(void);
 void xbox(int16_t x1, int16_t y1, int16_t x2, int16_t y2, unsigned page, int16_t color);
@@ -108,7 +109,7 @@ void *get_file(uint8_t *filename, int16_t key);
 void save_game(void);
 int16_t load_game(int16_t flag);
 void help(void);
-int32_t res_read(uint8_t *name, uint8_t *buff);
+int32_t res_read(const char *name, uint8_t *buff);
 int16_t load_music(int16_t num);
 
 //G_PANEL.C

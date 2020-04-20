@@ -1,5 +1,6 @@
 //Source code released to the public domain on March 27th, 2020.
 
+#pragma once
 #include <stdint.h>
 
 #undef outportb
