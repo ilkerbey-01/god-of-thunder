@@ -134,7 +134,7 @@ int32_t res_read(const char* name, uint8_t* buff) {
     }
   }
 
-  return 0;
+  return header.length;
 }
 
 bool res_init_record(int num, int& offset) {
