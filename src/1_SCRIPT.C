@@ -887,7 +887,7 @@ int16_t cmd_say(int16_t mode, int16_t type)
     p++;
   }
   *(p - 1) = 0;
-  display_speech(obj, (char *)scr_pic, type);
+  display_speech(obj, (uint8_t *)scr_pic, type);
   d_restore();
   return 0;
 }
