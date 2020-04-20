@@ -2,15 +2,14 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <io.h>
 #include <fcntl.h>
 
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
 #include "res_man.h"
-#include "FX_Manc.h"
-#include "MU_Manc.h"
-#include "SB_Manc.h"
+#include "fx_man.h"
+#include "mu_man.h"
+#include "sb_man.h"
 
 extern uint8_t *song;
 extern uint8_t music_current;
