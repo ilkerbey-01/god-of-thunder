@@ -34,7 +34,7 @@ int16_t thor_x1, thor_y1, thor_x2, thor_y2, thor_real_y1;
 int16_t thor_pos;
 int16_t max_shot;
 
-volatile uint16_t timer_cnt, vbl_cnt, magic_cnt, extra_cnt;
+extern volatile uint16_t timer_cnt, vbl_cnt, magic_cnt, extra_cnt;
 
 uint8_t text[94][72];
 uint8_t *bg_pics;
@@ -121,7 +121,7 @@ char res_file[16];
 uint8_t odin[4][262];
 uint8_t hampic[4][262];
 int16_t load_game_flag;
-int16_t music_flag, sound_flag, pcsound_flag;
+extern int16_t music_flag, sound_flag, pcsound_flag;
 int16_t cash1_inform, cash2_inform, door_inform, magic_inform, carry_inform;
 int16_t killgg_inform;
 uint8_t dialog_color[] = {14, 54, 120, 138, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -145,7 +145,8 @@ uint8_t test_sdf[80];
 char options_yesno[3][4] = {"Yes", "No", NULL};
 uint8_t *lzss_buff;
 uint8_t game_over;
-uint8_t noal, nosb, ret;
+extern uint8_t noal, nosb;
+uint8_t ret;
 char tempstr[80];
 uint8_t auto_load;
 uint8_t ide_run, fast_exit, nojoy, gr, xdos;

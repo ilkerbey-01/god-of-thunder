@@ -109,7 +109,6 @@ void *get_file(uint8_t *filename, int16_t key);
 void save_game(void);
 int16_t load_game(int16_t flag);
 void help(void);
-int32_t res_read(const char *name, uint8_t *buff);
 int16_t load_music(int16_t num);
 
 //G_PANEL.C

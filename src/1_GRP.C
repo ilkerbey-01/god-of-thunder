@@ -193,49 +193,6 @@ void xbox(int16_t x1, int16_t y1, int16_t x2, int16_t y2, unsigned page, int16_t
   xline(x2, y1, x2, y2, page, color);
 }
 /*=========================================================================*/
-void xline(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t page, int16_t color)
-{
-  int16_t x, y;
-
-  if (x0 == x1 && y0 == y1)
-    xpset(x0, y0, page, color);
-
-  else if (abs(x1 - x0) >= abs(y1 - y0))
-  {
-    if (x1 < x0)
-    {
-      x = x1;
-      y = y1;
-      x1 = x0;
-      y1 = y0;
-      x0 = x;
-      y0 = y;
-    }
-    for (x = x0; x <= x1; x++)
-    {
-      y = (int)(y0 + ((x - x0) * (int32_t)(y1 - y0)) / (x1 - x0));
-      xpset(x, y, page, color);
-    }
-  }
-  else
-  {
-    if (y1 < y0)
-    {
-      x = x1;
-      y = y1;
-      x1 = x0;
-      y1 = y0;
-      x0 = x;
-      y0 = y;
-    }
-    for (y = y0; y <= y1; y++)
-    {
-      x = (int)(x0 + ((y - y0) * (int32_t)(x1 - x0)) / (y1 - y0));
-      xpset(x, y, page, color);
-    }
-  }
-}
-/*=========================================================================*/
 void fade_in(void)
 {
 
