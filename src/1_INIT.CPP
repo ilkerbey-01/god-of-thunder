@@ -8,6 +8,7 @@
 // #include <dir.h>
 #include <ctype.h>
 
+#include "sdl_man.h"
 #include "res_man.h"
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
@@ -114,11 +115,16 @@ const char *err_msg[] = {
     "Can't Load Resource File",
     "Can't Demo Game",
     "Can't Randomize",
+    "Can't INIT SDL"
 };
 
 //===========================================================================
 int16_t initialize(void)
 {
+  if (!sdl_man_initialize()) {
+    return 17;
+  }
+
   int16_t i;
 
   lzss_buff = (uint8_t *)0;
@@ -285,6 +291,7 @@ void exit_code(int16_t ex_flag)
 {
   int16_t i;
 
+  sdl_man_close();
   res_close();
   sound_exit();
   sbfx_exit();

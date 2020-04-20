@@ -29,7 +29,11 @@ add_executable (got
     "mu_man.cpp"
     "res_man.cpp"
     "sb_man.cpp"
+    "sdl_man.cpp"
     "utility.cpp"
-)
+ )
+
+find_package(SDL2 CONFIG REQUIRED)
+target_link_libraries(got PRIVATE SDL2::SDL2 SDL2::SDL2main)
 
 # TODO: Add tests and install targets if needed.
