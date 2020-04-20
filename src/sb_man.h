@@ -8,5 +8,5 @@ void SB_PlayVOC(uint8_t* sound, int16_t tmp);
 void SB_StopVOC();
 void SB_Shutdown();
 void SB_ALOut(int16_t x, int16_t y);
-uint8_t* SB_Startup(uint8_t* x);
+uint8_t* SB_Startup(char* x);
 uint8_t* SB_DetectAdLib(void);

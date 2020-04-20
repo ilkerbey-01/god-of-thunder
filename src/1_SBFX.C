@@ -1,15 +1,14 @@
 //Source code released to the public domain on March 27th, 2020.
 
 #include <fcntl.h>
-#include <io.h>
 #include <stdlib.h>
 #include <stdio.h>
 
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
-#include "FX_Man.h"
-#include "MU_Man.h"
-#include "SB_Man.h"
+#include "fx_man.h"
+#include "mu_man.h"
+#include "sb_man.h"
 
 extern SETUP setup;
 extern uint8_t AdLibPresent;
@@ -40,8 +39,9 @@ void t0Service(void)
     TimerCount -= 0x10000L;
     t0OldService(); // Chain to old ISR
   }
-  else
-    outportb(0x20, 0x20); // Do the EOI
+  // TODO
+  // else
+  //   outportb(0x20, 0x20); // Do the EOI
 }
 uint8_t *SB_DetectAdLib(void);
 //===========================================================================
@@ -50,13 +50,15 @@ int16_t sbfx_init(void)
   unsigned speed;
   uint8_t *sberr;
 
-  t0OldService = getvect(8);
-  setvect(8, t0Service);
+  // TODO
+  //t0OldService = getvect(8);
+  //setvect(8, t0Service);
 
   speed = (unsigned)(1192030L / 120L);
-  outportb(0x43, 0x36);
-  outportb(0x40, speed);
-  outportb(0x40, speed >> 8);
+  // TODO
+  // outportb(0x43, 0x36);
+  // outportb(0x40, speed);
+  // outportb(0x40, speed >> 8);
   TimerDivisor = speed;
 
   music_flag = 0; //is hardware available flags
@@ -82,7 +84,7 @@ int16_t sbfx_init(void)
     {
       exit_code(0);
       printf("\r\n%s\r\n", sberr);
-      getch();
+      getc(stdin);
       exit(0);
     }
     if (!SoundBlasterPresent)
@@ -110,8 +112,9 @@ void sbfx_exit(void)
   for (i = 0; i < 0xf5; i++)
     SB_ALOut(i, 0);
 
-  outportb(0x43, 0x36); // Change timer 0
-  outportb(0x40, 0);
-  outportb(0x40, 0);
-  setvect(8, t0OldService); // Restore old timer 0 ISR
+  // TODO
+  // outportb(0x43, 0x36); // Change timer 0
+  // outportb(0x40, 0);
+  // outportb(0x40, 0);
+  // setvect(8, t0OldService); // Restore old timer 0 ISR
 }

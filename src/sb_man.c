@@ -25,7 +25,7 @@ void SB_ALOut(int16_t x, int16_t y) {
 
 }
 
-uint8_t* SB_Startup(uint8_t* x) {
+uint8_t* SB_Startup(char* x) {
   return 0;
 }
 
