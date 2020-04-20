@@ -1,22 +1,23 @@
 #include "res_man.h"
 
 #include <stdio.h>
-#include <string>
+#include <stdlib.h>
+#include <string.h>
 
 // Great details about how this is implemented:
 // http://www.shikadi.net/moddingwiki/DAT_Format_(God_of_Thunder)
 
 RES_HEADER res_header[0xb1];
 
-FILE* res_file;
-int32_t res_read(const char *name, uint8_t *buff) {
-    return 0;
+FILE* res_file_;
+int32_t res_read(const char* name, uint8_t* buff) {
+  return 0;
 }
 
 bool res_init_record(int num, int& offset) {
   uint8_t buffer[23];
 
-  size_t read = fread(buffer, 1, 23, res_file);
+  size_t read = fread(buffer, 1, 23, res_file_);
   if (read != 23) {
     return false;
   }
@@ -33,11 +34,11 @@ bool res_init_record(int num, int& offset) {
 }
 
 void res_init(uint8_t* lzss) {
-  if (res_file == NULL) {
+  if (res_file_ == NULL) {
     return;
   }
 
-  if (!fseek(res_file, 0, SEEK_SET)) {
+  if (!fseek(res_file_, 0, SEEK_SET)) {
     return;
   }
 
@@ -48,8 +49,8 @@ void res_init(uint8_t* lzss) {
 }
 
 int16_t res_open(const char* file_name) {
-  res_file = fopen(file_name, "rb");
-  if (res_file != NULL) {
+  res_file_ = fopen(file_name, "rb");
+  if (res_file_ != NULL) {
     return 0;
   }
   return -1;
@@ -66,7 +67,7 @@ int16_t res_find_name(const char* res_name) {
 
 bool read_uint8(uint8_t& i) {
   unsigned char tmp[1];
-  if (!fread(&tmp, 1, 1, res_file)) {
+  if (!fread(&tmp, 1, 1, res_file_)) {
     return false;
   }
   else {
@@ -77,7 +78,7 @@ bool read_uint8(uint8_t& i) {
 
 bool read_uint16(uint16_t& i) {
   uint8_t tmp[2];
-  if (fread(&tmp, 1, 2, res_file) != 2) {
+  if (fread(&tmp, 1, 2, res_file_) != 2) {
     return false;
   }
 
@@ -168,7 +169,7 @@ uint8_t* res_falloc_read(const char* res_name) {
   }
 
   RES_HEADER header = res_header[num];
-  if (fseek(res_file, header.offset, SEEK_SET)) {
+  if (fseek(res_file_, header.offset, SEEK_SET)) {
     return NULL;
   }
 
@@ -184,7 +185,7 @@ uint8_t* res_falloc_read(const char* res_name) {
 
   // Raw
   else {
-    size_t read = fread(buffer, 1, header.length, res_file);
+    size_t read = fread(buffer, 1, header.length, res_file_);
     if (read != header.length) {
       free(buffer);
       return NULL;
@@ -195,7 +196,7 @@ uint8_t* res_falloc_read(const char* res_name) {
 }
 
 void res_close() {
-  if (res_file != NULL) {
-    fclose(res_file);
+  if (res_file_ != NULL) {
+    fclose(res_file_);
   }
 }
