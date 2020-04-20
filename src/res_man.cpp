@@ -206,7 +206,7 @@ int16_t res_open(const char* file_name) {
     while (res_init_record(count++, offset) && count < 0xb1) {
     }
 
-    return 0;
+    return count;
   }
   return -1;
 }
