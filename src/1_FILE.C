@@ -3,12 +3,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <mem.h>
 #include <memory.h>
 #include <string.h>
 #include <fcntl.h>
-#include <share.h>
-#include <dir.h>
 
 #include "res_man.h"
 #include "1_DEFINE.H"
@@ -38,9 +35,9 @@ extern uint8_t game_over;
 extern uint16_t display_page, draw_page;
 extern volatile uint8_t key_flag[100];
 
-uint8_t *gotres = "GOTRES.00";
+char gotres[] = "GOTRES.00";
 //===========================================================================
-int32_t file_size(uint8_t *path)
+int32_t file_size(char *path)
 {
   int32_t tmpl;
   FILE *tmp_fp;
@@ -57,7 +54,7 @@ int32_t file_size(uint8_t *path)
 int16_t load_bg_data(void)
 {
 
-  bg_pics = malloc(60460l);
+  bg_pics = (uint8_t*)malloc(60460l);
   if (!bg_pics)
     return 0;
   if (GAME1)
@@ -68,15 +65,15 @@ int16_t load_bg_data(void)
 //===========================================================================
 int16_t load_sd_data(void)
 {
-  uint8_t s[21];
-  uint8_t str[21];
+  char s[21];
+  char str[21];
 
   strcpy(s, "SDAT");
-  itoa(area, str, 10);
+  sprintf(str, "%d", area);
   strcat(s, str);
 
   if (!sd_data)
-    sd_data = malloc(61440l);
+    sd_data = (uint8_t*)malloc(61440l);
   if (!sd_data)
     return 0;
   if (res_read(s, sd_data) < 0)
@@ -94,10 +91,10 @@ int16_t load_objects(void)
 //===========================================================================
 int16_t load_actor(int16_t file, int16_t num)
 {
-  uint8_t s[21];
-  uint8_t rs[21];
+  char s[21];
+  char rs[21];
 
-  itoa(num, s, 10);
+  sprintf(s, "%d", num);
   strcpy(rs, "ACTOR");
   strcat(rs, s);
   if (res_read(rs, tmp_buff) < 0)
@@ -109,20 +106,20 @@ int16_t load_actor(int16_t file, int16_t num)
 int16_t load_speech(int16_t index)
 {
   int16_t cnt;
-  uint8_t tmps[30];
-  uint8_t str[30];
-  uint8_t *p;
-  uint8_t *pm;
-  uint8_t *sp;
+  char tmps[30];
+  char str[30];
+  char *p;
+  char *pm;
+  char *sp;
 
-  sp = malloc(30000l);
+  sp = (char*)malloc(30000l);
   if (!sp)
     return 0;
 
   strcpy(str, "SPEAK");
-  itoa(area, tmps, 10);
+  sprintf(tmps, "%d", area);
   strcat(str, tmps);
-  if (res_read(str, sp) < 0)
+  if (res_read(str, (uint8_t*)sp) < 0)
   {
     free(sp);
     return 0;
@@ -137,7 +134,7 @@ int16_t load_speech(int16_t index)
     {
       p++;
       cnt++;
-      _fstrncpy(tmps, p, 4);
+      strncpy(tmps, p, 4);
       tmps[4] = 0;
       if (atoi(tmps) == index)
       {
@@ -172,7 +169,7 @@ int16_t load_speech(int16_t index)
   if (*(p - 1) == 10)
     *(p - 1) = 0;
   *p = 0;
-  _fmemcpy(tmp_buff, pm, cnt);
+  memcpy(tmp_buff, pm, cnt);
   tmp_buff[cnt] = 0;
   free(sp);
   return 1;
@@ -211,19 +208,20 @@ void save_game(void)
   }
   d_restore();
 
-  if (_dos_open(save_filename, O_RDONLY, &handle) != 0)
-    return;
-  _dos_read(handle, buff, 32, &total);
-  _dos_close(handle);
+  // TODO
+  // if (_dos_open(save_filename, O_RDONLY, &handle) != 0)
+  //   return;
+  // _dos_read(handle, buff, 32, &total);
+  // _dos_close(handle);
 
-  if (_dos_open(save_filename, O_WRONLY, &handle) != 0)
-    return;
-  _dos_write(handle, buff, 32, &total);
-  _dos_write(handle, &setup, sizeof(SETUP), &total);
-  _dos_write(handle, &thor_info, sizeof(THOR_INFO), &total);
-  _dos_write(handle, sd_data, 61440u, &total);
-  _dos_close(handle);
-  odin_speaks(2009, 0);
+  // if (_dos_open(save_filename, O_WRONLY, &handle) != 0)
+  //   return;
+  // _dos_write(handle, buff, 32, &total);
+  // _dos_write(handle, &setup, sizeof(SETUP), &total);
+  // _dos_write(handle, &thor_info, sizeof(THOR_INFO), &total);
+  // _dos_write(handle, sd_data, 61440u, &total);
+  // _dos_close(handle);
+  // odin_speaks(2009, 0);
 }
 //===========================================================================
 int16_t load_game(int16_t flag)
@@ -241,13 +239,14 @@ int16_t load_game(int16_t flag)
     }
     d_restore();
   }
-  if (_dos_open(save_filename, O_RDONLY, &handle) != 0)
-    return 0;
-  _dos_read(handle, buff, 32, &total);
-  _dos_read(handle, &setup, sizeof(SETUP), &total);
-  _dos_read(handle, &thor_info, sizeof(THOR_INFO), &total);
-  _dos_read(handle, sd_data, 61440u, &total);
-  _dos_close(handle);
+  // TODO
+  // if (_dos_open(save_filename, O_RDONLY, &handle) != 0)
+  //   return 0;
+  // _dos_read(handle, buff, 32, &total);
+  // _dos_read(handle, &setup, sizeof(SETUP), &total);
+  // _dos_read(handle, &thor_info, sizeof(THOR_INFO), &total);
+  // _dos_read(handle, sd_data, 61440u, &total);
+  // _dos_close(handle);
 
   current_area = thor_info.last_screen;
   area = setup.area;
