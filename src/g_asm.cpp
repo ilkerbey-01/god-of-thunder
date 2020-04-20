@@ -1,4 +1,4 @@
-#include <cmath>
+#include <cstdlib>
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
 #include "g_asm.h"
