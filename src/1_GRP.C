@@ -11,7 +11,6 @@
 #include "1_PROTO.H"
 //===========================================================================
 extern uint8_t text[94][72];
-extern union REGS in, out;
 uint8_t pbuff[768];
 extern uint8_t dialog_color[16];
 extern uint8_t cheat;
@@ -92,38 +91,38 @@ void xprintx(int16_t x, int16_t y, const char *string, uint16_t page, int16_t co
 //===========================================================================
 void split_screen(void)
 {
+// TODO
+//   asm {
 
-  asm {
-
-mov dx,0x03d4 //CRTC
-mov al,0x18 //select LINE COMPARE reg
-out dx,al
-inc dx
-mov ax,128  //set bits 0-7 of LINE COMPARE
-         //I believe this is what I changed
-         //I am loading the LINE compare with
-         //384 (192x2) (128 here + 256 in bit 8)
-         //since mode X displays each scan line
-         //twice. I was originally loading
-         //385, since that was the first
-         //scan line I wanted for the upper
-    //half of the screen.
-out dx,al
-dec dx
-mov al,7 //OVERFLOW reg
-out dx,al
-inc dx
-in  al,dx
-or  al,0x10 //set bit 8 of LINE COMPARE
-out dx,al
-dec dx
-mov al,9
-out dx,al
-inc dx
-in  al,dx
-and al,0xbf //clear bit 9 of LINE COMPARE
-out dx,al
-  }
+// mov dx,0x03d4 //CRTC
+// mov al,0x18 //select LINE COMPARE reg
+// out dx,al
+// inc dx
+// mov ax,128  //set bits 0-7 of LINE COMPARE
+//          //I believe this is what I changed
+//          //I am loading the LINE compare with
+//          //384 (192x2) (128 here + 256 in bit 8)
+//          //since mode X displays each scan line
+//          //twice. I was originally loading
+//          //385, since that was the first
+//          //scan line I wanted for the upper
+//     //half of the screen.
+// out dx,al
+// dec dx
+// mov al,7 //OVERFLOW reg
+// out dx,al
+// inc dx
+// in  al,dx
+// or  al,0x10 //set bit 8 of LINE COMPARE
+// out dx,al
+// dec dx
+// mov al,9
+// out dx,al
+// inc dx
+// in  al,dx
+// and al,0xbf //clear bit 9 of LINE COMPARE
+// out dx,al
+//   }
 }
 //===========================================================================
 int16_t load_palette(void)
@@ -151,34 +150,36 @@ int16_t load_palette(void)
     *(pbuff + ((i * 3) + 1)) = 0;
     *(pbuff + ((i * 3) + 2)) = 0;
   }
-  in.h.al = 0x10;
-  in.h.ah = 0x10;
+  // TODO
+  // in.h.al = 0x10;
+  // in.h.ah = 0x10;
   for (i = 0; i < 256; i++)
   {
     n = i;
     r = pbuff[i * 3];
     g = pbuff[(i * 3) + 1];
     b = pbuff[(i * 3) + 2];
-    asm mov al, n asm mov dx, DAC_WRITE_INDEX // Tell DAC what colour index to
-        asm out dx,
-        al // write to
-        asm mov dx,
-        DAC_DATA
+    // TODO
+    // asm mov al, n asm mov dx, DAC_WRITE_INDEX // Tell DAC what colour index to
+    //     asm out dx,
+    //     al // write to
+    //     asm mov dx,
+    //     DAC_DATA
 
-        asm mov bl,
-        r asm mov al, bl // Set the red component
-        asm out dx,
-        al
+    //     asm mov bl,
+    //     r asm mov al, bl // Set the red component
+    //     asm out dx,
+    //     al
 
-        asm mov ch,
-        g asm mov al, ch // Set the green component
-        asm out dx,
-        al
+    //     asm mov ch,
+    //     g asm mov al, ch // Set the green component
+    //     asm out dx,
+    //     al
 
-        asm mov cl,
-        b asm mov al, cl // Set the blue component
-        asm out dx,
-        al
+    //     asm mov cl,
+    //     b asm mov al, cl // Set the blue component
+    //     asm out dx,
+    //     al
   }
   return 1;
 }
@@ -249,31 +250,31 @@ void fade_out(void)
 //===========================================================================
 void unsplit_screen(void)
 {
+  // TODO
+//   asm {
 
-  asm {
-
-mov dx,0x03d4 //CRTC
-mov al,0x18 //select LINE COMPARE reg
-out dx,al
-inc dx
-mov ax,255 //set bits 0-7 of LINE COMPARE
-out dx,al
-dec dx
-mov al,7 //OVERFLOW reg
-out dx,al
-inc dx
-in  al,dx
-or  al,0x10 //set bit 8 of LINE COMPARE
-out dx,al
-dec dx
-mov al,9
-out dx,al
-inc dx
-in  al,dx
-or  al,64
-    //and al,0xbf      //clear bit 9 of LINE COMPARE
-out dx,al
-  }
+// mov dx,0x03d4 //CRTC
+// mov al,0x18 //select LINE COMPARE reg
+// out dx,al
+// inc dx
+// mov ax,255 //set bits 0-7 of LINE COMPARE
+// out dx,al
+// dec dx
+// mov al,7 //OVERFLOW reg
+// out dx,al
+// inc dx
+// in  al,dx
+// or  al,0x10 //set bit 8 of LINE COMPARE
+// out dx,al
+// dec dx
+// mov al,9
+// out dx,al
+// inc dx
+// in  al,dx
+// or  al,64
+//     //and al,0xbf      //clear bit 9 of LINE COMPARE
+// out dx,al
+//   }
 }
 //==========================================================================
 void screen_dump(void)
