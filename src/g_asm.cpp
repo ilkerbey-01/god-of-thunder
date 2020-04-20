@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
 #include "g_asm.h"
@@ -38,7 +39,7 @@ void xline(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t page, int16_t
   if (x0 == x1 && y0 == y1)
     xpset(x0, y0, page, color);
 
-  else if (abs(x1 - x0) >= abs(y1 - y0))
+  else if (std::abs(x1 - x0) >= std::abs(y1 - y0))
   {
     if (x1 < x0)
     {
