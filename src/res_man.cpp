@@ -10,60 +10,6 @@
 RES_HEADER res_header[0xb1];
 
 FILE* res_file_;
-int32_t res_read(const char* name, uint8_t* buff) {
-  return 0;
-}
-
-bool res_init_record(int num, int& offset) {
-  uint8_t buffer[23];
-
-  size_t read = fread(buffer, 1, 23, res_file_);
-  if (read != 23) {
-    return false;
-  }
-  else {
-    // Decrypt the contents using simple xor.
-    int i = 0;
-    for (i = 0; i < 23; i++) {
-      buffer[i] = buffer[i] ^ ((offset++) % 256) ^ 128;
-    }
-
-    memcpy(&res_header[num], buffer, 23);
-    return true;
-  }
-}
-
-void res_init(uint8_t* lzss) {
-  if (res_file_ == NULL) {
-    return;
-  }
-
-  if (!fseek(res_file_, 0, SEEK_SET)) {
-    return;
-  }
-
-  int count = 0;
-  int offset = 0;
-  while (res_init_record(count++, offset)) {
-  }
-}
-
-int16_t res_open(const char* file_name) {
-  res_file_ = fopen(file_name, "rb");
-  if (res_file_ != NULL) {
-    return 0;
-  }
-  return -1;
-}
-
-int16_t res_find_name(const char* res_name) {
-  for (int i = 0; i < 0xb1; i++) {
-    if (strcmp(res_name, res_header[i].name) == 0) {
-      return i;
-    }
-  }
-  return -1;
-}
 
 bool read_uint8(uint8_t& i) {
   unsigned char tmp[1];
@@ -162,6 +108,97 @@ bool res_compressed_read(uint8_t* buffer) {
   return true;
 }
 
+int32_t res_read(const char* name, uint8_t* buff) {
+  int16_t num = res_find_name(name);
+  if (num == -1) {
+    return NULL;
+  }
+
+  RES_HEADER header = res_header[num];
+  if (fseek(res_file_, header.offset, SEEK_SET)) {
+    return NULL;
+  }
+
+  // Compressed
+  if (header.flags) {
+    if (!res_compressed_read(buff)) {
+      return NULL;
+    }
+  }
+
+  // Raw
+  else {
+    size_t read = fread(buff, 1, header.length, res_file_);
+    if (read != header.length) {
+      return NULL;
+    }
+  }
+
+  return 0;
+}
+
+bool res_init_record(int num, int& offset) {
+  uint8_t buffer[23];
+
+  size_t read = fread(buffer, 1, 23, res_file_);
+  if (read != 23) {
+    return false;
+  }
+  else {
+    // Decrypt the contents using simple xor.
+    int i = 0;
+    for (i = 0; i < 23; i++) {
+      buffer[i] = buffer[i] ^ ((offset++) % 256) ^ 128;
+    }
+
+    // Make sure there is a name present.
+    for (i = 0; i < 9; i++) {
+      if (buffer[i] == 0) {
+        break;
+      }
+    }
+    if (i == 0) {
+      return false;
+    }
+
+    memcpy(&res_header[num], buffer, 23);
+
+    return true;
+  }
+}
+
+void res_init(uint8_t* lzss) {
+  if (res_file_ == NULL) {
+    return;
+  }
+
+  if (!fseek(res_file_, 0, SEEK_SET)) {
+    return;
+  }
+
+  int count = 0;
+  int offset = 0;
+  while (res_init_record(count++, offset) && count < 0xb1) {
+  }
+}
+
+int16_t res_open(const char* file_name) {
+  res_file_ = fopen(file_name, "rb");
+  if (res_file_ != NULL) {
+    return 0;
+  }
+  return -1;
+}
+
+int16_t res_find_name(const char* res_name) {
+  for (int i = 0; i < 0xb1; i++) {
+    if (strcmp(res_name, res_header[i].name) == 0) {
+      return i;
+    }
+  }
+  return -1;
+}
+
 uint8_t* res_falloc_read(const char* res_name) {
   int16_t num = res_find_name(res_name);
   if (num == -1) {
@@ -175,21 +212,9 @@ uint8_t* res_falloc_read(const char* res_name) {
 
   uint8_t* buffer = (uint8_t*)malloc(header.length);
 
-  // Compressed
-  if (header.flags) {
-    if (!res_compressed_read(buffer)) {
-      free(buffer);
-      return NULL;
-    }
-  }
-
-  // Raw
-  else {
-    size_t read = fread(buffer, 1, header.length, res_file_);
-    if (read != header.length) {
-      free(buffer);
-      return NULL;
-    }
+  if (!res_read(res_name, buffer)) {
+    free(buffer);
+    return NULL;
   }
 
   return buffer;
