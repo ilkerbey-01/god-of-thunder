@@ -5,7 +5,7 @@
 
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
-#include <res_man.h>
+#include "res_man.h"
 
 #include "FX_Manc.h"
 #include "MU_Manc.h"

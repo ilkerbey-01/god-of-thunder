@@ -7,7 +7,7 @@
 
 #include <g_define.h>
 #include <g_proto.h>
-#include <res_man.h>
+#include "res_man.h"
 //===========================================================================
 extern volatile uint16_t timer_cnt;
 extern LEVEL scrn;
