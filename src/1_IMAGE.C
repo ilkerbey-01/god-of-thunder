@@ -57,7 +57,7 @@ uint16_t make_mask(MASK_IMAGE *new_image,
    int16_t align, set;
    ALIGNED_MASK_IMAGE *work_ami;
    int16_t scan_line, bit_num, temp_image_width;
-   unsigned uint8_t mask_temp;
+   uint8_t mask_temp;
    uint8_t *new_mask_ptr;
    uint8_t *old_mask_ptr;
 
