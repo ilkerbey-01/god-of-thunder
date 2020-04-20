@@ -42,7 +42,7 @@ uint8_t expf[60];
 int16_t boss22_movement(ACTOR *actr)
 { //boss - skull
   int16_t d, f, x;
-  staticint16_t drop_flag = 0;
+  static int16_t drop_flag = 0;
 
   if (boss_dead)
     return boss_dead22();
@@ -202,7 +202,7 @@ void check_boss22_hit(ACTOR *actr, int16_t x1, int16_t y1, int16_t x2, int16_t y
 void boss_level22(void)
 {
   int16_t x;
-  uint8_t s[41];
+  char s[41];
 
   strcpy(s, "Are You Ready for Nognir?");
   x = ((40 - strlen(s)) / 2) * 8;
