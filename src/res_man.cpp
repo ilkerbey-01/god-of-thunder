@@ -156,12 +156,32 @@ bool res_init_record(int num, int& offset) {
       if (buffer[i] == 0) {
         break;
       }
+      else {
+        res_header[num].name[i] = buffer[i];
+      }
     }
     if (i == 0) {
       return false;
     }
 
-    memcpy(&res_header[num], buffer, 23);
+    i = 9;
+    res_header[num].offset = (uint32_t)buffer[i++];
+    res_header[num].offset += (uint32_t)buffer[i++] << 8;
+    res_header[num].offset += (uint32_t)buffer[i++] << 16;
+    res_header[num].offset += (uint32_t)buffer[i++] << 24;
+
+    res_header[num].ignore = (uint32_t)buffer[i++];
+    res_header[num].ignore += (uint32_t)buffer[i++] << 8;
+    res_header[num].ignore += (uint32_t)buffer[i++] << 16;
+    res_header[num].ignore += (uint32_t)buffer[i++] << 24;
+
+    res_header[num].length = (uint32_t)buffer[i++];
+    res_header[num].length += (uint32_t)buffer[i++] << 8;
+    res_header[num].length += (uint32_t)buffer[i++] << 16;
+    res_header[num].length += (uint32_t)buffer[i++] << 24;
+
+    res_header[num].flags = (uint16_t)buffer[i++];
+    res_header[num].flags += (uint16_t)buffer[i++] << 8;
 
     return true;
   }
@@ -175,16 +195,17 @@ void res_init(uint8_t* lzss) {
   if (!fseek(res_file_, 0, SEEK_SET)) {
     return;
   }
-
-  int count = 0;
-  int offset = 0;
-  while (res_init_record(count++, offset) && count < 0xb1) {
-  }
 }
 
 int16_t res_open(const char* file_name) {
   res_file_ = fopen(file_name, "rb");
   if (res_file_ != NULL) {
+
+    int count = 0;
+    int offset = 0;
+    while (res_init_record(count++, offset) && count < 0xb1) {
+    }
+
     return 0;
   }
   return -1;
