@@ -1,6 +1,5 @@
 //Source code released to the public domain on March 27th, 2020.
 
-#include <bios.h>
 #include <fcntl.h>
 #include <io.h>
 #include <stdlib.h>

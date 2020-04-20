@@ -6,11 +6,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <memory.h>
-#include <bios.h>
 #include <ctype.h>
 
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
+#include "utility.h"
 //===========================================================================
 extern uint8_t *bg_pics;
 extern int16_t warp_flag;
@@ -56,11 +56,11 @@ extern uint8_t auto_load;
 extern uint8_t area;
 extern uint8_t dialog_color[16];
 
-uint8_t *object_names[] = {"Shrub", "Child's Doll", "UNUSED", "FUTURE",
+char *object_names[] = {"Shrub", "Child's Doll", "UNUSED", "FUTURE",
                            "FUTURE", "FUTURE", "FUTURE", "FUTURE", "FUTURE",
                            "FUTURE", "FUTURE", "FUTURE", "FUTURE", "FUTURE",
                            "FUTURE"};
-uint8_t *item_name[] = {"Enchanted Apple", "Lightning Power",
+char *item_name[] = {"Enchanted Apple", "Lightning Power",
                         "Winged Boots", "Wind Power",
                         "Amulet of Protection", "Thunder Power"};
 //===========================================================================
@@ -96,16 +96,17 @@ void show_level(int16_t new_level)
     thor->dir = 0;
 
   //copy object data to main screen buffer
-  movedata(FP_SEG(&scrn.static_obj), FP_OFF(&scrn.static_obj),
-           FP_SEG(sd_data + (current_level * 512) + 322), FP_OFF(sd_data + (current_level * 512) + 322),
-           130);
+  // TODO 
+  // movedata(FP_SEG(&scrn.static_obj), FP_OFF(&scrn.static_obj),
+  //          FP_SEG(sd_data + (current_level * 512) + 322), FP_OFF(sd_data + (current_level * 512) + 322),
+  //          130);
 
-  movedata(FP_SEG(&scrn), FP_OFF(&scrn),
-           FP_SEG(sd_data + (current_level * 512)), FP_OFF(sd_data + (current_level * 512)),
-           sizeof(LEVEL));
+  // movedata(FP_SEG(&scrn), FP_OFF(&scrn),
+  //          FP_SEG(sd_data + (current_level * 512)), FP_OFF(sd_data + (current_level * 512)),
+  //          sizeof(LEVEL));
 
-  movedata(FP_SEG(sd_data + (new_level * 512)), FP_OFF(sd_data + (new_level * 512)),
-           FP_SEG(&scrn), FP_OFF(&scrn), sizeof(LEVEL));
+  // movedata(FP_SEG(sd_data + (new_level * 512)), FP_OFF(sd_data + (new_level * 512)),
+  //          FP_SEG(&scrn), FP_OFF(&scrn), sizeof(LEVEL));
 
   scrnp = (uint8_t *)&scrn;
   level_type = scrn.type;
@@ -321,22 +322,22 @@ void d_restore(void)
 int16_t actor_speaks(ACTOR *actr, int16_t index, int16_t item)
 {
   uint8_t *p;
-  uint8_t str[21];
-  uint8_t s[21];
+  char str[21];
+  char s[21];
   int16_t v;
   uint8_t *pic;
   int32_t lind;
 
   if (actr->type != 4)
     return 0;
-  v = atoi(actr->name);
+  v = parse_decimal_int16_t(actr->name);
   if (v < 1 || v > 20)
     return 0;
   strcpy(str, "FACE");
-  itoa(v, s, 10);
+  sprintf(s, "%d", v);
   strcat(str, s);
 
-  p = malloc(1048);
+  p = (uint8_t*)malloc(1048);
   if (!p)
     return 0;
 
@@ -500,7 +501,7 @@ void select_item(void)
 {
   int16_t l, b, p, op;
   uint16_t pg;
-  uint8_t *objn;
+  char *objn;
 
 #define _HRZSP 24
 

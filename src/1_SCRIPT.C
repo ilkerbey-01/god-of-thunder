@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <memory.h>
 #include <ctype.h>
-#include <bios.h>
 #include <string.h>
 #include <dir.h>
 

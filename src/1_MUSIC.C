@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <io.h>
-#include <bios.h>
 #include <fcntl.h>
 
 #include "1_DEFINE.H"

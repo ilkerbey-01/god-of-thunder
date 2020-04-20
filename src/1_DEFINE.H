@@ -67,7 +67,7 @@ typedef struct
        uint8_t flying;            //
        uint8_t rating;            //rnd(100) < rating = jewel
        uint8_t type;              //actor (0=thor,1=hammer,2=enemy,3=shot)
-       uint8_t name[9];           //actors name
+       char name[9];              //actors name
        uint8_t func_num;          //special function when thor touches
        uint8_t func_pass;         //value to pass to func
        int16_t magic_hurts;       //bitwise magic hurts flags
@@ -142,7 +142,7 @@ typedef struct
        uint8_t flying;            //
        uint8_t rating;            //rnd(100) < rating = jewel
        uint8_t type;              //actor (0=thor,1=hammer,2=enemy,3=shot)
-       uint8_t name[9];           //actors name
+       char name[9];              //actors name
        uint8_t func_num;          //special function when thor touches
        uint8_t func_pass;         //value to pass to func
        uint8_t future1[6];
@@ -272,9 +272,9 @@ typedef struct
        int32_t score;
        int32_t last_score;
        uint8_t object;
-       uint8_t *object_name;
+       char *object_name;
        uint8_t last_object;
-       uint8_t *last_object_name;
+       char *last_object_name;
        uint8_t armor;
        uint8_t future[65];
 } THOR_INFO;

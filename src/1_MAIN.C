@@ -11,6 +11,7 @@
 
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
+#include "utility.h"
 //#include "mu_man.h"
 
 //========================= Global Declarations ==============================
@@ -156,17 +157,6 @@ void timer_int(void);
 void xdisplay_actors(ACTOR *act, uint16_t page);
 void xerase_actors(ACTOR *act, uint16_t page);
 void setup_load(void);
-
-void delay(int milliseconds)
-{
-  long pause;
-  clock_t now, then;
-
-  pause = milliseconds * (CLOCKS_PER_SEC / 1000);
-  now = then = clock();
-  while ((now - then) < pause)
-    now = clock();
-}
 
 void strupr(char *s)
 {
