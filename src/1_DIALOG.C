@@ -72,47 +72,47 @@ int16_t (*dialog_func[])(ACTOR *actr) =
         dialog_fourteen,
 };
 //===========================================================================
-uint8_t *d_howmany = "So, How Many Ya Want?";
-uint8_t *d_canihave = "Well, Can I have it?";
-uint8_t *d_whichisit = "What Needs Fixed?";
-uint8_t *d_whichbridge = "Which Bridge?";
-uint8_t *d_whatsprob = "What's the Problem?";
-uint8_t *d_whatcanido = "What do you want to know?";
-uint8_t *d_have100jewels = "Can I have 100 jewels?";
-uint8_t *d_wellhowdo = "Well, how we gonna do this?";
-uint8_t *d_wannatrade = "Well, Do you want to trade?";
-uint8_t *options_buy1[] = {
+char *d_howmany = "So, How Many Ya Want?";
+char *d_canihave = "Well, Can I have it?";
+char *d_whichisit = "What Needs Fixed?";
+char *d_whichbridge = "Which Bridge?";
+char *d_whatsprob = "What's the Problem?";
+char *d_whatcanido = "What do you want to know?";
+char *d_have100jewels = "Can I have 100 jewels?";
+char *d_wellhowdo = "Well, how we gonna do this?";
+char *d_wannatrade = "Well, Do you want to trade?";
+char *options_buy1[] = {
     "5 Apples Please",
     "Fill 'er Up",
     "Never mind",
     NULL};
-uint8_t *options_bobstv[] = {
+char *options_bobstv[] = {
     "My TV",
     "A Bridge ",
     "Forget it",
     NULL};
-uint8_t *options_tv[] = {
+char *options_tv[] = {
     "Bad Picture Tube",
     "Horizontal Syncopation ",
     "Nothing",
     NULL};
-uint8_t *options_bridge1[] = {
+char *options_bridge1[] = {
     "London Bridge",
     "Dental Bridge",
     "I forgot",
     NULL};
-uint8_t *options_bridge2[] = {
+char *options_bridge2[] = {
     "London Bridge",
     "Dental Bridge",
     "Creekin's Bridge",
     "I forgot",
     NULL};
-uint8_t *options_hermit[] = {
+char *options_hermit[] = {
     "What's the doll for?",
     "How do I find Jormangund?",
     "Nothing",
     NULL};
-uint8_t *options_mailphone[] = {
+char *options_mailphone[] = {
     "I want to order by mail",
     "I want to order by phone",
     NULL};
