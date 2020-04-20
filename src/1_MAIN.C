@@ -12,6 +12,7 @@
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
 #include "utility.h"
+#include "g_asm.h"
 //#include "mu_man.h"
 
 //========================= Global Declarations ==============================
@@ -151,11 +152,9 @@ uint8_t ide_run, fast_exit, nojoy, gr, xdos;
 uint8_t main_loop;
 uint8_t end_tile;
 
-void (*old_timer_int)(void); //int16_terrupt function pointer
+void (*old_timer_int)(void); //interrupt function pointer
 void timer_int(void);
-
-void xdisplay_actors(ACTOR *act, uint16_t page);
-void xerase_actors(ACTOR *act, uint16_t page);
+void thor_spins(int16_t flag);
 void setup_load(void);
 
 void strupr(char *s)
