@@ -142,7 +142,7 @@ int16_t rnd_index;
 int16_t rnd_array[100];
 uint8_t rdemo;
 uint8_t test_sdf[80];
-char options_yesno[3][4] = {"Yes", "No", NULL};
+char *options_yesno[3] = {"Yes", "No", NULL};
 uint8_t *lzss_buff;
 uint8_t game_over;
 extern uint8_t noal, nosb;
@@ -158,6 +158,7 @@ void timer_int(void);
 void thor_spins(int16_t flag);
 void setup_load(void);
 
+#ifndef _WIN32
 void strupr(char *s)
 {
   while (*s)
@@ -166,6 +167,7 @@ void strupr(char *s)
     s++;
   }
 }
+#endif
 
 //============================================================================
 int main(int argc, char *argv[])

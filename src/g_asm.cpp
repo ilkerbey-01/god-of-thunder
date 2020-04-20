@@ -1,4 +1,4 @@
-#include <stdlib.h>
+#include <cmath>
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
 #include "g_asm.h"
@@ -82,7 +82,7 @@ void xpset(int16_t X, int16_t Y, uint16_t PageBase, int16_t Color) {
 
 }
 int16_t xpoint(int16_t X, int16_t Y, uint16_t PageBase) {
-
+  return 0;
 }
 void xget(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t pagebase,
           uint8_t *buff, int16_t invis) {
@@ -138,12 +138,12 @@ void xcopyd2d(int16_t SourceStartX, int16_t SourceStartY,
 uint16_t xcreatmaskimage(MASK_IMAGE *ImageToSet,
                          uint16_t DispMemStart, uint8_t *Image, int16_t ImageWidth,
                          int16_t ImageHeight, uint8_t *Mask) {
-
+  return 0;
 }
 uint16_t xcreatmaskimage2(MASK_IMAGE *ImageToSet,
                           uint16_t DispMemStart, uint8_t *Image, int16_t ImageWidth,
                           int16_t ImageHeight, uint8_t *Mask) {
-
+  return 0;
 }
 
 void xddfast(int16_t source_x, int16_t source_y, int16_t width, int16_t height,

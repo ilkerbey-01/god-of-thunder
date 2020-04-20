@@ -29,7 +29,7 @@ extern uint8_t area;
 extern uint8_t test_sdf[];
 extern uint8_t *song;
 extern uint8_t *lzss_buff;
-extern char *options_yesno[];
+extern char *options_yesno[3];
 extern int16_t music_flag, sound_flag, pcsound_flag;
 extern uint8_t game_over;
 extern uint16_t display_page, draw_page;

@@ -39,7 +39,7 @@ extern int16_t thor_x1, thor_y1, thor_x2, thor_y2, thor_real_y1;
 extern int16_t bomb_flag, shield_on;
 extern ACTOR magic_item[];
 extern uint8_t cheat;
-extern char *options_yesno[];
+extern char *options_yesno[3];
 extern SETUP setup;
 extern int16_t thunder_flag;
 extern uint8_t odin[4][262];

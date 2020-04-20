@@ -27,7 +27,7 @@ extern volatile uint16_t timer_cnt, extra_cnt;
 extern uint8_t level_type, slow_mode;
 extern struct sup setup;
 extern int16_t music_flag, sound_flag, pcsound_flag, boss_active;
-extern char *options_yesno[];
+extern char *options_yesno[3];
 char *options_onoff[] = {"On", "Off", NULL};
 char *options_sound[] = {"None", "PC Speaker", "Digitized", NULL};
 char *options_skill[] = {"Easy Enemies", "Normal Enemies", "Tough Enemies", NULL};
