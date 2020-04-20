@@ -1,6 +1,7 @@
 #include "utility.h"
 
 #include <stdlib.h>
+#include <time.h>
 
 void delay(int milliseconds)
 {
@@ -24,5 +25,5 @@ int16_t parse_decimal_int16_t(char* str) {
 }
 
 int32_t parse_decimal_int32_t(char* str) {
-    return strtol(str &end, 10);
+    return strtol(str, &end, 10);
 }
