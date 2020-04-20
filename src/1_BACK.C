@@ -362,7 +362,7 @@ int16_t actor_speaks(ACTOR *actr, int16_t index, int16_t item)
   return 1;
 }
 //===========================================================================
-int16_t display_speech(int16_t item, uint8_t *pic, int16_t tf)
+int16_t display_speech(int16_t item, char *pic, int16_t tf)
 {
   int16_t l, x, color, lc, pn, pc, key;
   uint16_t pg;

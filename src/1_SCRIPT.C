@@ -6,10 +6,10 @@
 #include <memory.h>
 #include <ctype.h>
 #include <string.h>
-#include <dir.h>
 
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
+#include "utility.h"
 //====================== Functions Declarations============================
 int16_t read_script_file(void);
 void script_error(int16_t err_num);
@@ -46,28 +46,28 @@ extern uint8_t object_index[240];
 extern int16_t thunder_flag;
 //============================= Globals ==================================
 int32_t num_var[26];       //numeric variables
-uint8_t str_var[26][81];   //string vars
-uint8_t line_label[32][9]; //line label look up table
-uint8_t *line_ptr[32];     //line label pointers
-uint8_t *new_ptr;
+char str_var[26][81];   //string vars
+char line_label[32][9]; //line label look up table
+char *line_ptr[32];     //line label pointers
+char *new_ptr;
 int16_t num_labels;       //number of labels
-uint8_t *gosub_stack[32]; //stack for GOSUB return addresses
+char *gosub_stack[32]; //stack for GOSUB return addresses
 uint8_t gosub_ptr;        //GOSUB stack pointer
-uint8_t *for_stack[10];   //FOR stack
+char *for_stack[10];   //FOR stack
 int32_t for_val[10];      //current FOR value
 uint8_t for_var[10];      //ending FOR value (target var)
 uint8_t for_ptr;          //FOR stack pointer
-uint8_t *buff_ptr;        //pointer to current command
-uint8_t *buff_end;        //pointer to end of buffer
-uint8_t *buffer;          //buffer space (malloc'ed)
+char *buff_ptr;        //pointer to current command
+char *buff_end;        //pointer to end of buffer
+char *buffer;          //buffer space (malloc'ed)
 int32_t scr_index;
 uint8_t *scr_pic;
 int32_t lvalue;
 int32_t ltemp;
-uint8_t temps[255];
+char temps[255];
 
 #define SCR_BUFF_SIZE 5000
-uint8_t *scr_command[] = {"!@#$%", "END", "GOTO", "GOSUB", "RETURN", "FOR", "NEXT",
+char *scr_command[] = {"!@#$%", "END", "GOTO", "GOSUB", "RETURN", "FOR", "NEXT",
                           "IF", "ELSE", "RUN",
                           "ADDJEWELS", "ADDHEALTH", "ADDMAGIC", "ADDKEYS",
                           "ADDSCORE", "SAY", "ASK", "SOUND", "PLACETILE",
@@ -75,7 +75,7 @@ uint8_t *scr_command[] = {"!@#$%", "END", "GOTO", "GOSUB", "RETURN", "FOR", "NEX
                           "PAUSE", "TEXT", "EXEC", "VISIBLE", "RANDOM",
                           NULL};
 
-uint8_t *internal_variable[] = {"@JEWELS", "@HEALTH", "@MAGIC", "@SCORE",
+char *internal_variable[] = {"@JEWELS", "@HEALTH", "@MAGIC", "@SCORE",
                                 "@SCREEN", "@KEYS",
                                 "@OW", "@GULP", "@SWISH", "@YAH", "@ELECTRIC",
                                 "@THUNDER", "@DOOR", "@FALL", "@ANGEL", "@WOOP",
@@ -83,7 +83,7 @@ uint8_t *internal_variable[] = {"@JEWELS", "@HEALTH", "@MAGIC", "@SCORE",
                                 "@EXPLODE", "@FLAG", "@ITEM", "@THORTILE",
                                 "@THORPOS", NULL};
 
-uint8_t *scr_error[] = {"!@#$%", "Out of Memory", "Can't Read Script",
+char *scr_error[] = {"!@#$%", "Out of Memory", "Can't Read Script",
                         "Too Many Labels", "No END",
                         "Syntax", "Out of Range", "Undefined Label",
                         "RETURN Without GOSUB", "Nesting",
@@ -106,14 +106,14 @@ void execute_script(int32_t index, uint8_t *pic)
   scr_index = index;
   scr_pic = pic;
 
-  _fmemset(&num_var, 0, 4 * 26);
-  _fmemset(&str_var, 0, 81 * 26);
+  memset(&num_var, 0, 4 * 26);
+  memset(&str_var, 0, 81 * 26);
 
   re_execute = 0;
 run_script: //jump point16_t for RUN command
 
-  _fmemset(line_label, 0, 32 * 9); //clear line label buffer
-  _fmemset(line_ptr, 0, 4 * 32);   //clear line ptrs
+  memset(line_label, 0, 32 * 9); //clear line label buffer
+  memset(line_ptr, 0, 4 * 32);   //clear line ptrs
 
   memset(gosub_stack, 0, 52); //clear gosub stack
   gosub_ptr = 0;
@@ -202,8 +202,8 @@ int16_t get_command(void)
   {
     if (!scr_command[i])
       break; //lookup command
-    len = _fstrlen(scr_command[i]);
-    if (!_fstrncmp(buff_ptr, (uint8_t *)scr_command[i], len))
+    len = strlen(scr_command[i]);
+    if (!strncmp(buff_ptr, (char *)scr_command[i], len))
     {
       buff_ptr += len;
       return i;
@@ -234,9 +234,9 @@ int16_t get_command(void)
         return -2;
       else if (ret == -1)
         return -3;
-      if (_fstrlen(temps) > 80)
+      if (strlen(temps) > 80)
         return -3;
-      _fstrcpy(str_var[i], temps);
+      strcpy(str_var[i], temps);
       return 0;
     }
   }
@@ -245,7 +245,7 @@ int16_t get_command(void)
 //=========================================================================
 int16_t calc_string(int16_t mode)
 { //if mode==1 stop at comma
-  uint8_t varstr[255];
+  char varstr[255];
   uint8_t varnum;
 
   strcpy(varstr, "");
@@ -257,8 +257,8 @@ strloop:
   if (*buff_ptr == '"')
   {
     get_str();
-    if (strlen(varstr) + _fstrlen(temps) < 255)
-      _fstrcat((uint8_t *)varstr, temps);
+    if (strlen(varstr) + strlen(temps) < 255)
+      strcat((char *)varstr, temps);
     goto nextstr;
   }
   if (isalpha(*buff_ptr))
@@ -266,8 +266,8 @@ strloop:
     if (*(buff_ptr + 1) == '$')
     {
       varnum = (*buff_ptr) - 65;
-      if (strlen(varstr) + _fstrlen(str_var[varnum]) < 255)
-        _fstrcat((uint8_t *)varstr, str_var[varnum]);
+      if (strlen(varstr) + strlen(str_var[varnum]) < 255)
+        strcat((char *)varstr, str_var[varnum]);
       buff_ptr += 2;
       goto nextstr;
     }
@@ -293,7 +293,7 @@ nextstr:
 strdone:
   if (strlen(varstr) > 255)
     return -1;
-  _fstrcpy(temps, (uint8_t *)varstr);
+  strcpy(temps, (char *)varstr);
   return 1;
 }
 //=========================================================================
@@ -371,8 +371,8 @@ int16_t calc_value(void)
 //=========================================================================
 int16_t get_next_val(void)
 {
-  uint8_t ch;
-  uint8_t tmpstr[25];
+  char ch;
+  char tmpstr[25];
   int16_t t;
 
   ch = *buff_ptr;
@@ -402,7 +402,7 @@ int16_t get_next_val(void)
     tmpstr[t] = 0;
     if (t > 10)
       return 0;
-    ltemp = atol(tmpstr);
+    ltemp = parse_decimal_int32_t(tmpstr);
     return 1;
   }
   return 0;
@@ -419,8 +419,8 @@ int16_t get_internal_variable(void)
   {
     if (!internal_variable[i])
       return 0; //lookupint16_ternal variable
-    len = _fstrlen(internal_variable[i]);
-    if (!_fstrncmp(buff_ptr, int16_ternal_variable[i], len))
+    len = strlen(internal_variable[i]);
+    if (!strncmp(buff_ptr, internal_variable[i], len))
     {
       buff_ptr += len;
       break;
@@ -498,7 +498,7 @@ int16_t get_internal_variable(void)
   return 1;
 }
 //=========================================================================
-int16_t get_line(uint8_t *src, uint8_t *dst)
+int16_t get_line(char *src, char *dst)
 {
   int16_t cnt;
 
@@ -521,25 +521,25 @@ int16_t get_line(uint8_t *src, uint8_t *dst)
 //=========================================================================
 int16_t read_script_file(void)
 {
-  uint8_t temp_buff[255];
+  char temp_buff[255];
   uint8_t quote_flag;
   int16_t i, len, p, ret, cnt;
-  uint8_t ch;
-  uint8_t tmps[255];
-  uint8_t *sb;
-  uint8_t *sbuff;
-  uint8_t str[21];
+  char ch;
+  char tmps[255];
+  char *sb;
+  char *sbuff;
+  char str[21];
 
-  buffer = malloc(SCR_BUFF_SIZE);
+  buffer = (char*)malloc(SCR_BUFF_SIZE);
   if (!buffer)
   {
     ret = 1;
     goto done;
   };
   buff_ptr = buffer;
-  _fmemset(buffer, 0, SCR_BUFF_SIZE);
+  memset(buffer, 0, SCR_BUFF_SIZE);
 
-  sbuff = malloc(25000l);
+  sbuff = (char*)malloc(25000l);
   if (!sbuff)
   {
     ret = 1;
@@ -547,22 +547,22 @@ int16_t read_script_file(void)
   };
   sb = sbuff;
 
-  itoa(area, tmps, 10);
+  sprintf(tmps, "%d", area);
   strcpy(str, "SPEAK");
   strcat(str, tmps);
-  if (res_read(str, sb) < 0)
+  if (res_read(str, (uint8_t*)sb) < 0)
   {
     ret = 6;
     goto done;
   }
 
-  ltoa(scr_index, str, 10);
+  sprintf(str, "%d", scr_index);
   strcpy(temp_buff, "|");
   strcat(temp_buff, str);
 
   while (1)
   {
-    cnt = get_line(sb, (uint8_t *)tmps);
+    cnt = get_line(sb, (char *)tmps);
     sb += cnt;
     if (!strcmp(tmps, "|EOF"))
     {
@@ -575,7 +575,7 @@ int16_t read_script_file(void)
   num_labels = 0;
   while (1)
   {
-    cnt = get_line(sb, (uint8_t *)tmps);
+    cnt = get_line(sb, (char *)tmps);
     if (!strcmp(tmps, "|STOP"))
     {
       if (buff_ptr != buffer)
@@ -588,7 +588,7 @@ int16_t read_script_file(void)
       goto done;
     }
     sb += cnt;
-    len = _fstrlen(tmps);
+    len = strlen(tmps);
     if (len < 2)
     {
       *buff_ptr = 0;
@@ -626,7 +626,7 @@ int16_t read_script_file(void)
     { //line label
       temp_buff[len - 1] = 0;
       line_ptr[num_labels] = buff_ptr;
-      _fstrcpy(line_label[num_labels++], (uint8_t *)temp_buff);
+      strcpy(line_label[num_labels++], (char *)temp_buff);
       if (num_labels > 31)
       {
         ret = 3;
@@ -636,7 +636,7 @@ int16_t read_script_file(void)
       buff_ptr++;
       continue;
     }
-    _fstrcpy(buff_ptr, (uint8_t *)temp_buff);
+    strcpy(buff_ptr, (char *)temp_buff);
     buff_ptr += strlen(temp_buff);
     *buff_ptr = 0;
     buff_ptr++;
@@ -650,9 +650,9 @@ done:
 void script_error(int16_t err_num)
 {
   int16_t line_num;
-  uint8_t s[17];
-  uint8_t *tb;
-  uint8_t ts[81];
+  char s[17];
+  char *tb;
+  char ts[81];
 
   line_num = 1;
   tb = buffer;
@@ -669,8 +669,8 @@ void script_error(int16_t err_num)
   if (err_num > ERROR_MAX)
     err_num = 5; //unknown=syntax
 
-  _fstrcpy((uint8_t *)ts, scr_error[err_num]);
-  itoa(line_num, s, 10);
+  strcpy((char *)ts, scr_error[err_num]);
+  sprintf(s, "%d", line_num);
   strcat(ts, " in Line #");
   strcat(ts, s);
 
@@ -685,7 +685,7 @@ void script_error(int16_t err_num)
 int16_t get_string(void)
 {
 
-  _fmemset(temps, 0, 255);
+  memset(temps, 0, 255);
   if (*buff_ptr == '"')
   {
     get_str();
@@ -694,14 +694,14 @@ int16_t get_string(void)
   {
     if ((*buff_ptr + 1) == '$')
     {
-      _fstrcpy(temps, str_var[(*buff_ptr) - 65]);
+      strcpy(temps, str_var[(*buff_ptr) - 65]);
       buff_ptr += 2;
     }
   }
   else
     return 5;
 
-  if (_fstrlen(temps) > 80)
+  if (strlen(temps) > 80)
     return 6;
   return 0;
 }
@@ -709,10 +709,10 @@ int16_t get_string(void)
 int16_t cmd_goto(void)
 {
   int16_t i, len;
-  uint8_t s[255];
-  uint8_t *p;
+  char s[255];
+  char *p;
 
-  _fstrcpy(s, buff_ptr);
+  strcpy(s, buff_ptr);
   p = strchr(s, ':');
   if (p)
     *p = 0;
@@ -722,7 +722,7 @@ int16_t cmd_goto(void)
     len = strlen(s);
     if (len == 0)
       break;
-    if (!_fstrcmp((uint8_t *)s, line_label[i]))
+    if (!strcmp((char *)s, line_label[i]))
     {
       new_ptr = line_ptr[i];
       buff_ptr += len;
@@ -791,7 +791,7 @@ iffalse:
   while (*buff_ptr == 0)
     buff_ptr++;
 
-  if (!_fstrncmp(buff_ptr, "ELSE", 4))
+  if (!strncmp(buff_ptr, "ELSE", 4))
     buff_ptr += 4;
 
 iftrue:
@@ -881,13 +881,13 @@ int16_t cmd_say(int16_t mode, int16_t type)
   p = (uint8_t *)tmp_buff;
   while (calc_string(0))
   {
-    _fstrcpy((uint8_t *)p, temps);
-    p += _fstrlen(temps);
+    strcpy((char *)p, temps);
+    p += strlen(temps);
     *(p) = 10;
     p++;
   }
   *(p - 1) = 0;
-  display_speech(obj, (uint8_t *)scr_pic, type);
+  display_speech(obj, (char *)scr_pic, type);
   d_restore();
   return 0;
 }
@@ -895,9 +895,9 @@ int16_t cmd_say(int16_t mode, int16_t type)
 int16_t cmd_ask(void)
 {
   int16_t i, v, p;
-  uint8_t title[41];
-  uint8_t *op[] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
-  uint8_t opts[10][41];
+  char title[41];
+  char *op[] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+  char opts[10][41];
 
   memset(tmp_buff, 0, TMP_SIZE);
   memset(opts, 0, 10 * 41);
@@ -918,7 +918,7 @@ int16_t cmd_ask(void)
 
   if (!calc_string(1))
     return 5;
-  _fstrncpy((uint8_t *)title, temps, 41);
+  strncpy((char *)title, temps, 41);
   title[40] = 0;
 
   if (*buff_ptr == ',')
@@ -935,7 +935,7 @@ int16_t cmd_ask(void)
   i = 0;
   while (calc_string(0))
   {
-    _fstrncpy((uint8_t *)opts[i], temps, 41);
+    strncpy((char *)opts[i], temps, 41);
     opts[i][40] = 0;
     op[i] = opts[i];
     i++;
@@ -1043,7 +1043,7 @@ int16_t cmd_setflag(void)
 int16_t cmd_ltoa(void)
 {
   int16_t sv;
-  uint8_t str[21];
+  char str[21];
 
   if (!calc_value())
     return 5;
@@ -1062,8 +1062,8 @@ int16_t cmd_ltoa(void)
   else
     return 5;
 
-  ltoa(lvalue, str, 10);
-  _fstrcpy(str_var[sv], (uint8_t *)str);
+  sprintf(str, "%d", lvalue);
+  strcpy(str_var[sv], (char *)str);
   return 0;
 }
 //=========================================================================
@@ -1137,7 +1137,7 @@ void scr_func1(void)
   thor->show = 2;
 }
 //=========================================================================
-uint8_t *offense[] = {
+char *offense[] = {
     "Cussing",
     "Rebellion",
     "Kissing Your Mother Goodbye",
@@ -1146,7 +1146,7 @@ uint8_t *offense[] = {
     "Carrying a Concealed Hammer",
 };
 
-uint8_t *reason[] = {
+char *reason[] = {
     "We heard you say 'Booger'.",
     "You look kind of rebellious.",
     "Your mother turned you in.",
@@ -1160,8 +1160,8 @@ void scr_func2(void)
   int16_t r;
 
   r = rnd(6);
-  _fstrcpy(str_var[0], offense[r]);
-  _fstrcpy(str_var[1], reason[r]);
+  strcpy(str_var[0], offense[r]);
+  strcpy(str_var[1], reason[r]);
 }
 //=========================================================================
 void scr_func3(void)
