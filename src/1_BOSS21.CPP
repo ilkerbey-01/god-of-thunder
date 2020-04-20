@@ -272,8 +272,9 @@ void boss_level21(void)
   play_sound(BOSS12, 1);
   timer_cnt = 0;
 
-  while (timer_cnt < 120)
-    rotate_pal();
+  // TODO this looks like it had to do with an interrupt to work with VGA.
+  // while (timer_cnt < 120)
+  //   rotate_pal();
   music_play(5, 1);
   apple_drop = 0;
 }

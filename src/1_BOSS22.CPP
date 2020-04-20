@@ -162,8 +162,9 @@ void check_boss22_hit(ACTOR *actr, int16_t x1, int16_t y1, int16_t x2, int16_t y
     {
       play_sound(BOSS12, 1);
       timer_cnt = 0;
-      while (timer_cnt < 120)
-        ;
+      // TODO is this just a wait timer?
+      // while (timer_cnt < 120)
+      //   ;
       actor[3].i1 = 1;
       actor[3].i2 = 0;
       memset(expf, 0, 60);
@@ -220,8 +221,9 @@ void boss_level22(void)
 
   if (setup.dig_sound || setup.pc_sound)
   {
-    while (timer_cnt < 200)
-      rotate_pal();
+    // TODO this looks like it had to do with an interrupt to work with VGA.
+    // while (timer_cnt < 200)
+    //   rotate_pal();
   }
   music_play(5, 1);
   //setup_boss(2);

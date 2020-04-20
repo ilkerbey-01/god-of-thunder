@@ -273,8 +273,9 @@ int16_t initialize(void)
     return 10;
   if (!setup_level())
     return 11;
-  while (timer_cnt < 240)
-    ;
+  // TODO is this just a wait timer?
+  // while (timer_cnt < 240)
+  //   ;
   fade_out();
   split_screen();
   return 0;
@@ -904,8 +905,9 @@ void story(void)
 
   timer_cnt = 0;
   add = 0;
-  while (timer_cnt < 60)
-    ;
+  // TODO is this just a wait timer?
+  // while (timer_cnt < 60)
+  //   ;
   i = 0;
   add = 0;
   extra_cnt = 0;

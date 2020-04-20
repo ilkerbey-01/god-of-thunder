@@ -395,8 +395,9 @@ int16_t select_option(char *option[], const char *title, int16_t ipos)
       pic = 0;
     }
     timer_cnt = 0;
-    while (timer_cnt < 10)
-      rotate_pal();
+    // TODO this looks like it had to do with an interrupt to work with VGA.
+    // while (timer_cnt < 10)
+    //   rotate_pal();
     key = get_response();
     if (key == ENTER || key == SPACE || key == key_fire || key == key_magic)
     {

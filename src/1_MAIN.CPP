@@ -828,8 +828,9 @@ void thor_dies(void)
   xfput(thor->x, thor->y, display_page, objects[10]);
   thor->used = 1;
   timer_cnt = 0;
-  while (timer_cnt < 60)
-    rotate_pal();
+  // TODO this looks like it had to do with an interrupt to work with VGA.
+  // while (timer_cnt < 60)
+  //   rotate_pal();
   new_level = thor_info.last_screen;
   thor->x = (thor_info.last_icon % 20) * 16;
   thor->y = ((thor_info.last_icon / 20) * 16) - 1;
@@ -987,8 +988,9 @@ void pause(int16_t delay)
 {
 
   timer_cnt = 0;
-  while (timer_cnt < delay)
-    rotate_pal();
+  // TODO this looks like it had to do with an interrupt to work with VGA.
+  // while (timer_cnt < delay)
+  //   rotate_pal();
 }
 //===========================================================================
 void rotate_pal(void)

@@ -471,10 +471,11 @@ int16_t display_speech(int16_t item, uint8_t *pic, int16_t tf)
       if (tf)
       {
         play_sound(WOOP, 1);
-        do
-        {
-          rotate_pal();
-        } while (timer_cnt < 5);
+        // TODO this looks like it had to do with an interrupt to work with VGA.
+        // do
+        // {
+        //   rotate_pal();
+        // } while (timer_cnt < 5);
       }
     }
     p++;
@@ -626,8 +627,9 @@ void select_item(void)
     xprint((320 - (strlen(objn) * 8)) / 2, 114, objn, pg, 12);
     timer_cnt = 0;
     play_sound(WOOP, 1);
-    while (timer_cnt < 30)
-      rotate_pal();
+    // TODO this looks like it had to do with an interrupt to work with VGA.
+    // while (timer_cnt < 30)
+    //   rotate_pal();
   }
 }
 //===========================================================================

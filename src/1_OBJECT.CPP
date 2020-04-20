@@ -686,8 +686,9 @@ void throw_lightning(void)
       }
     }
     timer_cnt = 0;
-    while (timer_cnt < 3)
-      ;
+    // TODO is this just a delay?
+    // while (timer_cnt < 3)
+    //   ;
     for (r = 7; r >= 0; r--)
     {
       for (i = 1; i < 25; i++)
@@ -696,8 +697,9 @@ void throw_lightning(void)
       }
     }
     timer_cnt = 0;
-    while (timer_cnt < 3)
-      ;
+    // TODO is this just a delay?
+    // while (timer_cnt < 3)
+    //   ;
   }
   x = thor->x + 7;
   y = thor->y + 7;
