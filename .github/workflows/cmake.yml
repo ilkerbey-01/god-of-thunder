@@ -27,13 +27,10 @@ jobs:
         vcpkgArguments: '@${{ github.workspace }}/vcpkg.txt'
         vcpkgGitCommitId: 'master'
 
-    - name: Configure CMake
-      shell: bash
-      run: cmake .
-
-    - name: Build
-      shell: bash
-      run: cmake --build .
+    - name: 'Build with CMake and Ninja'
+      uses: lukka/run-cmake@v2
+      with:
+        useVcpkgToolchainFile: true
 
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
