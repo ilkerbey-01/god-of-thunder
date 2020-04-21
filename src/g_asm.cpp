@@ -84,28 +84,7 @@ void xget(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t pagebase,
           uint8_t *buff, int16_t invis) {
 
 }
-void xput(int16_t x, int16_t y, uint16_t pagebase, uint8_t *buff) {
 
-}
-void xput2(int16_t x, int16_t y, uint16_t pagebase, uint8_t *buff) {
-
-}
-void xtext(int16_t x, int16_t y, uint16_t pagebase, uint8_t *buff, int16_t color) {
-
-}
-void xtext1(int16_t x, int16_t y, uint16_t pagebase, uint8_t *buff, int16_t color) {
-
-}
-void xtextx(int16_t x, int16_t y, uint16_t pagebase, uint8_t *buff, int16_t color) {
-
-}
-
-void xfput(int16_t x, int16_t y, uint16_t pagebase, uint8_t *buff) {
-
-}
-void xfarput(int16_t x, int16_t y, uint16_t pagebase, uint8_t *buff) {
-
-}
 void xcopyd2dmasked(int16_t SourceStartX,
                     int16_t SourceStartY, int16_t SourceEndX, int16_t SourceEndY,
                     int16_t DestStartX, int16_t DestStartY, MASK_IMAGE *Source,
