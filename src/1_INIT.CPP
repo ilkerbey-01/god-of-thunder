@@ -456,7 +456,7 @@ int16_t wait_response(void)
 //===========================================================================
 int16_t get_response(void)
 {
-
+  sdl_man_update();
   if (joystick)
   {
     joy_key();

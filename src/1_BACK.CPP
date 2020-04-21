@@ -12,6 +12,8 @@
 #include "1_PROTO.H"
 #include "res_man.h"
 #include "utility.h"
+#include "sdl_man.h"
+
 //===========================================================================
 extern uint8_t *bg_pics;
 extern int16_t warp_flag;
@@ -398,11 +400,6 @@ int16_t display_speech(int16_t item, uint8_t *pic, int16_t tf)
 
   while (1)
   {
-    if (joystick)
-    {
-      joy_key();
-      merge_keys();
-    }
     key = get_response();
     if (key == ESC)
     {
