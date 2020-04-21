@@ -99,17 +99,23 @@ void show_level(int16_t new_level)
     thor->dir = 0;
 
   //copy object data to main screen buffer
-  // TODO 
-  // movedata(FP_SEG(&scrn.static_obj), FP_OFF(&scrn.static_obj),
-  //          FP_SEG(sd_data + (current_level * 512) + 322), FP_OFF(sd_data + (current_level * 512) + 322),
-  //          130);
+  memcpy(
+    sd_data + (current_level * 512) + 322, 
+    &scrn.static_obj,
+    130
+  );
 
-  // movedata(FP_SEG(&scrn), FP_OFF(&scrn),
-  //          FP_SEG(sd_data + (current_level * 512)), FP_OFF(sd_data + (current_level * 512)),
-  //          sizeof(LEVEL));
+  memcpy(
+    sd_data + (current_level * 512),
+    &scrn,
+    sizeof(LEVEL)
+  );
 
-  // movedata(FP_SEG(sd_data + (new_level * 512)), FP_OFF(sd_data + (new_level * 512)),
-  //          FP_SEG(&scrn), FP_OFF(&scrn), sizeof(LEVEL));
+  memcpy(
+    sd_data + (new_level * 512),
+    &scrn,
+    sizeof(LEVEL)
+  );
 
   scrnp = (uint8_t *)&scrn;
   level_type = scrn.type;
@@ -564,11 +570,7 @@ void select_item(void)
   while (1)
   {
     xshowpage(pg);
-    if (joystick)
-    {
-      joy_key();
-      merge_keys();
-    }
+    sdl_man_update();
     if (key_flag[ESC])
     {
       wait_not_response();
