@@ -27,12 +27,13 @@ add_executable (got
     "fx_man.cpp"
     "g_asm.cpp"
     "mu_man.cpp"
+    "pal_man.cpp"
     "res_man.cpp"
     "sb_man.cpp"
     "sdl_graphics.cpp"
     "sdl_man.cpp"
     "utility.cpp"
- "pal_man.cpp")
+)
 
 find_package(SDL2 CONFIG REQUIRED)
 target_link_libraries(got PRIVATE SDL2::SDL2 SDL2::SDL2main)
