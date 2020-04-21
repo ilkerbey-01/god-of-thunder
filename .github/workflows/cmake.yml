@@ -9,6 +9,13 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest, macOS-latest]
+        include:
+          - os: windows-latest
+            triplet: x64-windows
+          - os: ubuntu-latest
+            triplet: x64-linux
+          - os: macos-latest
+            triplet: x64-osx
 
     steps:
     - uses: actions/checkout@v2
@@ -24,10 +31,11 @@ jobs:
       uses: lukka/run-vcpkg@v1
       id: runvcpkg
       with:
-        vcpkgArguments: '@${{ github.workspace }}/vcpkg-${{ runner.os }}.txt'
+        vcpkgArguments: '@${{ github.workspace }}/vcpkg-${{ runner.os }}.txt --triplet ${{ matrix.triplet }}'
         vcpkgGitCommitId: 'master'
 
     - name: 'Build with CMake and Ninja'
       uses: lukka/run-cmake@v2
       with:
         useVcpkgToolchainFile: true
+        buildWithCMakeArgs: '-- -v'
