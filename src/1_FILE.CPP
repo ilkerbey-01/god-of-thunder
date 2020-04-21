@@ -20,7 +20,7 @@ extern uint8_t res_file[];
 extern THOR_INFO thor_info;
 extern int16_t current_area;
 extern ACTOR *thor;
-extern uint8_t *save_filename;
+extern char save_filename[];
 extern union REGS in, out;
 extern SETUP setup;
 extern uint8_t level_type, slow_mode;
@@ -193,8 +193,6 @@ void help(void)
 //===========================================================================
 void save_game(void)
 {
-  int16_t handle;
-  uint16_t total;
   uint8_t buff[32];
 
   if (game_over)
@@ -208,20 +206,23 @@ void save_game(void)
   }
   d_restore();
 
-  // TODO
-  // if (_dos_open(save_filename, O_RDONLY, &handle) != 0)
-  //   return;
-  // _dos_read(handle, buff, 32, &total);
-  // _dos_close(handle);
+  FILE* fp = fopen(save_filename, "rb");
+  if (fp == NULL) {
+    return;
+  }
+  fread(buff, 1, 32, fp);
+  fclose(fp);
 
-  // if (_dos_open(save_filename, O_WRONLY, &handle) != 0)
-  //   return;
-  // _dos_write(handle, buff, 32, &total);
-  // _dos_write(handle, &setup, sizeof(SETUP), &total);
-  // _dos_write(handle, &thor_info, sizeof(THOR_INFO), &total);
-  // _dos_write(handle, sd_data, 61440u, &total);
-  // _dos_close(handle);
-  // odin_speaks(2009, 0);
+  fp = fopen(save_filename, "wb");
+  if (fp == NULL) {
+    return;
+  }
+  fwrite(buff, 1, 32, fp);
+  fwrite(&setup, sizeof(SETUP), 1, fp);
+  fwrite(&thor_info, sizeof(THOR_INFO), 1, fp);
+  fwrite(&sd_data, 1, 61440u, fp);
+  fclose(fp);
+  odin_speaks(2009, 0);
 }
 //===========================================================================
 int16_t load_game(int16_t flag)
@@ -239,14 +240,17 @@ int16_t load_game(int16_t flag)
     }
     d_restore();
   }
-  // TODO
-  // if (_dos_open(save_filename, O_RDONLY, &handle) != 0)
-  //   return 0;
-  // _dos_read(handle, buff, 32, &total);
-  // _dos_read(handle, &setup, sizeof(SETUP), &total);
-  // _dos_read(handle, &thor_info, sizeof(THOR_INFO), &total);
-  // _dos_read(handle, sd_data, 61440u, &total);
-  // _dos_close(handle);
+  
+  FILE* fp = fopen(save_filename, "rb");
+  if (fp == NULL) {
+    return 0;
+  }
+
+  fread(buff, 1, 32, fp);
+  fread(&setup, sizeof(SETUP), 1, fp);
+  fread(&thor_info, sizeof(THOR_INFO), 1, fp);
+  fread(sd_data, 61440u, 1, fp);
+  fclose(fp);
 
   current_area = thor_info.last_screen;
   area = setup.area;
