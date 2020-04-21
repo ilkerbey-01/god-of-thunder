@@ -9,6 +9,7 @@
 #include "res_man.h"
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
+#include "pal_man.h"
 //===========================================================================
 extern uint8_t text[94][72];
 uint8_t pbuff[768];
@@ -128,10 +129,6 @@ void split_screen(void)
 int16_t load_palette(void)
 {
   int16_t i;
-  uint8_t r, g, b, n;
-#define DAC_READ_INDEX 03c7h
-#define DAC_WRITE_INDEX 03c8h
-#define DAC_DATA 03c9h
 
   if (res_read("palette", (uint8_t *)pbuff) < 0)
     return 0;
@@ -150,36 +147,13 @@ int16_t load_palette(void)
     *(pbuff + ((i * 3) + 1)) = 0;
     *(pbuff + ((i * 3) + 2)) = 0;
   }
-  // TODO
-  // in.h.al = 0x10;
-  // in.h.ah = 0x10;
   for (i = 0; i < 256; i++)
   {
-    n = i;
-    r = pbuff[i * 3];
-    g = pbuff[(i * 3) + 1];
-    b = pbuff[(i * 3) + 2];
-    // TODO
-    // asm mov al, n asm mov dx, DAC_WRITE_INDEX // Tell DAC what colour index to
-    //     asm out dx,
-    //     al // write to
-    //     asm mov dx,
-    //     DAC_DATA
-
-    //     asm mov bl,
-    //     r asm mov al, bl // Set the red component
-    //     asm out dx,
-    //     al
-
-    //     asm mov ch,
-    //     g asm mov al, ch // Set the green component
-    //     asm out dx,
-    //     al
-
-    //     asm mov cl,
-    //     b asm mov al, cl // Set the blue component
-    //     asm out dx,
-    //     al
+    PALETTE_COLOR color;
+    color.r = pbuff[i * 3];
+    color.g = pbuff[(i * 3) + 1];
+    color.b = pbuff[(i * 3) + 2];
+    palette_colors[i] = color;
   }
   return 1;
 }

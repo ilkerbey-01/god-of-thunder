@@ -111,18 +111,18 @@ bool res_compressed_read(uint8_t* buffer) {
 int32_t res_read(const char* name, uint8_t* buff) {
   int16_t num = res_find_name(name);
   if (num == -1) {
-    return NULL;
+    return 1;
   }
 
   RES_HEADER header = res_header[num];
   if (fseek(res_file_, header.offset, SEEK_SET)) {
-    return NULL;
+    return 1;
   }
 
   // Compressed
   if (header.flags) {
     if (!res_compressed_read(buff)) {
-      return NULL;
+      return 1;
     }
   }
 
@@ -130,11 +130,11 @@ int32_t res_read(const char* name, uint8_t* buff) {
   else {
     size_t read = fread(buff, 1, header.length, res_file_);
     if (read != header.length) {
-      return NULL;
+      return 1;
     }
   }
 
-  return header.length;
+  return 0;
 }
 
 bool res_init_record(int num, int& offset) {
@@ -213,7 +213,7 @@ int16_t res_open(const char* file_name) {
 
 int16_t res_find_name(const char* res_name) {
   for (int i = 0; i < 0xb1; i++) {
-    if (strcmp(res_name, res_header[i].name) == 0) {
+    if (strcmpi(res_name, res_header[i].name) == 0) {
       return i;
     }
   }
@@ -233,7 +233,7 @@ uint8_t* res_falloc_read(const char* res_name) {
 
   uint8_t* buffer = (uint8_t*)malloc(header.length);
 
-  if (!res_read(res_name, buffer)) {
+  if (res_read(res_name, buffer)) {
     free(buffer);
     return NULL;
   }

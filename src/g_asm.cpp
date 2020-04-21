@@ -74,10 +74,6 @@ void xline(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t page, int16_t
     }
   }
 }
-void xfillrectangle(int16_t StartX, int16_t StartY, int16_t EndX, int16_t EndY,
-                    uint16_t PageBase, int16_t Color) {
-
-}
 void xpset(int16_t X, int16_t Y, uint16_t PageBase, int16_t Color) {
 
 }
