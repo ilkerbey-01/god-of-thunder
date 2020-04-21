@@ -81,6 +81,12 @@ void sdl_man_handle_key(SDL_KeyboardEvent* key) {
   case SDLK_SPACE:
     key_flag[57] = flag;
     break;
+  case SDLK_s:
+    key_flag[31] = flag;
+    break;
+  case SDLK_l:
+    key_flag[38] = flag;
+    break;
   }
 }
 
