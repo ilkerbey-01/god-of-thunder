@@ -118,7 +118,7 @@ run_script: //jump point16_t for RUN command
 
   memset(gosub_stack, 0, 52); //clear gosub stack
   gosub_ptr = 0;
-  for (i = 0; i < 11; i++)
+  for (i = 0; i < 10; i++)
   {
     for_var[i] = 0;
     for_val[i] = 0;
