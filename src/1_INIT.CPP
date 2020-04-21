@@ -419,11 +419,7 @@ void wait_not_response(void)
     if (cheat && key_flag[_K])
       screen_dump();
     rotate_pal();
-    if (joystick)
-    {
-      joy_key();
-      merge_keys();
-    }
+    sdl_man_update();
   }
 }
 //===========================================================================
@@ -446,11 +442,7 @@ int16_t wait_response(void)
     else if (key_flag[ESC])
       return ESC;
     rotate_pal();
-    if (joystick)
-    {
-      joy_key();
-      merge_keys();
-    }
+    sdl_man_update();
   }
 }
 //===========================================================================
@@ -487,11 +479,7 @@ void wait_not_key(int16_t index)
     if (key_flag[ESC])
       return;
     rotate_pal();
-    if (joystick)
-    {
-      joy_key();
-      merge_keys();
-    }
+    sdl_man_update();
   }
 }
 //===========================================================================

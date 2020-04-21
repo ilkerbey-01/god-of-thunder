@@ -13,6 +13,7 @@
 #include "1_PROTO.H"
 #include "utility.h"
 #include "g_asm.h"
+#include "sdl_man.h"
 //#include "mu_man.h"
 
 //========================= Global Declarations ==============================
@@ -542,11 +543,7 @@ int main(int argc, char *argv[])
     }
     else
       vl = 1;
-    if (joystick)
-    {
-      joy_key();
-      merge_keys();
-    }
+    sdl_man_update();
     if (cheat)
     {
       if (key_flag[_K])
