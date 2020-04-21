@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.8)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/out)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/out)
 
 add_executable (got 
     "1_BACK.CPP"

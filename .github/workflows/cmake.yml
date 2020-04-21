@@ -39,3 +39,9 @@ jobs:
       with:
         useVcpkgToolchainFile: true
         buildWithCMakeArgs: '-- -v'
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: got-${{ runner.os }}
+        path: out/
