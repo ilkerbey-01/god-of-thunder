@@ -4,6 +4,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef WIN32
+#define STRCMP_I(x, y) strcmpi(x, y)
+#else
+#include <strings.h>
+#define STRCMP_I(x, y) strcasecmp(x, y)
+#endif
+
 // Great details about how this is implemented:
 // http://www.shikadi.net/moddingwiki/DAT_Format_(God_of_Thunder)
 
@@ -213,7 +220,7 @@ int16_t res_open(const char* file_name) {
 
 int16_t res_find_name(const char* res_name) {
   for (int i = 0; i < 0xb1; i++) {
-    if (strcmpi(res_name, res_header[i].name) == 0) {
+    if (STRCMP_I(res_name, res_header[i].name) == 0) {
       return i;
     }
   }
