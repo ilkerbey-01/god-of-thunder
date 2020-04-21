@@ -32,6 +32,10 @@ jobs:
       with:
         useVcpkgToolchainFile: true
 
+    - name: 'Where is the output really?'
+      run: "find . -print | grep 'got'"
+      shell: bash
+
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
