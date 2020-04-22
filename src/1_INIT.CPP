@@ -213,8 +213,9 @@ int16_t initialize(void)
     return 15;
   if (res_read("DEMO", (uint8_t *)demo_key) < 0)
     return 16;
-  if (res_read("TEXT", (uint8_t *)text) < 0)
-    return 2;
+  // TODO determine how to read font - it looks like it might have been embedded in got.exe.
+  // if (res_read("TEXT", (uint8_t *)text) < 0)
+  //   return 2;
   if (res_read("ODINPIC", (uint8_t *)odin) < 0)
     return 12;
   if (res_read("HAMPIC", (uint8_t *)hampic) < 0)
