@@ -132,29 +132,23 @@ int16_t load_palette(void)
 
   if (res_read("palette", (uint8_t *)pbuff) < 0)
     return 0;
-  for (i = 0; i < 768; i++)
-    pbuff[i] = pbuff[i] >> 2;
 
-  for (i = 240; i < 244; i++)
-  {
-    *(pbuff + ((i * 3) + 0)) = 0;
-    *(pbuff + ((i * 3) + 1)) = 0;
-    *(pbuff + ((i * 3) + 2)) = 0x3b;
+  uint8_t temp;
+  for (int i = 0; i < 255; i++) {
+    temp = pbuff[i * 3];
+    pbuff[i * 3] = pbuff[i * 3 + 2];
+    pbuff[i * 3 + 2] = temp;
   }
-  for (i = 244; i < 248; i++)
-  {
-    *(pbuff + ((i * 3) + 0)) = 0x3b;
-    *(pbuff + ((i * 3) + 1)) = 0;
-    *(pbuff + ((i * 3) + 2)) = 0;
+
+  int index = 0;
+  for (int i = 0; i < 0x300; i += 3) {
+    PALETTE_COLOR color = PALETTE_COLOR();
+    color.b = pbuff[i];
+    color.g = pbuff[i + 1];
+    color.r = pbuff[i + 2];
+    palette_colors[index++] = color;
   }
-  for (i = 0; i < 256; i++)
-  {
-    PALETTE_COLOR color;
-    color.r = pbuff[i * 3];
-    color.g = pbuff[(i * 3) + 1];
-    color.b = pbuff[(i * 3) + 2];
-    palette_colors[i] = color;
-  }
+
   return 1;
 }
 /*=========================================================================*/
