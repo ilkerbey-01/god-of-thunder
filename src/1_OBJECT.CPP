@@ -559,7 +559,7 @@ void use_item(void)
     ret = use_object(kf);
     break;
   }
-  if (kf)
+  if (kf && thor_info.item)
   {
     if ((!ret) && (!flag))
     {
