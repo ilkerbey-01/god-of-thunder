@@ -30,15 +30,20 @@ void xfillrectangle(int16_t StartX, int16_t StartY, int16_t EndX, int16_t EndY,
 }
 
 
-void xput(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff) {
-  // TODO is this 16x16?
-  for (int i = 0; i < 256; i++) {
+void sdl_graphics_render_image(int16_t x, int16_t y, int16_t width, int16_t height, uint8_t* buff) {
+  int size = width * height;
+  for (int i = 0; i < size; i++) {
     sdl_graphics_set_palette_color(*(buff + i));
-    int offset_x = x + (i % 16);
-    int offset_y = y + (i / 16);
+    int offset_x = x + (i % width);
+    int offset_y = y + (i / width);
     SDL_RenderDrawPoint(ren, offset_x, offset_y);
   }
   SDL_RenderPresent(ren);
+}
+
+void xput(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff) {
+  // TODO is this 16x16?
+  sdl_graphics_render_image(x, y, 16, 16, buff);
 }
 
 void xput2(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff) {
@@ -50,8 +55,7 @@ void xfput(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff) {
   xput(x, y, pagebase, buff);
 }
 void xfarput(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff) {
-  // TODO determine the difference with xput
-  xput(x, y, pagebase, buff);
+  sdl_graphics_render_image(x, y, 320, 48, buff);
 }
 
 void xtext(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff, int16_t color) {
