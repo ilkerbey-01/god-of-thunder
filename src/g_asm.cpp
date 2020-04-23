@@ -23,10 +23,6 @@ void read_joystick(void) {
 
 }
 
-void UnLZSS(uint8_t *src, uint8_t *dest, int16_t len) {
-
-}
-
 void xsetmode(void) {
 
 }

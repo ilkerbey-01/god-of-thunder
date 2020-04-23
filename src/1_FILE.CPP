@@ -301,48 +301,6 @@ int16_t load_game(int16_t flag)
   return 1;
 }
 //==========================================================================
-/*
-int32_t res_read(uint8_t *name,uint8_t *buff){
-int16_t num,bytes;
-size_t len;
-size_t total;
-uint8_t bf[256];
-uint8_t *p;
-uint16_t clen;
-uint16_t *up;
-
-if(!res_active) return RES_NOT_ACTIVE;
-if(!res_fp) return RES_NOT_OPEN;
-
-num=res_find_name(name);
-if(num<0) return RES_CANT_FIND;
-
-if(fseek(res_fp,res_header[num].offset,SEEK_SET)) return RES_CANT_SEEK;
-len=(size_t) res_header[num].length;
-
-total=0;
-if(res_header[num].key) p=buff;
-else p=lzss_buff;
-while(total<len){
-     if(((len-total) >255) && (len > 255)) bytes=fread(bf,1,256,res_fp);
-     else bytes=fread(bf,1,len-total,res_fp);
-     if(!bytes) break;
-     total+=bytes;
-     movedata(FP_SEG(bf),FP_OFF(bf),FP_SEG(p),FP_OFF(p),bytes);
-     p+=bytes;
-}
-if(res_header[num].key) res_decode(buff,len,res_header[num].key);
-else{
-  p=lzss_buff;
-  up=(uint16_t *) p;
-  clen=*up;
-  p+=4;
-  UnLZSS(p,buff,clen);
-}
-return res_header[num].length;
-}
-*/
-//==========================================================================
 int16_t load_music(int16_t num)
 {
 
