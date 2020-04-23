@@ -177,15 +177,15 @@ bool res_init_record(int num, int& offset) {
     res_header[num].offset += (uint32_t)buffer[i++] << 16;
     res_header[num].offset += (uint32_t)buffer[i++] << 24;
 
-    res_header[num].ignore = (uint32_t)buffer[i++];
-    res_header[num].ignore += (uint32_t)buffer[i++] << 8;
-    res_header[num].ignore += (uint32_t)buffer[i++] << 16;
-    res_header[num].ignore += (uint32_t)buffer[i++] << 24;
-
     res_header[num].length = (uint32_t)buffer[i++];
     res_header[num].length += (uint32_t)buffer[i++] << 8;
     res_header[num].length += (uint32_t)buffer[i++] << 16;
     res_header[num].length += (uint32_t)buffer[i++] << 24;
+
+    res_header[num].original_size = (uint32_t)buffer[i++];
+    res_header[num].original_size += (uint32_t)buffer[i++] << 8;
+    res_header[num].original_size += (uint32_t)buffer[i++] << 16;
+    res_header[num].original_size += (uint32_t)buffer[i++] << 24;
 
     res_header[num].flags = (uint16_t)buffer[i++];
     res_header[num].flags += (uint16_t)buffer[i++] << 8;

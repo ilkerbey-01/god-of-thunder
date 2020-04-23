@@ -5,8 +5,8 @@
 typedef struct {              //23
   char name[9];               //9 name of file
   uint32_t offset;            //4 offset from gotres.dat
-  uint32_t ignore;            //4 compressed size
-  uint32_t length;            //4 decompressed size
+  uint32_t length;            //4 compressed size
+  uint32_t original_size;     //4 decompressed size
   uint16_t flags;             //2 is compressed
 } RES_HEADER;
 extern RES_HEADER res_header[0xb1];
