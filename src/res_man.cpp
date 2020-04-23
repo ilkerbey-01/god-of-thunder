@@ -238,7 +238,7 @@ uint8_t* res_falloc_read(const char* res_name) {
     return NULL;
   }
 
-  uint8_t* buffer = (uint8_t*)malloc(header.length);
+  uint8_t* buffer = (uint8_t*)malloc(header.original_size);
 
   if (res_read(res_name, buffer)) {
     free(buffer);
