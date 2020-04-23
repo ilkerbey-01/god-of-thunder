@@ -57,14 +57,11 @@ void xput(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff) {
   RAW_IMAGE* image = (RAW_IMAGE*)buff;
   int16_t width = (image->plane_width * 4);
   int16_t size = width * image->height;
-  for (int16_t J = 0; J < size - 1; J++) {
-    int16_t target_index = size + J / 16 * 16 + J % 16;
-    int16_t source_index = 262 + J / 4 + J % 4 * 64;
+  for (int16_t i = 0; i < size - 1; i++) {
+    int16_t offset_x = i % width;
+    int16_t offset_y = i / width;
 
-    int16_t offset_x = target_index % width;
-    int16_t offset_y = target_index / width;
-
-    int16_t color_index = image->color_indexes[source_index];
+    int16_t color_index = image->color_indexes[i / 4 + i % 4 * 16 * 4];
     if (color_index != image->invis_color) {
       sdl_graphics_set_palette_color(color_index);
       SDL_RenderDrawPoint(ren, x + offset_x, y + offset_y);
@@ -82,7 +79,21 @@ void xfput(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff) {
   xput(x, y, pagebase, buff);
 }
 void xfarput(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff) {
-  sdl_graphics_render_image(x, y, 320, 48, buff);
+
+  RAW_IMAGE* image = (RAW_IMAGE*)buff;
+  int16_t width = (image->plane_width * 4);
+  int16_t size = width * image->height;
+  for (int16_t i = 0; i < size - 1; i++) {
+    int16_t offset_x = i % width;
+    int16_t offset_y = i / width;
+
+    int16_t color_index = image->color_indexes[i / 4 + i % 4 * 320 * 12];
+    if (color_index != image->invis_color) {
+      sdl_graphics_set_palette_color(color_index);
+      SDL_RenderDrawPoint(ren, x + offset_x, y + offset_y);
+    }
+  }
+  SDL_RenderPresent(ren);
 }
 
 void xtext(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff, int16_t color) {
