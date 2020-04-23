@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <stdint.h>
 #include <SDL.h>
 
@@ -85,3 +86,50 @@ void xtextx(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff, int16_t colo
   xtext(x, y, pagebase, buff, color);
 }
 
+void xpset(int16_t X, int16_t Y, uint16_t PageBase, int16_t Color) {
+  if (sdl_graphics_set_palette_color(Color)) {
+    SDL_RenderDrawPoint(ren, X, Y);
+  }
+  SDL_RenderPresent(ren);
+}
+void xline(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t page, int16_t color) {
+  int16_t x, y;
+
+  if (x0 == x1 && y0 == y1)
+    xpset(x0, y0, page, color);
+
+  else if (std::abs(x1 - x0) >= std::abs(y1 - y0))
+  {
+    if (x1 < x0)
+    {
+      x = x1;
+      y = y1;
+      x1 = x0;
+      y1 = y0;
+      x0 = x;
+      y0 = y;
+    }
+    for (x = x0; x <= x1; x++)
+    {
+      y = (int)(y0 + ((x - x0) * (int32_t)(y1 - y0)) / (x1 - x0));
+      xpset(x, y, page, color);
+    }
+  }
+  else
+  {
+    if (y1 < y0)
+    {
+      x = x1;
+      y = y1;
+      x1 = x0;
+      y1 = y0;
+      x0 = x;
+      y0 = y;
+    }
+    for (y = y0; y <= y1; y++)
+    {
+      x = (int)(x0 + ((y - y0) * (int32_t)(x1 - x0)) / (y1 - y0));
+      xpset(x, y, page, color);
+    }
+  }
+}
