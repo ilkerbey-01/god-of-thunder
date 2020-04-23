@@ -46,9 +46,31 @@ void sdl_graphics_render_image(int16_t x, int16_t y, int16_t width, int16_t heig
   SDL_RenderPresent(ren);
 }
 
+typedef struct {
+  int16_t plane_width;
+  int16_t height;
+  int16_t invis_color;
+  uint8_t color_indexes[];
+} RAW_IMAGE;
+
 void xput(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff) {
-  // TODO is this 16x16?
-  sdl_graphics_render_image(x, y, 16, 16, buff);
+  RAW_IMAGE* image = (RAW_IMAGE*)buff;
+  int16_t width = (image->plane_width * 4);
+  int16_t size = width * image->height;
+  for (int16_t J = 0; J < size - 1; J++) {
+    int16_t target_index = size + J / 16 * 16 + J % 16;
+    int16_t source_index = 262 + J / 4 + J % 4 * 64;
+
+    int16_t offset_x = target_index % width;
+    int16_t offset_y = target_index / width;
+
+    int16_t color_index = image->color_indexes[source_index];
+    if (color_index != image->invis_color) {
+      sdl_graphics_set_palette_color(color_index);
+      SDL_RenderDrawPoint(ren, x + offset_x, y + offset_y);
+    }
+  }
+  SDL_RenderPresent(ren);
 }
 
 void xput2(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff) {
