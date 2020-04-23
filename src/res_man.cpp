@@ -251,5 +251,6 @@ uint8_t* res_falloc_read(const char* res_name) {
 void res_close() {
   if (res_file_ != NULL) {
     fclose(res_file_);
+    res_file_ = NULL;
   }
 }
