@@ -86,9 +86,9 @@ void sound_exit(void)
     ;
 
   if (std_sound_start)
-    free(std_sounds);
+    free(std_sound_start);
   if (pcstd_sound_start)
-    free(pcstd_sounds);
+    free(pcstd_sound_start);
 }
 //===========================================================================
 void play_sound(int16_t index, int16_t priority_override)
