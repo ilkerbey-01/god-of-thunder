@@ -198,11 +198,8 @@ int16_t boss_dead;
 
 int16_t warp_flag;
 
-uint8_t *std_sound_start;
 uint8_t *pcstd_sound_start;
-uint8_t *std_sound;
 uint8_t *pcstd_sounds;
-uint8_t *boss_sound[3];
 uint8_t *boss_pcsound[3];
 int32_t pcsound_length[NUM_SOUNDS];
 int16_t rand1, rand2;
@@ -224,9 +221,7 @@ int16_t killgg_inform;
 uint8_t dialog_color[] = {14, 54, 120, 138, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 //norm,good,bad,sign,white
 
-uint8_t *std_sounds;
 uint8_t *pc_sound[NUM_SOUNDS];
-uint8_t *dig_sound[NUM_SOUNDS];
 int16_t boss_active;
 uint8_t story_flag;
 char save_filename[] = "XXXXXXXX.XXX";

@@ -32,7 +32,6 @@ extern uint8_t enemy_type[MAX_ENEMIES];
 extern ACTOR explosion;
 extern ACTOR sparkle;
 extern uint8_t shot_ok;
-extern uint8_t *std_sound_start;
 extern int16_t max_shot;
 extern THOR_INFO thor_info;
 extern uint8_t object_map[240];

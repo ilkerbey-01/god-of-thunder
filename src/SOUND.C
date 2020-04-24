@@ -17,8 +17,6 @@ void play_pc_sound(int16_t index, int16_t priority_override);
 extern uint8_t *std_sounds;
 extern uint8_t *pcstd_sounds;
 extern uint8_t *pc_sound[NUM_SOUNDS];
-extern uint8_t *dig_sound[NUM_SOUNDS];
-extern uint8_t *std_sound_start;
 extern uint8_t *pcstd_sound_start;
 extern int16_t level;
 
@@ -39,19 +37,8 @@ int16_t sound_init(void)
   uint8_t *p;
   HEADER *header;
 
-  std_sound_start = res_falloc_read("DIGSOUND");
-  if (!std_sound_start)
+  if (!sb_initialize()) {
     return 0;
-  std_sounds = std_sound_start;
-  header = (HEADER *)std_sounds;
-  std_sounds = std_sounds + (sizeof(HEADER) * 16);
-
-  p = std_sounds;
-  for (i = 0; i < 16; i++)
-  {
-    dig_sound[i] = p;
-    p += (int)header->length;
-    header++;
   }
 
   pcstd_sound_start = res_falloc_read("PCSOUNDS");
@@ -85,8 +72,8 @@ void sound_exit(void)
   while (sound_playing())
     ;
 
-  if (std_sound_start)
-    free(std_sound_start);
+  sb_close();
+
   if (pcstd_sound_start)
     free(pcstd_sound_start);
 }
@@ -111,7 +98,7 @@ void play_sound(int16_t index, int16_t priority_override)
     SB_StopVOC();
   }
 
-  SB_PlayVOC((uint8_t *)dig_sound[index], 1);
+  SB_PlayVOC(index, 1);
   current_priority = sound_priority[index];
 }
 //===========================================================================

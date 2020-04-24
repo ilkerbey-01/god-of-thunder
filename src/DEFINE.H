@@ -277,11 +277,8 @@ typedef struct
        uint8_t future[65];
 } THOR_INFO;
 
-typedef struct
-{
-       int32_t offset;
-       int32_t length;
-} HEADER;
+#include "header.h"
+
 //==========================================================================
 //defines
 
@@ -433,7 +430,7 @@ enum
 #define GAME3 (area == 3)
 #define BP (key_flag[_B])
 
-#define NUM_SOUNDS 19
+#include "sb_man.h"
 #define NUM_OBJECTS 32
 
 #define APPLE_MAGIC 1

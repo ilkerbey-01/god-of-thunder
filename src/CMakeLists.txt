@@ -20,6 +20,7 @@ add_executable (got
     "PANEL.C"
     "RES_ENCO.C"
     "RES_FALL.C"
+    "RES_LEN.C"
     "RES_FIND.C"
     "RES_INIT.C"
     "RES_READ.C"

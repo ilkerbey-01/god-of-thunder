@@ -41,9 +41,7 @@ extern ACTOR actor[MAX_ACTORS];
 extern ACTOR *thor;
 extern uint8_t boss_loaded;
 
-extern uint8_t *std_sound_start;
 extern uint8_t *pcstd_sound_start;
-extern uint8_t *std_sound;
 extern uint8_t *pcstd_sound;
 extern uint8_t *object_sound[26];
 
@@ -69,11 +67,9 @@ static void (*old_keyboard_int)(void); //int16_terrupt func pointer
 extern void (*old_timer_int)(void);    //int16_terrupt function pointer
 void timer_int(void);
 extern uint8_t *bleep;
-extern uint8_t *boss_sound[3];
 extern uint8_t *boss_pcsound[3];
 extern uint8_t res_file[];
 extern uint8_t *pc_sound[NUM_SOUNDS];
-extern uint8_t *dig_sound[NUM_SOUNDS];
 extern int16_t current_level;
 extern uint8_t odin[4][262];
 extern uint8_t hampic[4][262];
@@ -139,7 +135,6 @@ int16_t initialize(void)
   song = (uint8_t *)0;
   for (i = 0; i < 3; i++)
   {
-    boss_sound[i] = (uint8_t *)0;
     boss_pcsound[i] = (uint8_t *)0;
   }
   //commandeer the KBint16_t
@@ -174,14 +169,10 @@ int16_t initialize(void)
   bg_pics = (uint8_t *)0;
   sd_data = (uint8_t *)0;
   memset(&actor[0], 0, (sizeof(ACTOR) * MAX_ACTORS));
-  boss_sound[0] = 0;
-  boss_sound[1] = 0;
-  boss_sound[2] = 0;
   boss_pcsound[0] = 0;
   boss_pcsound[1] = 0;
   boss_pcsound[2] = 0;
 
-  std_sound_start = 0;
   pcstd_sound_start = 0;
 
   tmp_buff = (uint8_t *)malloc(TMP_SIZE);
@@ -317,8 +308,6 @@ void exit_code(int16_t ex_flag)
     free(song);
   for (i = 0; i < 3; i++)
   {
-    if (boss_sound[i])
-      free(boss_sound[i]);
     if (boss_pcsound[i])
       free(boss_pcsound[i]);
   }
@@ -597,38 +586,12 @@ int16_t setup_boss(int16_t num)
   {
     REPEAT(3)
     {
-      if (boss_sound[rep])
-        free(boss_sound[rep]);
       if (boss_pcsound[rep])
         free(boss_pcsound[rep]);
     }
   }
 
-  sprintf(s, "%d", num);
-  strcpy(str, "BOSSV");
-  strcat(str, s);
-
-  strcpy(ress, str);
-  strcat(ress, "1");
-
-  boss_sound[0] = res_falloc_read(ress);
-  if (!boss_sound[0])
-    return 0;
-  dig_sound[NUM_SOUNDS - 3] = boss_sound[0];
-
-  strcpy(ress, str);
-  strcat(ress, "2");
-  boss_sound[1] = res_falloc_read(ress);
-  if (!boss_sound[1])
-    return 0;
-  dig_sound[NUM_SOUNDS - 2] = boss_sound[1];
-
-  strcpy(ress, str);
-  strcat(ress, "3");
-  boss_sound[2] = res_falloc_read(ress);
-  if (!boss_sound[2])
-    return 0;
-  dig_sound[NUM_SOUNDS - 1] = boss_sound[2];
+  sb_swap_boss_sounds(num);
 
   sprintf(s, "%d", num);
   strcpy(str, "BOSSP");

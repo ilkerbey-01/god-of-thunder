@@ -28,7 +28,6 @@ extern THOR_INFO thor_info;
 extern ACTOR actor[MAX_ACTORS];
 extern ACTOR *thor;
 extern volatile uint8_t key_flag[100];
-extern uint8_t *dig_sound[10];
 extern int16_t restore_screen;
 extern int16_t key_fire, key_up, key_down, key_left, key_right, key_magic, key_select;
 extern uint8_t *tmp_buff;
