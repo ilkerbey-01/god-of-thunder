@@ -8,6 +8,7 @@ SDL_Renderer* ren = nullptr;
 extern volatile uint8_t key_flag[100];
 extern volatile uint8_t joy_flag[100];
 extern int16_t key_fire, key_up, key_down, key_left, key_right, key_magic, key_select;
+void exit_code(int16_t ex_flag);
 
 bool sdl_man_initialize() {
   if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
@@ -97,6 +98,9 @@ void sdl_man_update() {
     case SDL_KEYDOWN:
     case SDL_KEYUP:
       sdl_man_handle_key(&e.key);
+      break;
+    case SDL_QUIT:
+      exit_code(0);
       break;
     }
   }
