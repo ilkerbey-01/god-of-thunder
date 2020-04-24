@@ -57,8 +57,8 @@ void display_health(void)
   int16_t b;
 
   b = 59 + thor->health;
-  xfillrectangle(59, 8, b, 12, PAGES, 32);
-  xfillrectangle(b, 8, 209, 12, PAGES, STAT_COLOR);
+  xfillrectangle(59, 200, b, 204, PAGES, 32);
+  xfillrectangle(b, 200, 209, 204, PAGES, STAT_COLOR);
 }
 //===========================================================================
 void display_magic(void)
@@ -66,8 +66,8 @@ void display_magic(void)
   int16_t b;
 
   b = 59 + thor_info.magic;
-  xfillrectangle(59, 20, b, 24, PAGES, 96);
-  xfillrectangle(b, 20, 209, 24, PAGES, STAT_COLOR);
+  xfillrectangle(59, 212, b, 216, PAGES, 96);
+  xfillrectangle(b, 212, 209, 216, PAGES, STAT_COLOR);
 }
 //===========================================================================
 void display_jewels(void)
@@ -85,8 +85,8 @@ void display_jewels(void)
   else
     x = 62;
 
-  xfillrectangle(59, 32, 85, 42, PAGES, STAT_COLOR);
-  xprint(x, 32, s, PAGES, 14);
+  xfillrectangle(59, 224, 85, 234, PAGES, STAT_COLOR);
+  xprint(x, 224, s, PAGES, 14);
 }
 //===========================================================================
 void display_score(void)
@@ -99,8 +99,8 @@ void display_score(void)
   l = strlen(s);
   x = 276 - (l * 8);
 
-  xfillrectangle(223, 32, 279, 42, PAGES, STAT_COLOR);
-  xprint(x, 32, s, PAGES, 14);
+  xfillrectangle(223, 224, 279, 234, PAGES, STAT_COLOR);
+  xprint(x, 224, s, PAGES, 14);
 }
 //===========================================================================
 void display_keys(void)
@@ -118,20 +118,20 @@ void display_keys(void)
   else
     x = 142;
 
-  xfillrectangle(139, 32, 165, 42, PAGES, STAT_COLOR); //215
-  xprint(x, 32, s, PAGES, 14);
+  xfillrectangle(139, 224, 165, 234, PAGES, STAT_COLOR); //215
+  xprint(x, 224, s, PAGES, 14);
 }
 //===========================================================================
 void display_item(void)
 {
 
-  xfillrectangle(280, 8, 296, 24, PAGES, STAT_COLOR);
+  xfillrectangle(280, 200, 296, 216, PAGES, STAT_COLOR);
   if (thor_info.item)
   {
     if (thor_info.item == 7)
-      xfput(282, 8, PAGES, (uint8_t *)objects[thor_info.object + 10]);
+      xfput(282, 200, PAGES, (uint8_t *)objects[thor_info.object + 10]);
     else
-      xfput(282, 8, PAGES, (uint8_t *)objects[thor_info.item + 25]);
+      xfput(282, 200, PAGES, (uint8_t *)objects[thor_info.item + 25]);
   }
 }
 //===========================================================================
@@ -143,7 +143,7 @@ int16_t init_status_panel(void)
   if (!sp)
     return 0;
 
-  xfarput(0, 0, PAGES, sp);
+  xfarput(0, 192, PAGES, sp);
   //xfillrectangle(61,32,87,42,PAGES,STAT_COLOR);
   //xfillrectangle(183,32,209,42,PAGES,STAT_COLOR);
   //xfillrectangle(222,16,272,33,PAGES,STAT_COLOR);
