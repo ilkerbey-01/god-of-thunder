@@ -1,3 +1,6 @@
+// THOR - The God of Thunder
+// See LICENSE for details
+
 #include "sdl_man.h"
 
 #include <SDL.h>

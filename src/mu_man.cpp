@@ -1,3 +1,6 @@
+// THOR - The God of Thunder
+// See LICENSE for details
+
 #include "mu_man.h"
 
 int16_t MU_MusicPlaying() {

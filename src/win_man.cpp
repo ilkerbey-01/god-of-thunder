@@ -1,3 +1,6 @@
+// THOR - The God of Thunder
+// See LICENSE for details
+
 #include "win_man.h"
 
 #ifdef WIN32

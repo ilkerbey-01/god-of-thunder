@@ -1,3 +1,6 @@
+// THOR - The God of Thunder
+// See LICENSE for details
+
 #include "sb_man.h"
 
 int16_t SoundBlasterPresent;

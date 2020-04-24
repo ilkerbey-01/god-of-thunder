@@ -1,4 +1,4 @@
-//Source code released to the public domain on March 27th, 2020.
+// See LICENSE for details
 
 //XMASKIM.H: structures used for storing and manipulating masked images
 

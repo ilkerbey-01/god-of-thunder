@@ -1,3 +1,6 @@
+// THOR - The God of Thunder
+// See LICENSE for details
+
 #include "fx_man.h"
 
 int FX_PCPlaying() {
