@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "1_DEFINE.H"
-#include "1_PROTO.H"
+#include "DEFINE.H"
+#include "PROTO.H"
 
 #define TILE_SOLID 80
 #define TILE_FLY 140

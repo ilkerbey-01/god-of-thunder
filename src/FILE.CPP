@@ -8,8 +8,8 @@
 #include <fcntl.h>
 
 #include "res_man.h"
-#include "1_DEFINE.H"
-#include "1_PROTO.H"
+#include "DEFINE.H"
+#include "PROTO.H"
 //============================================================================
 extern uint8_t *bg_pics;
 extern uint8_t objects[NUM_OBJECTS][262];

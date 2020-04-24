@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "1_DEFINE.H"
-#include "1_PROTO.H"
+#include "DEFINE.H"
+#include "PROTO.H"
 //===========================================================================
 extern uint8_t pge;
 extern uint16_t draw_page, display_page, page3_offset;

@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "1_DEFINE.H"
-#include "1_PROTO.H"
+#include "DEFINE.H"
+#include "PROTO.H"
 //===========================================================================
 extern ACTOR actor[MAX_ACTORS];
 extern int16_t thor_x1, thor_y1, thor_x2, thor_y2, thor_real_y1;

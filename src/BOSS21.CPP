@@ -6,8 +6,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "1_DEFINE.H"
-#include "1_PROTO.H"
+#include "DEFINE.H"
+#include "PROTO.H"
 
 void check_boss21_hit(void);
 //===========================================================================

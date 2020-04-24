@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "1_DEFINE.H"
-#include "1_PROTO.H"
+#include "DEFINE.H"
+#include "PROTO.H"
 //===========================================================================
 extern ACTOR actor[MAX_ACTORS]; //current actors
 extern ACTOR *thor;

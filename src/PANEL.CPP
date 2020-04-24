@@ -6,8 +6,8 @@
 #include <string.h>
 
 #include "res_man.h"
-#include "1_DEFINE.H"
-#include "1_PROTO.H"
+#include "DEFINE.H"
+#include "PROTO.H"
 
 #define STAT_COLOR 206
 

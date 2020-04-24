@@ -9,8 +9,8 @@
 #include <ctype.h>
 #include <time.h>
 
-#include "1_DEFINE.H"
-#include "1_PROTO.H"
+#include "DEFINE.H"
+#include "PROTO.H"
 #include "utility.h"
 #include "g_asm.h"
 #include "sdl_man.h"

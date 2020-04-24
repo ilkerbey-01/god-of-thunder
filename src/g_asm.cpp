@@ -1,6 +1,6 @@
 #include <cstdlib>
-#include "1_DEFINE.H"
-#include "1_PROTO.H"
+#include "DEFINE.H"
+#include "PROTO.H"
 #include "g_asm.h"
 
 void xdisplay_actors(ACTOR *act, uint16_t page) {

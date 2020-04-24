@@ -7,8 +7,8 @@
 #include <ctype.h>
 #include <string.h>
 
-#include "1_DEFINE.H"
-#include "1_PROTO.H"
+#include "DEFINE.H"
+#include "PROTO.H"
 #include "res_man.h"
 #include "utility.h"
 //====================== Functions Declarations============================

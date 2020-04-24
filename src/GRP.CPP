@@ -7,8 +7,8 @@
 #include <ctype.h>
 
 #include "res_man.h"
-#include "1_DEFINE.H"
-#include "1_PROTO.H"
+#include "DEFINE.H"
+#include "PROTO.H"
 #include "pal_man.h"
 //===========================================================================
 extern uint8_t text[94][72];

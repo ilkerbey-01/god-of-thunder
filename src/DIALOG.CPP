@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "1_DEFINE.H"
-#include "1_PROTO.H"
+#include "DEFINE.H"
+#include "PROTO.H"
 #include "res_man.h"
 //===========================================================================
 extern volatile uint16_t timer_cnt;

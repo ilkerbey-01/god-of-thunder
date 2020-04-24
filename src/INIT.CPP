@@ -10,8 +10,8 @@
 
 #include "sdl_man.h"
 #include "res_man.h"
-#include "1_DEFINE.H"
-#include "1_PROTO.H"
+#include "DEFINE.H"
+#include "PROTO.H"
 #include "utility.h"
 #include "win_man.h"
 

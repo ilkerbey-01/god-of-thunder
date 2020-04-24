@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "1_DEFINE.H"
-#include "1_PROTO.H"
+#include "DEFINE.H"
+#include "PROTO.H"
 //===========================================================================
 extern int16_t new_level, current_level, new_level_tile;
 extern int16_t warp_flag;

@@ -8,8 +8,8 @@
 #include <memory.h>
 #include <ctype.h>
 
-#include "1_DEFINE.H"
-#include "1_PROTO.H"
+#include "DEFINE.H"
+#include "PROTO.H"
 #include "res_man.h"
 #include "utility.h"
 #include "sdl_man.h"
