@@ -103,19 +103,19 @@ void show_level(int16_t new_level)
     thor->dir = 0;
 
   //copy object data to main screen buffer
-  memcpy(
+  memmove(
     sd_data + ((size_t)current_level * 512) + 322, 
     &scrn.static_obj,
     130
   );
 
-  memcpy(
+  memmove(
     sd_data + ((size_t)current_level * 512),
     &scrn,
     sizeof(LEVEL)
   );
 
-  memcpy(
+  memmove(
     sd_data + ((size_t)new_level * 512),
     &scrn,
     sizeof(LEVEL)

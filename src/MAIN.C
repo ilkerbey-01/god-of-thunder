@@ -465,7 +465,7 @@ int main(int argc, char *argv[])
     display_score();
   }
   new_level = current_level;
-  memcpy(
+  memmove(
     &scrn,
     sd_data + ((size_t)new_level * 512), 
     sizeof(LEVEL)
@@ -975,7 +975,7 @@ void thor_dies(void)
   actor[1].used = 0;
   actor[2].used = 0;
   thor->speed_count = 6;
-  memcpy(
+  memmove(
     &scrn,
     sd_data + ((size_t)new_level * 512), 
     sizeof(LEVEL)
@@ -1073,7 +1073,7 @@ void setup_load(void)
   actor[1].used = 0;
   actor[2].used = 0;
   thor->speed_count = 6;
-  memcpy(
+  memmove(
     &scrn,
     sd_data + ((size_t)new_level * 512), 
     sizeof(LEVEL)

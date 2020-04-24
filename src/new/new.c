@@ -18,12 +18,6 @@
 // palette_t sdl_palette;
 
 // //===========================================================================
-// void* movedata(void* src0, void* src1, void* dest0, void* dest1, size_t bytes) {
-//     assert(dest0 == dest1);
-//     assert(src0 == src1);
-//     return memmove(dest0, src0, bytes);
-// }
-// //===========================================================================
 // void delay(int16_t ms) {
 //     Sleep((DWORD)ms);
 // }
