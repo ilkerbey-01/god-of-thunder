@@ -13,6 +13,7 @@
 #include "1_DEFINE.H"
 #include "1_PROTO.H"
 #include "utility.h"
+#include "win_man.h"
 
 int16_t setup_level(void);
 int16_t setup_player(void);
@@ -124,6 +125,8 @@ int16_t initialize(void)
   if (!sdl_man_initialize()) {
     return 17;
   }
+
+  win_man_initialize();
 
   int16_t i;
 
@@ -292,6 +295,7 @@ void exit_code(int16_t ex_flag)
 {
   int16_t i;
 
+  win_man_close();
   sdl_man_close();
   res_close();
   sound_exit();

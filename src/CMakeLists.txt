@@ -33,6 +33,7 @@ add_executable (got
     "sdl_graphics.cpp"
     "sdl_man.cpp"
     "utility.cpp"
+    "win_man.cpp"
 )
 
 find_package(SDL2 CONFIG REQUIRED)
