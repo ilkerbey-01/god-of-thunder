@@ -69,6 +69,8 @@ char *item_name[] = {"Enchanted Apple", "Lightning Power",
 //===========================================================================
 void build_screen(uint16_t pg)
 {
+  // TODO restore this functionality once graphics is revisited
+  return;
   int16_t x, y;
 
   xfillrectangle(0, 0, 320, 192, pg, 0);
@@ -87,6 +89,8 @@ void build_screen(uint16_t pg)
 //===========================================================================
 void show_level(int16_t new_level)
 {
+  // TODO restore this functionality once graphics is revisited
+  return;
   int16_t f, save_d;
 
   boss_active = 0;
