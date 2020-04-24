@@ -91,9 +91,11 @@ void xtext(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff, int16_t color
     int16_t text_color = *(buff + i) == 0
       ? 0
       : color;
-    int offset_x = x + (i % 8);
-    int offset_y = y + (i / 8);
-    xpset(offset_x, offset_y, pagebase, text_color);
+    if (text_color) {
+      int offset_x = x + (i % 8);
+      int offset_y = y + (i / 8);
+      xpset(offset_x, offset_y, pagebase, text_color);
+    }
   }
 }
 
