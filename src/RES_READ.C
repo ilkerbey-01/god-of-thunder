@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "define.h"
-#include "proto.h"
+#include "DEFINE.H"
+#include "PROTO.H"
 #include "res_man.h"
 #include "new/new.h"
 //==========================================================================
