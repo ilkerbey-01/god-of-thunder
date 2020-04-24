@@ -92,7 +92,7 @@ void xprintx(int16_t x, int16_t y, const char *string, uint16_t page, int16_t co
 //===========================================================================
 void split_screen(void)
 {
-// TODO
+// TODO split_screen figure out what this function was for (should it be DEPRECATED?)
 //   asm {
 
 // mov dx,0x03d4 //CRTC
@@ -175,7 +175,7 @@ void fade_out(void)
 //===========================================================================
 void unsplit_screen(void)
 {
-  // TODO
+  // TODO unsplit_screen figure out what this function was for (should it be DEPRECATED?)
 //   asm {
 
 // mov dx,0x03d4 //CRTC

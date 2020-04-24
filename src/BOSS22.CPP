@@ -324,9 +324,9 @@ int16_t boss22a_movement(ACTOR *actr)
   actor[an].x = x;
   actor[an].y = y;
 
-  xfput(x, y, display_page, (uint8_t *)(bg_pics + (scrn.bg_color * 262)));
-  xfput(x, y, draw_page, (uint8_t *)(bg_pics + (scrn.bg_color * 262)));
-  xfput(x, y, PAGE2, (uint8_t *)(bg_pics + (scrn.bg_color * 262)));
+  xfput(x, y, display_page, (uint8_t *)(bg_pics + ((size_t)scrn.bg_color * 262)));
+  xfput(x, y, draw_page, (uint8_t *)(bg_pics + ((size_t)scrn.bg_color * 262)));
+  xfput(x, y, PAGE2, (uint8_t *)(bg_pics + ((size_t)scrn.bg_color * 262)));
   scrn.icon[y / 16][x / 16] = scrn.bg_color;
 
   actor[3].i2++;

@@ -815,7 +815,7 @@ int16_t cmd_addjewels(void)
   if (!calc_value())
     return 5;
   buff_ptr++;
-  add_jewels((int)lvalue);
+  add_jewels((int16_t)lvalue);
   return 0;
 }
 //=========================================================================
@@ -825,7 +825,7 @@ int16_t cmd_addhealth(void)
   if (!calc_value())
     return 5;
   buff_ptr++;
-  add_health((int)lvalue);
+  add_health((int16_t)lvalue);
   return 0;
 }
 //=========================================================================
@@ -835,7 +835,7 @@ int16_t cmd_addmagic(void)
   if (!calc_value())
     return 5;
   buff_ptr++;
-  add_magic((int)lvalue);
+  add_magic((int16_t)lvalue);
   return 0;
 }
 //=========================================================================
@@ -845,7 +845,7 @@ int16_t cmd_addkeys(void)
   if (!calc_value())
     return 5;
   buff_ptr++;
-  add_keys((int)lvalue);
+  add_keys((int16_t)lvalue);
   return 0;
 }
 //=========================================================================
@@ -855,7 +855,7 @@ int16_t cmd_addscore(void)
   if (!calc_value())
     return 5;
   buff_ptr++;
-  add_score((int)lvalue);
+  add_score((int16_t)lvalue);
   return 0;
 }
 //=========================================================================
@@ -869,7 +869,7 @@ int16_t cmd_say(int16_t mode, int16_t type)
     if (!calc_value())
       return 5;
     buff_ptr++;
-    obj = (int)lvalue;
+    obj = (int16_t)lvalue;
     if (obj < 0 || obj > 32)
       return 6;
     if (obj)
@@ -970,14 +970,14 @@ int16_t cmd_settile(void)
   if (!calc_value())
     return 5;
   buff_ptr++;
-  screen = (int)lvalue;
+  screen = (int16_t)lvalue;
   if (!calc_value())
     return 5;
   buff_ptr++;
-  pos = (int)lvalue;
+  pos = (int16_t)lvalue;
   if (!calc_value())
     return 5;
-  tile = (int)lvalue;
+  tile = (int16_t)lvalue;
   if (screen < 0 || screen > 119)
     return 6;
   if (pos < 0 || pos > 239)
@@ -990,7 +990,7 @@ int16_t cmd_settile(void)
   }
   else
   {
-    lvl = (LEVEL *)(sd_data + (screen * 512));
+    lvl = (LEVEL *)(sd_data + ((size_t)screen * 512));
     lvl->icon[pos / 20][pos % 20] = tile;
   }
   return 0;
@@ -1003,7 +1003,7 @@ int16_t cmd_itemgive(void)
   if (!calc_value())
     return 5;
   buff_ptr++;
-  i = (int)lvalue;
+  i = (int16_t)lvalue;
   if (i < 1 || i > 15)
     return 6;
 
@@ -1112,7 +1112,7 @@ int16_t cmd_random(void)
   if (!calc_value())
     return 5;
   buff_ptr++;
-  r = (int)lvalue;
+  r = (int16_t)lvalue;
   if (r < 1 || r > 1000)
     return 6;
 

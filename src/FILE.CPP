@@ -177,10 +177,10 @@ int16_t load_speech(int16_t index)
 //===========================================================================
 void setup_filenames(int16_t level)
 {
-  //uint8_t s[21];
+  //char s[21];
 
   //strcpy(res_file,gotres);
-  //itoa(level,s,10);
+  //_itoa(level,s,10);
   //strcat(res_file,s);
   level = level;
 }

@@ -1,10 +1,9 @@
 // See LICENSE for details
 
 #pragma once
+#pragma pack(push, 1)
 #include <stdint.h>
 
-#undef outportb
-#undef inportb
 //==========================================================================
 //typedefs
 //Describes one alignment of a mask-image pair
@@ -44,9 +43,8 @@ typedef struct
        uint8_t future[3];         //473
 } LEVEL;
 
-typedef struct
-{ //size=256
-       //first part loaded from disk    (size=40)
+typedef struct                    //size=256
+{                                 //first part loaded from disk    (size=40)
        uint8_t move;              //movement pattern (0=none)
        uint8_t width;             //physical width
        uint8_t height;            //physical height
@@ -458,3 +456,5 @@ enum
 //#define IDE 1
 //#define CRIPPLED 1
 #define DEMO_LEN 3600
+
+#pragma pack(pop)

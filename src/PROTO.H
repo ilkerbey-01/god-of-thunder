@@ -2,6 +2,7 @@
 // See LICENSE for details
 
 #pragma once
+#pragma pack(push, 1)
 #include <stdint.h>
 
 //G_LIB.LIB
@@ -79,7 +80,7 @@ void show_all_actors(void);
 //G_INIT.C
 int16_t initialize(void);
 void exit_code(int16_t ex_flag);
-void keyboard_int(); //int16_terrupt prototype
+void keyboard_int(); // interrupt prototype
 void demo_key_set(void);
 void wait_not_response(void);
 int16_t wait_response(void);
@@ -96,7 +97,7 @@ void story(void);
 
 //G_FILE.C
 int32_t file_size(char *path);
-uint16_t read_file(uint8_t *filename, uint8_t *buff,
+uint16_t read_file(const char* filename, uint8_t *buff,
                    int32_t offset, uint16_t amount, int16_t key);
 int16_t load_bg_data(void);
 int16_t load_sd_data(void);
@@ -105,7 +106,7 @@ int16_t load_actor(int16_t file, int16_t num);
 int16_t load_picture(int16_t index, uint8_t *buff);
 void setup_filenames(int16_t level);
 int16_t load_speech(int16_t index);
-void *get_file(uint8_t *filename, int16_t key);
+void *get_file(const char* filename, int16_t key);
 void save_game(void);
 int16_t load_game(int16_t flag);
 void help(void);
@@ -269,3 +270,4 @@ void pal_fade_out(uint8_t *buff);
 void read_joystick(void);
 #define REPEAT(a) for (rep = 0; rep < a; rep++)
 #define IN_RANGE(v, l, h) (v >= l && v <= h)
+#pragma pack(pop)

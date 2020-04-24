@@ -14,7 +14,6 @@
 #include "utility.h"
 #include "g_asm.h"
 #include "sdl_man.h"
-//#include "mu_man.h"
 
 //========================= Global Declarations ==============================
 uint16_t page[3] = {PAGE0, PAGE1, PAGE2};
@@ -466,9 +465,11 @@ int main(int argc, char *argv[])
     display_score();
   }
   new_level = current_level;
-  // TODO
-  // movedata(FP_SEG(sd_data + (new_level * 512)), FP_OFF(sd_data + (new_level * 512)),
-  //          FP_SEG(&scrn), FP_OFF(&scrn), sizeof(LEVEL));
+  memcpy(
+    &scrn,
+    sd_data + ((size_t)new_level * 512), 
+    sizeof(LEVEL)
+  );
   show_level(current_level);
   exit_flag = 0;
   pge = 0;
@@ -547,6 +548,7 @@ int main(int argc, char *argv[])
     {
       if (key_flag[_THREE])
       {
+        // TODO replace this mysterious asm with something (is this a cheat code?)
         // asm("mov dx, status_Reg1");
         // asm("in al, dx");
         // asm("asm mov dx, atr_Index");
@@ -581,6 +583,7 @@ int main(int argc, char *argv[])
     {
       if (vbl_flag)
       {
+        // TODO replace this mysterious asm with something (is this a cheatcode?)
         // asm("mov dx, status_Reg1");
         // asm("in al, dx");
         // asm("mov dx, atr_Index");
@@ -810,7 +813,7 @@ int main(int argc, char *argv[])
   //if(xdos==3 && cheat) exit(0);
   if ((!cheat) || demo)
   {
-    // TODO
+    // TODO what does this mysterious interrupt do?
     // _AX = 0x0100;
     // _CX = 0x2000;
     // geninterrupt(0x10);
@@ -823,6 +826,8 @@ extern int16_t SBResetCount;
 //===========================================================================
 void run_gotm(void)
 {
+  return; // DEPRECATED
+  /*
   int16_t num;
   char s[36];
   char *args[] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL,
@@ -895,6 +900,7 @@ void run_gotm(void)
   //if (!ide_run)
   //  execv("GOT.EXE", args);
   exit(0);
+  */
 }
 //===========================================================================
 void printt(int16_t val)
@@ -969,9 +975,11 @@ void thor_dies(void)
   actor[1].used = 0;
   actor[2].used = 0;
   thor->speed_count = 6;
-  // TODO
-  // movedata(FP_SEG(sd_data + (new_level * 512)), FP_OFF(sd_data + (new_level * 512)),
-  //          FP_SEG(&scrn), FP_OFF(&scrn), sizeof(LEVEL));
+  memcpy(
+    &scrn,
+    sd_data + ((size_t)new_level * 512), 
+    sizeof(LEVEL)
+  );
   display_health();
   display_magic();
   display_jewels();
@@ -1065,9 +1073,11 @@ void setup_load(void)
   actor[1].used = 0;
   actor[2].used = 0;
   thor->speed_count = 6;
-  // TODO
-  // movedata(FP_SEG(sd_data + (new_level * 512)), FP_OFF(sd_data + (new_level * 512)),
-  //          FP_SEG(&scrn), FP_OFF(&scrn), sizeof(LEVEL));
+  memcpy(
+    &scrn,
+    sd_data + ((size_t)new_level * 512), 
+    sizeof(LEVEL)
+  );
   display_health();
   display_magic();
   display_jewels();

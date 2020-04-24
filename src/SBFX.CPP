@@ -20,8 +20,18 @@ void (*t0OldService)(void);
 int32_t TimerDivisor, TimerCount;
 volatile int32_t TickCount2, TickCount;
 //===========================================================================
-void t0Service(void)
+void t0Service(void) // (uint32_t interval, void* param)
 {
+  // SDL_UserEvent userevent;
+  // userevent.type = SDL_USEREVENT;
+  // userevent.code = 0;
+  // userevent.data1 = NULL;
+  // userevent.data2 = NULL  // 
+
+  // SDL_Event event;
+  // event.type = SDL_USEREVENT;
+  // event.user = userevent;
+  // SDL_PushEvent(&event);
 
   timer_cnt++;
   vbl_cnt++;

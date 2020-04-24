@@ -78,8 +78,8 @@ void build_screen(uint16_t pg)
     {
       if (scrn.icon[y][x] != 0)
       {
-        xfput(x * 16, y * 16, pg, (uint8_t *)(bg_pics + (scrn.bg_color * 262)));
-        xfput(x * 16, y * 16, pg, (uint8_t *)(bg_pics + (scrn.icon[y][x] * 262)));
+        xfput(x * 16, y * 16, pg, (uint8_t *)(bg_pics + ((size_t)scrn.bg_color * 262)));
+        xfput(x * 16, y * 16, pg, (uint8_t *)(bg_pics + ((size_t)scrn.icon[y][x] * 262)));
       }
     }
   }
@@ -100,19 +100,19 @@ void show_level(int16_t new_level)
 
   //copy object data to main screen buffer
   memcpy(
-    sd_data + (current_level * 512) + 322, 
+    sd_data + ((size_t)current_level * 512) + 322, 
     &scrn.static_obj,
     130
   );
 
   memcpy(
-    sd_data + (current_level * 512),
+    sd_data + ((size_t)current_level * 512),
     &scrn,
     sizeof(LEVEL)
   );
 
   memcpy(
-    sd_data + (new_level * 512),
+    sd_data + ((size_t)new_level * 512),
     &scrn,
     sizeof(LEVEL)
   );
@@ -396,7 +396,7 @@ int16_t display_speech(int16_t item, uint8_t *pic, int16_t tf)
   color = 14;
   pn = 0;
   pc = 0;
-  xput(152, 65, pg, (pic + (pn * 262)));
+  xput(152, 65, pg, (pic + ((size_t)pn * 262)));
   if (item)
     xfput(176, 65, pg, (uint8_t *)objects[item]);
 
@@ -467,7 +467,7 @@ int16_t display_speech(int16_t item, uint8_t *pic, int16_t tf)
       pn++;
       if (pn > 3)
         pn = 0;
-      xput(152, 65, pg, (pic + (pn * 262)));
+      xput(152, 65, pg, (pic + ((size_t)pn * 262)));
     }
     if (!key_flag[key_fire] && !key_flag[ENTER] && !key_flag[SPACE] && !key_flag[key_magic])
     {
@@ -736,8 +736,8 @@ void remove_objects(int16_t y, int16_t x)
 
   if (object_map[p] > 0)
   {
-    xfput(ix, iy, PAGE2, (uint8_t *)(bg_pics + (scrn.bg_color * 262)));
-    xfput(ix, iy, PAGE2, (uint8_t *)(bg_pics + (scrn.icon[y][x] * 262)));
+    xfput(ix, iy, PAGE2, (uint8_t *)(bg_pics + ((size_t)scrn.bg_color * 262)));
+    xfput(ix, iy, PAGE2, (uint8_t *)(bg_pics + ((size_t)scrn.icon[y][x] * 262)));
     xcopyd2d(ix, iy, ix + 16, iy + 16, ix, iy, PAGE2, draw_page, 320, 320);
     object_map[p] = 0;
     object_index[p] = 0;
@@ -751,8 +751,8 @@ void place_tile(int16_t x, int16_t y, int16_t tile)
   ix = x * 16;
   iy = y * 16;
 
-  xfput(ix, iy, PAGE2, (uint8_t *)(bg_pics + (scrn.bg_color * 262)));
-  xfput(ix, iy, PAGE2, (uint8_t *)(bg_pics + (tile * 262)));
+  xfput(ix, iy, PAGE2, (uint8_t *)(bg_pics + ((size_t)scrn.bg_color * 262)));
+  xfput(ix, iy, PAGE2, (uint8_t *)(bg_pics + ((size_t)tile * 262)));
   xcopyd2d(ix, iy, ix + 16, iy + 16, ix, iy, PAGE2, draw_page, 320, 320);
   xcopyd2d(ix, iy, ix + 16, iy + 16, ix, iy, PAGE2, display_page, 320, 320);
   scrn.icon[y][x] = tile;

@@ -143,7 +143,6 @@ int16_t initialize(void)
     boss_pcsound[i] = (uint8_t *)0;
   }
   //commandeer the KBint16_t
-  // TODO 
   //old_keyboard_int16_t = getvect(0x09);
   //setvect(0x09, keyboard_int);
   break_code = 1;
