@@ -17,42 +17,8 @@ extern int16_t music_flag, sound_flag, pcsound_flag;
 extern uint8_t noal, nosb;
 
 void (*t0OldService)(void);
-int32_t TimerDivisor, TimerCount;
-volatile int32_t TickCount2, TickCount;
-//===========================================================================
-void t0Service(void) // (uint32_t interval, void* param)
-{
-  // SDL_UserEvent userevent;
-  // userevent.type = SDL_USEREVENT;
-  // userevent.code = 0;
-  // userevent.data1 = NULL;
-  // userevent.data2 = NULL  // 
-
-  // SDL_Event event;
-  // event.type = SDL_USEREVENT;
-  // event.user = userevent;
-  // SDL_PushEvent(&event);
-
-  timer_cnt++;
-  vbl_cnt++;
-  magic_cnt++;
-  extra_cnt++;
-
-  FX_ServicePC();
-  MU_Service();
-
-  TickCount2++;
-  TickCount = TickCount2 >> 1;
-  TimerCount += TimerDivisor;
-  if (TimerCount >= 0x10000L)
-  {
-    TimerCount -= 0x10000L;
-    t0OldService(); // Chain to old ISR
-  }
-  // TODO
-  // else
-  //   outportb(0x20, 0x20); // Do the EOI
-}
+extern int32_t TimerDivisor, TimerCount;
+extern volatile int32_t TickCount2, TickCount;
 uint8_t *SB_DetectAdLib(void);
 //===========================================================================
 int16_t sbfx_init(void)

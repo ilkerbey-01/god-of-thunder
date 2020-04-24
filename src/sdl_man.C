@@ -7,39 +7,71 @@
 
 bool sdl_inited = false;
 SDL_Window* win = nullptr;
-SDL_Renderer* ren = nullptr;
+SDL_Surface* surface = nullptr;
+SDL_TimerID timer_id = 0;
 extern volatile uint8_t key_flag[100];
 extern volatile uint8_t joy_flag[100];
 extern int16_t key_fire, key_up, key_down, key_left, key_right, key_magic, key_select;
+extern volatile uint16_t timer_cnt, vbl_cnt, magic_cnt, extra_cnt;
+int32_t TimerDivisor, TimerCount;
+volatile int32_t TickCount2, TickCount;
+
 void exit_code(int16_t ex_flag);
 
+void tick_update(void) {
+  SDL_UpdateWindowSurface(win);
+}
+
+uint32_t sdl_man_timer_handler(uint32_t interval, void* param) {
+  SDL_UserEvent userevent;
+  userevent.type = SDL_USEREVENT;
+  userevent.code = 0;
+  userevent.data1 = NULL;
+  userevent.data2 = NULL;
+
+  SDL_Event event;
+  event.type = SDL_USEREVENT;
+  event.user = userevent;
+  SDL_PushEvent(&event);
+
+  timer_cnt++;
+  vbl_cnt++;
+  magic_cnt++;
+  extra_cnt++;
+
+  TickCount2++;
+  TickCount = TickCount2 >> 1;
+  TimerCount += TimerDivisor;
+
+  if (TimerCount >= 0x10000L) {
+    TimerCount -= 0x10000L;
+  }
+
+  return interval;
+}
+
 bool sdl_man_initialize() {
-  if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+  if (SDL_Init(SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_EVENTS) != 0) {
     return false;
   }
   sdl_inited = true;
 
-  win = SDL_CreateWindow("God of Thunder", 100, 100, 320, 240, SDL_WINDOW_SHOWN);
+  win = SDL_CreateWindow("God of Thunder", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, NATIVE_SCREEN_WIDTH * 4, NATIVE_SCREEN_HEIGHT * 4, 0);
   if (!win) {
     return false;
   }
 
-  ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-  if (!ren) {
+  surface = SDL_GetWindowSurface(win);
+  if (!surface) {
     return false;
   }
 
-  SDL_RenderClear(ren);
+  timer_id = SDL_AddTimer(1000 / 50, sdl_man_timer_handler, NULL);
 
   return true;
 }
 
 void sdl_man_close() {
-  if (ren) {
-    SDL_DestroyRenderer(ren);
-    ren = nullptr;
-  }
-
   if (win) {
     SDL_DestroyWindow(win);
     win = nullptr;
@@ -104,6 +136,10 @@ void sdl_man_update() {
       break;
     case SDL_QUIT:
       exit_code(0);
+      exit(0);
+      break;
+    case SDL_USEREVENT:
+      tick_update();
       break;
     }
   }

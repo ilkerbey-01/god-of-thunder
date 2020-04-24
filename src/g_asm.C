@@ -29,13 +29,6 @@ void read_joystick(void) {
 void xsetmode(void) {
 
 }
-void xshowpage(unsigned page) {
-
-}
-
-int16_t xpoint(int16_t X, int16_t Y, uint16_t PageBase) {
-  return 0;
-}
 void xget(int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t pagebase,
           uint8_t *buff, int16_t invis) {
 

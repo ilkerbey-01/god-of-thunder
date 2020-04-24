@@ -5,48 +5,36 @@
 #include <stdint.h>
 #include <SDL.h>
 
+#include "sdl_man.h"
 #include "pal_man.h"
 
-extern SDL_Renderer* ren;
+extern SDL_Surface* surface;
 
-bool sdl_graphics_set_palette_color(int16_t color_index) {
-  if (color_index) {
-    PALETTE_COLOR color = palette_colors[color_index];
-    SDL_SetRenderDrawColor(ren, color.r, color.g, color.b, SDL_ALPHA_OPAQUE);
-    return true;
-  }
-  else {
-    SDL_SetRenderDrawColor(ren, 0xff, 0xff, 0xff, SDL_ALPHA_TRANSPARENT);
-    return false;
-  }
+void xpset(int16_t X, int16_t Y, uint16_t PageBase, int16_t Color);
+
+uint16_t current_page = 0;
+
+uint32_t convert_color(uint8_t index) {
+  return SDL_MapRGBA(surface->format,
+    palette_colors[index].r,
+    palette_colors[index].g,
+    palette_colors[index].b,
+    0xff);
+}
+
+void xshowpage(unsigned page) {
+  current_page = page;
+  return; // TODO xshowpage
 }
 
 void xfillrectangle(int16_t StartX, int16_t StartY, int16_t EndX, int16_t EndY,
   uint16_t PageBase, int16_t Color) {
-
-  SDL_Rect rect = SDL_Rect();
+  SDL_Rect rect;
   rect.x = StartX;
   rect.y = StartY;
   rect.w = EndX - StartX;
   rect.h = EndY - StartY;
-
-  if (sdl_graphics_set_palette_color(Color)) {
-    SDL_RenderFillRect(ren, &rect);
-    SDL_RenderPresent(ren);
-  }
-}
-
-
-void sdl_graphics_render_image(int16_t x, int16_t y, int16_t width, int16_t height, uint8_t* buff) {
-  int size = width * height;
-  for (int i = 0; i < size; i++) {
-    if (sdl_graphics_set_palette_color(*(buff + i))) {
-      int offset_x = x + (i % width);
-      int offset_y = y + (i / width);
-      SDL_RenderDrawPoint(ren, offset_x, offset_y);
-    }
-  }
-  SDL_RenderPresent(ren);
+  SDL_FillRect(surface, &rect, convert_color((uint8_t)Color));
 }
 
 typedef struct {
@@ -56,47 +44,46 @@ typedef struct {
   uint8_t color_indexes[];
 } RAW_IMAGE;
 
-void xput(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff) {
-  RAW_IMAGE* image = (RAW_IMAGE*)buff;
-  int16_t width = (image->plane_width * 4);
-  int16_t size = width * image->height;
-  for (int16_t i = 0; i < size - 1; i++) {
-    int16_t offset_x = i % width;
-    int16_t offset_y = i / width;
-
-    int16_t color_index = image->color_indexes[i / 4 + i % 4 * 16 * 4];
-    if (color_index != image->invis_color) {
-      sdl_graphics_set_palette_color(color_index);
-      SDL_RenderDrawPoint(ren, x + offset_x, y + offset_y);
+static void xput_layer(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff, int offset) {
+  int16_t width = *(int16_t*)(buff);
+  int16_t height = *(int16_t*)(buff + 2);
+  int16_t mask = *(int16_t*)(buff + 4);
+  uint8_t* pixels = buff + 6;
+  uint32_t index = width * height * offset;
+  int32_t pitch = surface->pitch / surface->format->BytesPerPixel;
+  for (int32_t curr_y = 0; curr_y < height; ++curr_y) {
+    for (int32_t curr_x = 0; curr_x < width; ++curr_x) {
+      if (pixels[index] != mask) {
+        int32_t sx = x + curr_x * 4 + offset;
+        int32_t sy = y + curr_y;
+        if (pagebase) {
+          sy += (pagebase / 19200) * NATIVE_SCREEN_HEIGHT;
+        }
+        //if (sx >= 0 && sx < NATIVE_SCREEN_WIDTH &&
+        //    sy >= 0 && sy < NATIVE_SCREEN_HEIGHT) {
+        ((uint32_t*)surface->pixels)[sy * pitch + sx] = convert_color(pixels[index]);
+        //}
+      }
+      ++index;
     }
   }
-  SDL_RenderPresent(ren);
+}
+
+void xput(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff) {
+  xput_layer(x, y, pagebase, buff, 0);
+  xput_layer(x, y, pagebase, buff, 1);
+  xput_layer(x, y, pagebase, buff, 2);
+  xput_layer(x, y, pagebase, buff, 3);
 }
 
 void xput2(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff) {
-  // TODO determine the difference with xput
   xput(x, y, pagebase, buff);
 }
 void xfput(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff) {
-  // TODO determine the difference with xput
   xput(x, y, pagebase, buff);
 }
 void xfarput(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff) {
-
-  RAW_IMAGE* image = (RAW_IMAGE*)buff;
-  int16_t width = (image->plane_width * 4);
-  int16_t size = width * image->height;
-  for (int16_t i = 0; i < size - 1; i++) {
-    int16_t offset_x = i % width;
-    int16_t offset_y = i / width;
-
-    int16_t color_index = image->color_indexes[i / 4 + i % 4 * 320 * 12];
-    if (color_index != image->invis_color) {
-      sdl_graphics_set_palette_color(color_index);
-      SDL_RenderDrawPoint(ren, x + offset_x, y + offset_y);
-    }
-  }
-  SDL_RenderPresent(ren);
+  xput(x, y, pagebase, buff);
 }
 
 void xtext(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff, int16_t color) {
@@ -104,30 +91,74 @@ void xtext(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff, int16_t color
     int16_t text_color = *(buff + i) == 0
       ? 0
       : color;
-    if (sdl_graphics_set_palette_color(text_color)) {
-      int offset_x = x + (i % 8);
-      int offset_y = y + (i / 8);
-      SDL_RenderDrawPoint(ren, offset_x, offset_y);
-    }
+    int offset_x = x + (i % 8);
+    int offset_y = y + (i / 8);
+    xpset(offset_x, offset_y, pagebase, text_color);
   }
-  SDL_RenderPresent(ren);
 }
 
 void xtext1(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff, int16_t color) {
-  // TODO determine the difference with xtext
   xtext(x, y, pagebase, buff, color);
 }
 void xtextx(int16_t x, int16_t y, uint16_t pagebase, uint8_t* buff, int16_t color) {
-  // TODO determine the difference with xtext
   xtext(x, y, pagebase, buff, color);
 }
 
 void xpset(int16_t X, int16_t Y, uint16_t PageBase, int16_t Color) {
-  if (sdl_graphics_set_palette_color(Color)) {
-    SDL_RenderDrawPoint(ren, X, Y);
+  int bpp = surface->format->BytesPerPixel;
+
+  uint32_t pixel = convert_color((uint8_t)Color);
+  uint8_t* p = (uint8_t*)surface->pixels + Y * surface->pitch + X * bpp;
+
+  switch (bpp) {
+  case 1:
+    *p = pixel;
+    break;
+  case 2:
+    *(Uint16*)p = pixel;
+    break;
+  case 3:
+    if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+      p[0] = (pixel >> 16) & 0xff;
+      p[1] = (pixel >> 8) & 0xff;
+      p[2] = pixel & 0xff;
+    }
+    else {
+      p[0] = pixel & 0xff;
+      p[1] = (pixel >> 8) & 0xff;
+      p[2] = (pixel >> 16) & 0xff;
+    }
+    break;
+  case 4:
+    *(Uint32*)p = pixel;
+    break;
   }
-  SDL_RenderPresent(ren);
 }
+
+int16_t xpoint(int16_t X, int16_t Y, uint16_t PageBase) {
+  int bpp = surface->format->BytesPerPixel;
+
+  uint8_t* p = (uint8_t*)surface->pixels + Y * surface->pitch + X * bpp;
+
+  switch (bpp) {
+  case 1:
+    return *p;
+  case 2:
+    return *(Uint16*)p;
+  case 3:
+    if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+      return p[0] << 16 | p[1] << 8 | p[2];
+    }
+    else {
+      return p[0] | p[1] << 8 | p[2] << 16;
+    }
+  case 4:
+    return *(Uint32*)p;
+  default:
+    return 0;
+  }
+}
+
 void xline(int16_t x0, int16_t y0, int16_t x1, int16_t y1, int16_t page, int16_t color) {
   int16_t x, y;
 
