@@ -259,6 +259,10 @@ int16_t SB_VOCPlaying() {
 }
 
 void SB_PlayVOC(uint8_t sound_index, int16_t tmp) {
+  if (!sound_flag) {
+    return;
+  }
+
   SDL_PauseAudio(0);
 
   DIGITAL_SOUND digital_sound = digital_sounds[sound_index];
