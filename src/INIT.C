@@ -289,6 +289,7 @@ void exit_code(int16_t ex_flag)
   sdl_man_close();
   res_close();
   sound_exit();
+  sb_close();
   sbfx_exit();
 
   // TODO 

@@ -268,19 +268,3 @@ void SB_PlayVOC(uint8_t sound_index, int16_t tmp) {
 void SB_StopVOC() {
   SDL_PauseAudio(1);
 }
-
-void SB_Shutdown() {
-
-}
-
-void SB_ALOut(int16_t x, int16_t y) {
-
-}
-
-uint8_t* SB_Startup(char* x) {
-  return 0;
-}
-
-uint8_t* SB_DetectAdLib(void) {
-  return 0;
-}

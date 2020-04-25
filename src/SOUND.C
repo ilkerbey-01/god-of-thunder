@@ -71,8 +71,6 @@ void sound_exit(void)
 
   SB_StopVOC();
 
-  sb_close();
-
   if (pcstd_sound_start)
     free(pcstd_sound_start);
 }

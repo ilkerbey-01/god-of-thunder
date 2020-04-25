@@ -19,7 +19,6 @@ extern uint8_t noal, nosb;
 void (*t0OldService)(void);
 extern int32_t TimerDivisor, TimerCount;
 extern volatile int32_t TickCount2, TickCount;
-uint8_t *SB_DetectAdLib(void);
 //===========================================================================
 int16_t sbfx_init(void)
 {
@@ -43,31 +42,11 @@ int16_t sbfx_init(void)
     return 1;
   if (nosb)
   {
-    sberr = SB_DetectAdLib();
-    //  if(sberr) return 0;
-    if (!AdLibPresent)
-    {
-      SB_Shutdown();
-      return 0;
-    }
     music_flag = 1;
     return 1;
   }
   else
   {
-    sberr = SB_Startup(getenv("BLASTER"));
-    if (sberr)
-    {
-      exit_code(0);
-      printf("\r\n%s\r\n", sberr);
-      getc(stdin);
-      exit(0);
-    }
-    if (!SoundBlasterPresent)
-    {
-      SB_Shutdown();
-      return 0;
-    }
     music_flag = 1;
     sound_flag = 1;
   }
@@ -82,15 +61,4 @@ void sbfx_exit(void)
     FX_StopPC();
   if (setup.music)
     MU_MusicOff();
-  if (setup.music || setup.dig_sound)
-    SB_Shutdown();
-
-  for (i = 0; i < 0xf5; i++)
-    SB_ALOut(i, 0);
-
-  // TODO
-  // outportb(0x43, 0x36); // Change timer 0
-  // outportb(0x40, 0);
-  // outportb(0x40, 0);
-  // setvect(8, t0OldService); // Restore old timer 0 ISR
 }
