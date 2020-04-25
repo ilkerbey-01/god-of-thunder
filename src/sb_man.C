@@ -197,17 +197,21 @@ uint8_t sb_initialize() {
   if (!raw_sound) {
     return 0;
   }
-  HEADER* header = (HEADER*)raw_sound;
-  raw_sound += (sizeof(HEADER) * 16);
+
+  uint8_t* p = raw_sound;
+  HEADER* header = (HEADER*)p;
+  p += (sizeof(HEADER) * 16);
 
   // Read in all of the sound files.
   for (int i = 0; i < 16; i++)
   {
-    sb_convert(raw_sound, header->length, &digital_sounds[i]);
+    sb_convert(p, header->length, &digital_sounds[i]);
 
-    raw_sound += header->length;
+    p += header->length;
     header++;
   }
+
+  free(raw_sound);
 
   if (!load_boss_sounds()) {
     return 0;
