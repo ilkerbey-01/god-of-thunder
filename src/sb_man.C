@@ -174,6 +174,7 @@ int16_t SB_VOCPlaying() {
 }
 
 void SB_PlayVOC(uint8_t sound_index, int16_t tmp) {
+  // TODO consider using SDL_ConvertAudio at startup to cache native data
   DIGITAL_SOUND digital_sound = digital_sounds[sound_index];
   uint8_t* sound = digital_sound.sound;
   uint8_t* end = sound + digital_sound.length;
@@ -253,6 +254,7 @@ void SB_PlayVOC(uint8_t sound_index, int16_t tmp) {
       // see table is ignored if a block of type 0x08( Extra info )
       // defines a codec (from version 1.20)
       VOC_CODEC_TYPE codec = (VOC_CODEC_TYPE)*sound;
+      SDL_ConvertAudio
       switch (codec) {
       case VOC_CODEC_TYPE::unsigned_pcm_8_bits:
         audio_spec.format = AUDIO_U8;
