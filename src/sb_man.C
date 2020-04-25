@@ -16,6 +16,7 @@ typedef struct {
 
 DIGITAL_SOUND digital_sounds[NUM_SOUNDS];
 uint8_t* sound_root = nullptr;
+SDL_AudioSpec audio_spec;
 
 DIGITAL_SOUND digital_sounds_boss[3][3];
 
@@ -29,7 +30,7 @@ static uint8_t* sound_pos;
  * stream: A pointer to the audio buffer to be filled
  * chunk_size: The length (in bytes) of the audio buffer
 */
-void sb_send_pcm(void* udata, uint8_t* stream, int chunk_size) {
+void sb_send_pcm(void* _, uint8_t* stream, int chunk_size) {
   //SDL 2.0
   SDL_memset(stream, 0, chunk_size);
   if (sound_size == 0) {
@@ -97,15 +98,12 @@ bool load_boss_sounds() {
 bool sdl_audio_opened = false;
 bool sb_initialize() {
 
-  // TODO determine uniform format for all files 
-  // in the resource manager, and then convert to it.
-  SDL_AudioSpec audio_spec;
   audio_spec.freq = 12195;
   audio_spec.format = AUDIO_U8;
   audio_spec.channels = 1;
   audio_spec.silence = 0;
   audio_spec.samples = 1024;
-  audio_spec.callback = sb_send_pcm;
+  audio_spec.callback = &sb_send_pcm;
 
   if (SDL_OpenAudio(&audio_spec, NULL) < 0) {
     return false;
@@ -204,22 +202,29 @@ void SB_PlayVOC(uint8_t sound_index, int16_t tmp) {
       // Null terminated string
       char* ascii_string = (char*)sound;
       sound += strlen(ascii_string);
+
+      // TODO?
       break;
     }
     case VOC_DATA_BLOCK_TYPE::end_repeat: {
+      // TODO
       break;
     }
     case VOC_DATA_BLOCK_TYPE::marker: {
       // The last marker remains in an intermediate memory during playback and can be jumped on again. 
       uint8_t* marker_number = sound;
       sound += 2;
+
+      // TODO
       break;
     }
     case VOC_DATA_BLOCK_TYPE::repeat: {
       // Number of repetitions (2-byte integer) 
-      // 0x0000to 0xFFFE1-65,535 repetitions, 0xFFFFfor infinite 
+      // 0x0000 to 0xFFFE1-65,535 repetitions, 0xFFFFfor infinite 
       uint16_t to_repeat = (uint16_t)*sound;
       sound += 2;
+
+      // TODO
       break;
     }
     case VOC_DATA_BLOCK_TYPE::silence: {
@@ -229,6 +234,7 @@ void SB_PlayVOC(uint8_t sound_index, int16_t tmp) {
 
       // as with audio content
       uint8_t sampling_rate = *sound;
+      audio_spec.freq = 1000000 / (256 - sampling_rate);
       sound++;
       break;
     }
@@ -239,13 +245,25 @@ void SB_PlayVOC(uint8_t sound_index, int16_t tmp) {
       break;
     }
     case VOC_DATA_BLOCK_TYPE::sound_data: {
-      // 256-(1000000/Sample rate)
+      // (1000000/256-Sample rate)
       uint8_t sampling_rate = *sound;
+      audio_spec.freq = 1000000 / (256 - sampling_rate);
       sound++;
 
       // see table is ignored if a block of type 0x08( Extra info )
       // defines a codec (from version 1.20)
       VOC_CODEC_TYPE codec = (VOC_CODEC_TYPE)*sound;
+      switch (codec) {
+      case VOC_CODEC_TYPE::unsigned_pcm_8_bits:
+        audio_spec.format = AUDIO_U8;
+        break;
+      case VOC_CODEC_TYPE::signed_pcm_16_bits:
+        audio_spec.format = AUDIO_S16;
+        break;
+      default:
+        // TODO are any other formats needed?
+        break;
+      }
       sound++;
 
       // Audio data in the specified format (codec)
