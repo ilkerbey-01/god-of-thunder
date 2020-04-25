@@ -15,18 +15,19 @@ typedef struct {
   uint16_t checksum;
 } VOC_HEADER;
 
-enum class VOC_DATA_BLOCK_TYPE : uint8_t {
-  terminator = 0x00,
-  sound_data = 0x01,
-  sound_continue = 0x02,
-  silence = 0x03,
-  marker = 0x04,
-  ascii_string = 0x05,
-  repeat = 0x06,
-  end_repeat = 0x07
+enum VOC_DATA_BLOCK_TYPE {
+  terminator          = 0x00,
+  sound_data          = 0x01,
+  sound_continue      = 0x02,
+  silence             = 0x03,
+  marker              = 0x04,
+  ascii_string        = 0x05,
+  repeat              = 0x06,
+  end_repeat          = 0x07,
+  extra_information   = 0x08
 };
 
-enum class VOC_CODEC_TYPE : uint8_t {
+enum VOC_CODEC_TYPE {
   unsigned_pcm_8_bits = 0x00,
   creative_adpcm_4_bits_to_8_bits = 0x01,
   creative_adpcm_3_bits_to_8_bits = 0x02, // (AKA 2.6 bits)
@@ -34,11 +35,11 @@ enum class VOC_CODEC_TYPE : uint8_t {
   signed_pcm_16_bits = 0x04,
   alaw = 0x06,
   ulaw = 0x07,
-  //creative_adpcm_4_bits_to_16_bits = 0x200, // (only valid in block type 0x09)
+  creative_adpcm_4_bits_to_16_bits = 0x200, // (only valid in block type 0x09)
 };
 
 extern int16_t SoundBlasterPresent;
-bool sb_initialize();
+uint8_t sb_initialize();
 void sb_close();
 void sb_swap_boss_sounds(int16_t boss_num);
 int16_t SB_VOCPlaying();

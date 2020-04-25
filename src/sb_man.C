@@ -14,125 +14,203 @@ typedef struct {
   int32_t length;
 } DIGITAL_SOUND;
 
+SDL_AudioSpec actual_spec;
 DIGITAL_SOUND digital_sounds[NUM_SOUNDS];
-uint8_t* sound_root = nullptr;
-SDL_AudioSpec audio_spec;
-
 DIGITAL_SOUND digital_sounds_boss[3][3];
 
-static uint8_t* sound_chunk;
-static uint32_t sound_size;
-static uint8_t* sound_pos;
+void sb_convert(uint8_t* sound, int32_t length, DIGITAL_SOUND* digital_sound) {
+  uint8_t* end = sound + length;
+  VOC_HEADER* header = (VOC_HEADER*)sound;
+  sound += sizeof(VOC_HEADER);
 
-/* Audio Callback
- * The audio function callback takes the following parameters:
- * udata: ignored
- * stream: A pointer to the audio buffer to be filled
- * chunk_size: The length (in bytes) of the audio buffer
-*/
-void sb_send_pcm(void* _, uint8_t* stream, int chunk_size) {
-  //SDL 2.0
-  SDL_memset(stream, 0, chunk_size);
-  if (sound_size == 0) {
-    return;
+  SDL_AudioFormat src_format = AUDIO_U8;
+  uint8_t src_channels = 1;
+  int src_freq = 48000;
+  uint8_t* src_data = NULL;
+  uint32_t src_data_len = 0;
+
+  // Resources from GOTRES.RES only implement the
+  // terminator, sound_data and extra_information data blocks,
+  // and only include one sound_data block per sound.
+  int i = 0;
+  while (sound < end) {
+    auto type = (enum VOC_DATA_BLOCK_TYPE)(uint8_t)*sound;
+    sound++;
+
+    uint32_t size = *sound;
+    sound++;
+    size += (*sound) << 8;
+    sound++;
+    size += (*sound) << 16;
+    sound++;
+
+    switch (type) {
+    case terminator: {
+      sound = end;
+      break;
+    }
+    case sound_data: {
+      // (1000000/256-Sample rate)
+      uint8_t sampling_rate = *sound;
+      src_freq = 1000000 / (256 - sampling_rate);
+      sound++;
+
+      // see table is ignored if a block of type 0x08( Extra info )
+      // defines a codec (from version 1.20)
+      auto codec = (enum VOC_CODEC_TYPE)*sound;
+
+      switch (codec) {
+      case unsigned_pcm_8_bits:
+        src_format = AUDIO_U8;
+        break;
+      case signed_pcm_16_bits:
+        src_format = AUDIO_S16;
+        break;
+      default:
+        // TODO are any other formats needed?
+        break;
+      }
+      sound++;
+
+      // Audio data in the specified format (codec)
+      src_data = sound;
+      src_data_len = size;
+      sound += size;
+      break;
+    }
+    case extra_information: {
+      // Sample rate = 256000000 / ((numChannels + 1) * (65536 - frequency divisor))
+      uint16_t sampling_rate = *sound;
+      sound += 2;
+
+      auto codec = (enum VOC_CODEC_TYPE)*sound;
+      switch (codec) {
+      case unsigned_pcm_8_bits:
+        src_format = AUDIO_U8;
+        break;
+      case signed_pcm_16_bits:
+        src_format = AUDIO_S16;
+        break;
+      default:
+        // TODO are any other formats needed?
+        break;
+      }
+      sound++;
+
+      uint8_t num_channels = *sound;
+      sound++;
+
+      src_channels = num_channels + 1;
+      src_freq = 256000000 / ((num_channels + 1) * (65536 - sampling_rate));
+      break;
+    }
+    }
   }
-  chunk_size = (chunk_size > sound_size ? sound_size : chunk_size);
 
-  SDL_MixAudio(stream, sound_pos, chunk_size, SDL_MIX_MAXVOLUME);
-  sound_pos += chunk_size;
-  sound_size -= chunk_size;
+  SDL_AudioCVT cvt;
+  SDL_BuildAudioCVT(&cvt
+    , src_format, src_channels, src_freq
+    , actual_spec.format, actual_spec.channels, actual_spec.freq);
+
+  cvt.len = src_data_len;
+  cvt.buf = (uint8_t*)malloc((size_t)src_data_len * (size_t)cvt.len_mult);
+  memcpy(cvt.buf, src_data, src_data_len);
+
+  SDL_ConvertAudio(&cvt);
+
+  digital_sound->length = cvt.len_cvt;
+  digital_sound->sound = cvt.buf;
 }
 
-bool load_boss_sound(const char* res_name, DIGITAL_SOUND* digital_sound) {
-  digital_sound->sound = res_falloc_read(res_name);
-  if (!digital_sound->sound) {
-    return false;
+uint8_t load_boss_sound(const char* res_name, DIGITAL_SOUND* digital_sound) {
+  uint8_t* sound = res_falloc_read(res_name);
+  if (!sound) {
+    return 0;
   }
-  digital_sound->length = res_original_size(res_name);
-  return true;
+  int32_t length = res_original_size(res_name);
+  sb_convert(sound, length, digital_sound);
+  free(sound);
+  return 1;
 }
 
-bool load_boss_sounds() {
+uint8_t load_boss_sounds() {
   for (int i = 0; i < 3; i++) {
     for (int j = 0; j < 3; j++) {
       digital_sounds_boss[i][i].length = 0;
-      digital_sounds_boss[i][i].sound = nullptr;
+      digital_sounds_boss[i][i].sound = NULL;
     }
   }
 
   // Part 1
   if (!load_boss_sound("BOSSV11", &digital_sounds_boss[0][0])) {
-    return false;
+    return 0;
   }
   if (!load_boss_sound("BOSSV12", &digital_sounds_boss[0][1])) {
-    return false;
+    return 0;
   }
   if (!load_boss_sound("BOSSV12", &digital_sounds_boss[0][2])) {
-    return false;
+    return 0;
   }
 
   // Part 2
   if (!load_boss_sound("BOSSV21", &digital_sounds_boss[1][0])) {
-    return false;
+    return 0;
   }
   if (!load_boss_sound("BOSSV22", &digital_sounds_boss[1][1])) {
-    return false;
+    return 0;
   }
   if (!load_boss_sound("BOSSV22", &digital_sounds_boss[1][2])) {
-    return false;
+    return 0;
   }
 
   // Part 3
   if (!load_boss_sound("BOSSV31", &digital_sounds_boss[2][0])) {
-    return false;
+    return 0;
   }
   if (!load_boss_sound("BOSSV32", &digital_sounds_boss[2][1])) {
-    return false;
+    return 0;
   }
   if (!load_boss_sound("BOSSV32", &digital_sounds_boss[2][2])) {
-    return false;
+    return 0;
   }
-  return true;
+  return 1;
 }
 
-bool sdl_audio_opened = false;
-bool sb_initialize() {
+uint8_t sdl_audio_opened = 0;
+uint8_t sb_initialize() {
+  SDL_AudioSpec desired_spec;
+  desired_spec.freq = 48000;
+  desired_spec.format = AUDIO_S16;
+  desired_spec.channels = 2;
+  desired_spec.silence = 0;
+  desired_spec.samples = 1024;
+  desired_spec.callback = NULL;
 
-  audio_spec.freq = 12195;
-  audio_spec.format = AUDIO_U8;
-  audio_spec.channels = 1;
-  audio_spec.silence = 0;
-  audio_spec.samples = 1024;
-  audio_spec.callback = &sb_send_pcm;
-
-  if (SDL_OpenAudio(&audio_spec, NULL) < 0) {
-    return false;
+  if (SDL_OpenAudio(&desired_spec, &actual_spec) < 0) {
+    return 0;
   }
-  sdl_audio_opened = true;
+  sdl_audio_opened = 1;
 
   // The single file is made up of 16 headers
   // (including length), and then the 16 VOC files.
-  sound_root = res_falloc_read("DIGSOUND");
-  if (!sound_root) {
-    return false;
+  uint8_t* raw_sound = res_falloc_read("DIGSOUND");
+  if (!raw_sound) {
+    return 0;
   }
-  uint8_t* p = sound_root;
-  HEADER* header = (HEADER*)sound_root;
-  p += (sizeof(HEADER) * 16);
+  HEADER* header = (HEADER*)raw_sound;
+  raw_sound += (sizeof(HEADER) * 16);
 
   // Read in all of the sound files.
   for (int i = 0; i < 16; i++)
   {
-    DIGITAL_SOUND sound = DIGITAL_SOUND();
-    sound.sound = p;
-    sound.length = header->length;
-    digital_sounds[i] = sound;
-    p += header->length;
+    sb_convert(raw_sound, header->length, &digital_sounds[i]);
+
+    raw_sound += header->length;
     header++;
   }
 
   if (!load_boss_sounds()) {
-    return false;
+    return 0;
   }
 }
 
@@ -141,8 +219,10 @@ void sb_close() {
     SDL_CloseAudio();
   }
 
-  if (sound_root) {
-    free(sound_root);
+  for (int i = 0; i < NUM_SOUNDS; i++) {
+    if (digital_sounds[i].sound) {
+      free(digital_sounds[i].sound);
+    }
   }
 
   for (int i = 0; i < 3; i++) {
@@ -170,114 +250,14 @@ int16_t music_flag, sound_flag, pcsound_flag;
 uint8_t noal, nosb;
 
 int16_t SB_VOCPlaying() {
-  return sound_size > 0;
+  return SDL_GetAudioStatus() == SDL_AUDIO_PLAYING;
 }
 
 void SB_PlayVOC(uint8_t sound_index, int16_t tmp) {
-  // TODO consider using SDL_ConvertAudio at startup to cache native data
-  DIGITAL_SOUND digital_sound = digital_sounds[sound_index];
-  uint8_t* sound = digital_sound.sound;
-  uint8_t* end = sound + digital_sound.length;
-  VOC_HEADER* header = (VOC_HEADER*)sound;
-  sound += sizeof(VOC_HEADER);
-
   SDL_PauseAudio(0);
 
-  int i = 0;
-  while (sound < end) {
-    VOC_DATA_BLOCK_TYPE type = (VOC_DATA_BLOCK_TYPE)*sound;
-    sound++;
-
-    uint32_t size = *sound;
-    sound++;
-    size += (*sound) << 8;
-    sound++;
-    size += (*sound) << 16;
-    sound++;
-
-    switch (type) {
-    case VOC_DATA_BLOCK_TYPE::terminator: {
-      return;
-    }
-    case VOC_DATA_BLOCK_TYPE::ascii_string: {
-      // Null terminated string
-      char* ascii_string = (char*)sound;
-      sound += strlen(ascii_string);
-
-      // TODO?
-      break;
-    }
-    case VOC_DATA_BLOCK_TYPE::end_repeat: {
-      // TODO
-      break;
-    }
-    case VOC_DATA_BLOCK_TYPE::marker: {
-      // The last marker remains in an intermediate memory during playback and can be jumped on again. 
-      uint8_t* marker_number = sound;
-      sound += 2;
-
-      // TODO
-      break;
-    }
-    case VOC_DATA_BLOCK_TYPE::repeat: {
-      // Number of repetitions (2-byte integer) 
-      // 0x0000 to 0xFFFE1-65,535 repetitions, 0xFFFFfor infinite 
-      uint16_t to_repeat = (uint16_t)*sound;
-      sound += 2;
-
-      // TODO
-      break;
-    }
-    case VOC_DATA_BLOCK_TYPE::silence: {
-      // Length of silence in the unit of the sampling rate Integer-1
-      uint16_t length = (uint16_t)*sound;
-      sound += 2;
-
-      // as with audio content
-      uint8_t sampling_rate = *sound;
-      audio_spec.freq = 1000000 / (256 - sampling_rate);
-      sound++;
-      break;
-    }
-    case VOC_DATA_BLOCK_TYPE::sound_continue: {
-      // additional audio data in the same format as the previous block 
-      uint8_t* data = sound;
-      sound += size;
-      break;
-    }
-    case VOC_DATA_BLOCK_TYPE::sound_data: {
-      // (1000000/256-Sample rate)
-      uint8_t sampling_rate = *sound;
-      audio_spec.freq = 1000000 / (256 - sampling_rate);
-      sound++;
-
-      // see table is ignored if a block of type 0x08( Extra info )
-      // defines a codec (from version 1.20)
-      VOC_CODEC_TYPE codec = (VOC_CODEC_TYPE)*sound;
-      SDL_ConvertAudio
-      switch (codec) {
-      case VOC_CODEC_TYPE::unsigned_pcm_8_bits:
-        audio_spec.format = AUDIO_U8;
-        break;
-      case VOC_CODEC_TYPE::signed_pcm_16_bits:
-        audio_spec.format = AUDIO_S16;
-        break;
-      default:
-        // TODO are any other formats needed?
-        break;
-      }
-      sound++;
-
-      // Audio data in the specified format (codec)
-      // Set audio buffer (PCM data)
-      sound_chunk = sound;
-      sound_size = size;
-      sound_pos = sound_chunk;
-      sound += size;
-      break;
-    }
-    }
-  }
+  DIGITAL_SOUND digital_sound = digital_sounds[sound_index];
+  SDL_QueueAudio(1, digital_sound.sound, digital_sound.length);
 }
 
 void SB_StopVOC() {
