@@ -219,7 +219,9 @@ void sb_close() {
     SDL_CloseAudio();
   }
 
-  for (int i = 0; i < NUM_SOUNDS; i++) {
+  // Don't free the last sounds, because they're 
+  // shared with one of the boss sound sets.
+  for (int i = 0; i < NUM_SOUNDS - 3; i++) {
     if (digital_sounds[i].sound) {
       free(digital_sounds[i].sound);
     }
@@ -245,7 +247,6 @@ void sb_swap_boss_sounds(int16_t boss_num) {
 
 int16_t SoundBlasterPresent = 1;
 uint8_t AdLibPresent;
-volatile uint16_t timer_cnt, vbl_cnt, magic_cnt, extra_cnt;
 int16_t music_flag, sound_flag, pcsound_flag;
 uint8_t noal, nosb;
 

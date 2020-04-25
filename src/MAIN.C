@@ -34,7 +34,7 @@ int16_t thor_x1, thor_y1, thor_x2, thor_y2, thor_real_y1;
 int16_t thor_pos;
 int16_t max_shot;
 
-extern volatile uint16_t timer_cnt, vbl_cnt, magic_cnt, extra_cnt;
+volatile uint16_t timer_cnt, vbl_cnt, magic_cnt, extra_cnt;
 
 // TODO this should probably be broken out, and ideally read from a resource file.
 uint8_t text[94][72] = {
