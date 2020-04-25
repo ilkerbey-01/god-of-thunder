@@ -20,13 +20,20 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Cache vcpkg artifacts
+      uses: actions/cache@v1
+      with:
+        path: ${{ github.workspace }}/vcpkg/
+        # Ensure the cache is invalidated any time vcpkg version changes, or a different set of packages is being used.
+        key: ${{ hashFiles( format('{0}/vcpkg-${{ runner.os }}.txt', github.workspace )) }}-${{ runner.os }}
+
     - name: Run vcpkg
       uses: lukka/run-vcpkg@v1
       id: runvcpkg
+      if: steps.cache.outputs.cache-hit != 'true'
       with:
         vcpkgArguments: '@${{ github.workspace }}/vcpkg-${{ runner.os }}.txt --triplet ${{ matrix.triplet }}'
         vcpkgGitCommitId: 'master'
-        appendedCacheKey: '${{ github.workspace }}/vcpkg-${{ runner.os }}.txt'
 
     - name: 'Build with CMake and Ninja'
       uses: lukka/run-cmake@v2
