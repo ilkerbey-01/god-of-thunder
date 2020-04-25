@@ -68,9 +68,8 @@ void sound_exit(void)
   FX_StopPC();
   while (FX_PCPlaying())
     ;
+
   SB_StopVOC();
-  while (sound_playing())
-    ;
 
   sb_close();
 
