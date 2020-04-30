@@ -6,6 +6,7 @@
 #include "header.h"
 
 #include <SDL.h>
+#include <SDL_mixer.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -176,8 +177,10 @@ uint8_t load_boss_sounds() {
   return 1;
 }
 
+uint8_t mix_audio_opened = 0;
 uint8_t sdl_audio_opened = 0;
 uint8_t sb_initialize() {
+
   SDL_AudioSpec desired_spec;
   desired_spec.freq = 48000;
   desired_spec.format = AUDIO_S16;
@@ -190,6 +193,15 @@ uint8_t sb_initialize() {
     return 0;
   }
   sdl_audio_opened = 1;
+
+  int audio_rate = 48000;
+  Uint16 audio_format = AUDIO_S16SYS;
+  int audio_channels = 2;
+  int audio_buffers = 4096;
+  if (Mix_OpenAudio(actual_spec.freq, actual_spec.format, actual_spec.channels, actual_spec.samples)) {
+    return 0;
+  }
+  mix_audio_opened = 1;
 
   // The single file is made up of 16 headers
   // (including length), and then the 16 VOC files.
@@ -219,6 +231,10 @@ uint8_t sb_initialize() {
 }
 
 void sb_close() {
+  if (mix_audio_opened) {
+    Mix_CloseAudio();
+  }
+
   if (sdl_audio_opened) {
     SDL_CloseAudio();
   }
@@ -266,7 +282,13 @@ void SB_PlayVOC(uint8_t sound_index, int16_t tmp) {
   SDL_PauseAudio(0);
 
   DIGITAL_SOUND digital_sound = digital_sounds[sound_index];
-  SDL_QueueAudio(1, digital_sound.sound, digital_sound.length);
+
+  Mix_Chunk chunk;
+  chunk.abuf = digital_sound.sound;
+  chunk.alen = digital_sound.length;
+  chunk.allocated = 1;
+  chunk.volume = 128;
+  Mix_PlayChannel(-1, &chunk, 0);
 }
 
 void SB_StopVOC() {

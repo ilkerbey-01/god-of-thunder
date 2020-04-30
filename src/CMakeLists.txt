@@ -44,4 +44,7 @@ add_executable (got
 find_package(SDL2 CONFIG REQUIRED)
 target_link_libraries(got PRIVATE SDL2::SDL2 SDL2::SDL2main)
 
+find_package(sdl2-mixer CONFIG REQUIRED)
+target_link_libraries(got PRIVATE SDL2::SDL2_mixer)
+
 # TODO: Add tests and install targets if needed.
