@@ -33,7 +33,7 @@ jobs:
       env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
   
-      uses: lukka/run-vcpkg@v2
+      uses: lukka/run-vcpkg@v1
       id: runvcpkg
       with:
         vcpkgArguments: '@${{ github.workspace }}/vcpkg-${{ runner.os }}.txt --triplet ${{ matrix.triplet }}'
