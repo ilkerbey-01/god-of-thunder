@@ -74,7 +74,7 @@ int16_t (*dialog_func[])(ACTOR *actr) =
 //===========================================================================
 char *d_howmany = "Eee, kaç tane istersin?";
 char *d_canihave = "Well, Can I have it?";
-char *d_whichisit = "What Needs Fixed?";
+char *d_whichisit = "Ne tamir edilecek?";
 char *d_whichbridge = "Which Bridge?";
 char *d_whatsprob = "What's the Problem?";
 char *d_whatcanido = "What do you want to know?";
