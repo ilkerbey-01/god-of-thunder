@@ -18,21 +18,16 @@ jobs:
             triplet: x64-osx
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
 
     - name: Cache vcpkg artifacts
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-      uses: actions/cache@v2
+      uses: actions/cache@v1
       with:
         path: ${{ github.workspace }}/vcpkg/
         # Ensure the cache is invalidated any time vcpkg version changes, or a different set of packages is being used.
         key: ${{ hashFiles( format('{0}/vcpkg.txt', github.workspace )) }}-${{ runner.os }}
 
     - name: Run vcpkg
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-  
       uses: lukka/run-vcpkg@v1
       id: runvcpkg
       with:
@@ -40,9 +35,6 @@ jobs:
         vcpkgGitCommitId: 'master'
 
     - name: 'Build with CMake and Ninja'
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-  
       uses: lukka/run-cmake@v2
       with:
         useVcpkgToolchainFile: true
@@ -50,9 +42,6 @@ jobs:
 
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
-      env:
-        ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-  
       with:
         name: got-${{ runner.os }}
         path: out/
