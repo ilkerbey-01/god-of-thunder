@@ -28,14 +28,14 @@ jobs:
         key: ${{ hashFiles( format('{0}/vcpkg.txt', github.workspace )) }}-${{ runner.os }}
 
     - name: Run vcpkg
-      uses: lukka/run-cmake@v10.0
+      uses: lukka/run-vcpkg@v5
       id: runvcpkg
       with:
         vcpkgArguments: '@${{ github.workspace }}/vcpkg-${{ runner.os }}.txt --triplet ${{ matrix.triplet }}'
         vcpkgGitCommitId: 'master'
 
     - name: 'Build with CMake and Ninja'
-      uses: lukka/run-cmake@v5
+      uses: lukka/run-cmake@v10.0
       with:
         useVcpkgToolchainFile: true
         buildWithCMakeArgs: '-- -v'
