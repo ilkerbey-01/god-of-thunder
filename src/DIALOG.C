@@ -72,7 +72,7 @@ int16_t (*dialog_func[])(ACTOR *actr) =
         dialog_fourteen,
 };
 //===========================================================================
-char *d_howmany = "So, How Many Ya Want?";
+char *d_howmany = "Eee, kaç tane istersin?";
 char *d_canihave = "Well, Can I have it?";
 char *d_whichisit = "What Needs Fixed?";
 char *d_whichbridge = "Which Bridge?";
