@@ -10,11 +10,11 @@ jobs:
       matrix:
         os: [windows-latest, ubuntu-latest, macOS-latest]
         include:
-          - runs-on: windows-latest
+          - os: windows-latest
             triplet: x64-windows
-          - runs-on: ubuntu-latest
+          - os: ubuntu-latest
             triplet: x64-linux
-          - runs-on: macos-latest
+          - os: macos-latest
             triplet: x64-osx
 
     steps:
@@ -23,7 +23,7 @@ jobs:
     - name: Cache vcpkg artifacts
       env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: ${{ github.workspace }}/vcpkg/
         # Ensure the cache is invalidated any time vcpkg version changes, or a different set of packages is being used.
@@ -33,7 +33,7 @@ jobs:
       env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
   
-      uses: lukka/run-vcpkg@v1
+      uses: lukka/run-vcpkg@v2
       id: runvcpkg
       with:
         vcpkgArguments: '@${{ github.workspace }}/vcpkg-${{ runner.os }}.txt --triplet ${{ matrix.triplet }}'
