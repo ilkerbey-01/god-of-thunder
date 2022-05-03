@@ -8,7 +8,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        runs-on: [windows-latest, ubuntu-latest, macOS-latest]
+        os: [windows-latest, ubuntu-latest, macOS-latest]
         include:
           - runs-on: windows-latest
             triplet: x64-windows
