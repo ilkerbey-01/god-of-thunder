@@ -35,7 +35,7 @@ jobs:
         vcpkgGitCommitId: 'master'
 
     - name: 'Build with CMake and Ninja'
-      uses: lukka/run-cmake@v2
+      uses: lukka/run-cmake@v5
       with:
         useVcpkgToolchainFile: true
         buildWithCMakeArgs: '-- -v'
